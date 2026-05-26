@@ -4,9 +4,9 @@ spring:
 
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://127.0.0.1:3306/mydb
-    username: mydbid
-    password: mydbpw
+    url: jdbc:mariadb://127.0.0.1:3306/schoolstock
+    username: root
+    password: 1234
 
 server:
     port: 8882
