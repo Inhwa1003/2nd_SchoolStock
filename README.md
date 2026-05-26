@@ -4,3 +4,13 @@
 
 ### 노션 링크
 https://www.notion.so/KOSTA-337e2c8a37e7807b9a0bc6b612928f78?source=copy_link
+
+### 브랜치(Branch)
+- main
+  : 통합 테스트까지 마친 default 브랜치를 최종적으로 합친다. PR은 필수
+- default
+  : 단위 테스트까지 마친 feature 브랜치를 주기적으로 합친다. PR은 필수
+- feature
+  : 각각의 기능을 개발할 때, 사용한다.
+
+  feature -> default -> main(최종)
