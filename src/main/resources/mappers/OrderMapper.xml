@@ -6,7 +6,6 @@
 <mapper namespace="com.school.schoolstock.domain.order.repository.OrderRepository">
     <!-- 주문 매칭 -->
     <select id="getMatchOrder" parameterType="map" resultType="map">
-        START TRANSACTION;
         SELECT order_no       AS "orderNo",
         order_content  AS "orderContent",
         order_point    AS "orderPoint",
@@ -27,14 +26,13 @@
         ORDER BY order_date ASC
         LIMIT 1
         )
-        FOR UPDATE;
-        COMMIT;
+        FOR UPDATE
     </select>
 
     <!-- 매도, 매수 주문 요청 -->
     <insert id="setOrderRequest" parameterType="map">
         INSERT INTO ORDERS (order_content, order_point, amount, order_state, order_date, student_id, stock_no)
-        VALUES ('SELL', 1400, 2, 'PENDING', NOW(), 'def', 1);
+        VALUES ('SELL', 1400, 2, 'PENDING', NOW(), 'def', 1)
     </insert>
 
     <!-- 최근 등록한 주문 번호 조회 -->
@@ -47,51 +45,51 @@
         AND order_state = 'MATCHED'
         AND amount = 10
         AND order_point = 1050
-        ORDER BY order_date DESC;
+        ORDER BY order_date DESC
     </select>
 
     <!-- 특정 주식 대기중인 매도 매수 주문 모두 조회 -->
-    <select id="getTotalOrder" parameterType="int" resultType="com.school.stockGame.vo.OrderVO">
+    <select id="getTotalOrder" parameterType="int" resultType="com.school.schoolstock.domain.order.vo.Orders">
         SELECT order_point, amount, order_content
         FROM ORDERS
         WHERE stock_no = 1
         AND order_state = 'PENDING'
-        ORDER BY order_date ASC;
+        ORDER BY order_date ASC
     </select>
 
     <!-- 특정 주식 대기중인 매도 주문 모두 조회 -->
-    <select id="getTotalSellOrder" parameterType="int" resultType="com.school.stockGame.vo.OrderVO">
+    <select id="getTotalSellOrder" parameterType="int" resultType="com.school.schoolstock.domain.order.vo.Orders">
         SELECT order_point, amount, order_content
         FROM ORDERS
         WHERE stock_no = 3
         AND order_state = 'PENDING'
         AND order_content = 'SELL'
-        ORDER BY order_date ASC;
+        ORDER BY order_date ASC
     </select>
 
     <!-- 특정 주식 대기중인 매수 주문 모두 조회 -->
-    <select id="getTotalBuyOrder" parameterType="int" resultType="com.school.stockGame.vo.OrderVO">
+    <select id="getTotalBuyOrder" parameterType="int" resultType="com.school.schoolstock.domain.order.vo.Orders">
         SELECT order_point, amount, order_content
         FROM ORDERS
         WHERE stock_no = 1
         AND order_state = 'PENDING'
         AND order_content = 'BUY'
-        ORDER BY order_date ASC;
+        ORDER BY order_date ASC
     </select>
 
     <!-- 주문 요청 상태 '대기'변경 -->
     <update id="setOrderStatePending" parameterType="int">
-        UPDATE orders SET order_state = '대기' WHERE order_no = 1;
+        UPDATE orders SET order_state = '대기' WHERE order_no = 1
     </update>
 
     <!-- 주문 요청 상태 '취소'변경 -->
     <update id="setOrderStateCancel" parameterType="int">
-        UPDATE orders SET state = '취소' WHERE order_no = #{orderNo}
+        UPDATE orders SET order_state = '취소' WHERE order_no = 1
     </update>
 
     <!-- 주문 요청 상태 '체결'변경 -->
     <update id="setOrderStateMatched" parameterType="int">
-        UPDATE orders SET order_state = '체결' WHERE order_no = 1;
+        UPDATE orders SET order_state = '체결' WHERE order_no = 1
     </update>
 
 </mapper>
