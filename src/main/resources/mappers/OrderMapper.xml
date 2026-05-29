@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.school.schoolstock.domain.order.repository.OrderRepository">
+    <!-- 주문 매칭 -->
+    <select id="getMatchOrder" parameterType="map" resultType="map">
+        SELECT order_no       AS "orderNo",
+        order_content  AS "orderContent",
+        order_point    AS "orderPoint",
+        amount         AS "amount",
+        order_state    AS "orderState",
+        order_date     AS "orderDate",
+        student_id     AS "studentId",
+        stock_no       AS "stockNo"
+        FROM orders
+        WHERE order_no = (
+        SELECT order_no FROM orders
+        WHERE stock_no = 3
+        AND order_state = 'PENDING'
+        AND order_content = 'SELL'
+        AND order_point = 1600
+        AND amount = 5
+        AND student_id != 'abc'
+        ORDER BY order_date ASC
+        LIMIT 1
+        )
+        FOR UPDATE
+    </select>
+
+    <!-- 매도, 매수 주문 요청 -->
+    <insert id="setOrderRequest" parameterType="map">
+        INSERT INTO ORDERS (order_content, order_point, amount, order_state, order_date, student_id, stock_no)
+        VALUES ('SELL', 1400, 2, 'PENDING', NOW(), 'def', 1)
+    </insert>
+
+    <!-- 최근 등록한 주문 번호 조회 -->
+    <select id="getMyOrderNo" parameterType="map" resultType="int">
+        SELECT order_no
+        FROM ORDERS
+        WHERE order_content = 'BUY'
+        AND student_id = 'abc'
+        AND stock_no = 1
+        AND order_state = 'MATCHED'
+        AND amount = 10
+        AND order_point = 1050
+        ORDER BY order_date DESC
+    </select>
+
+    <!-- 특정 주식 대기중인 매도 매수 주문 모두 조회 -->
+    <select id="getTotalOrder" parameterType="int" resultType="com.school.schoolstock.domain.order.vo.Orders">
+        SELECT order_point, amount, order_content
+        FROM ORDERS
+        WHERE stock_no = 1
+        AND order_state = 'PENDING'
+        ORDER BY order_date ASC
+    </select>
+
+    <!-- 특정 주식 대기중인 매도 주문 모두 조회 -->
+    <select id="getTotalSellOrder" parameterType="int" resultType="com.school.schoolstock.domain.order.vo.Orders">
+        SELECT order_point, amount, order_content
+        FROM ORDERS
+        WHERE stock_no = 3
+        AND order_state = 'PENDING'
+        AND order_content = 'SELL'
+        ORDER BY order_date ASC
+    </select>
+
+    <!-- 특정 주식 대기중인 매수 주문 모두 조회 -->
+    <select id="getTotalBuyOrder" parameterType="int" resultType="com.school.schoolstock.domain.order.vo.Orders">
+        SELECT order_point, amount, order_content
+        FROM ORDERS
+        WHERE stock_no = 1
+        AND order_state = 'PENDING'
+        AND order_content = 'BUY'
+        ORDER BY order_date ASC
+    </select>
+
+    <!-- 주문 요청 상태 '대기'변경 -->
+    <update id="setOrderStatePending" parameterType="int">
+        UPDATE orders SET order_state = '대기' WHERE order_no = 1
+    </update>
+
+    <!-- 주문 요청 상태 '취소'변경 -->
+    <update id="setOrderStateCancel" parameterType="int">
+        UPDATE orders SET order_state = '취소' WHERE order_no = 1
+    </update>
+
+    <!-- 주문 요청 상태 '체결'변경 -->
+    <update id="setOrderStateMatched" parameterType="int">
+        UPDATE orders SET order_state = '체결' WHERE order_no = 1
+    </update>
+
+</mapper>
