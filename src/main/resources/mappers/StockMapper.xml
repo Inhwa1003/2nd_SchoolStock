@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.school.schoolstock.domain.stock.repository.StockRepository">
+    <select id="getStockNameList" resultType="com.school.schoolstock.domain.stock.vo.StockVO">
+        SELECT
+            stock_no AS stockNo,
+            name AS name
+        FROM stocks
+        ORDER BY stock_no;
+    </select>
+    <select id="getStockInfo" parameterType="int" resultType="com.school.schoolstock.domain.stock.vo.StockVO">
+        SELECT
+            name AS name,
+            stock_content AS stockContent
+        FROM STOCKS
+        WHERE stock_no = #{stockNo};
+    </select>
+    <select id="getStockPrice" parameterType="int" resultType="int" >
+        SELECT o.order_point
+        FROM TRADE t
+                 JOIN ORDERS o ON t.buy_order_no = o.order_no
+        WHERE o.stock_no = #{stockNo}
+        ORDER BY t.trade_date DESC
+            LIMIT 1;
+    </select>
+    <select id="getStockPriceChange" parameterType="int" resultType="int">
+        SELECT recent.price - s.prev_point AS priceChange
+        FROM (
+                 SELECT o.order_point AS price
+                 FROM TRADE t
+                          JOIN ORDERS o ON t.buy_order_no = o.order_no
+                 WHERE o.stock_no = 1
+                 ORDER BY t.trade_date DESC
+                     LIMIT 1
+             ) AS recent
+                 JOIN STOCKS s ON s.stock_no = #{stockNo};
+    </select>
+    <select id="getChangeRate" parameterType="int" resultType="double">
+        SELECT
+            COALESCE(
+                    ROUND((recent.price - s.prev_point) / NULLIF(s.prev_point, 0) * 100),
+                    0
+            ) AS changeRate
+        FROM (
+                 SELECT o.order_point AS price
+                 FROM TRADE t
+                          JOIN ORDERS o ON t.buy_order_no = o.order_no
+                 WHERE o.stock_no = 1
+                 ORDER BY t.trade_date DESC
+                     LIMIT 1
+             ) AS recent
+                 JOIN STOCKS s ON s.stock_no = #{stockNo};
+    </select>
+    <select id="getPrevPoint" parameterType="int" resultType="int">
+        SELECT prev_point
+        FROM STOCKS
+        WHERE stock_no = #{stockNo};
+    </select>
+    <update id="setStockPubBalance" parameterType="map">
+        UPDATE stocks SET publication_balance = publication_balance - #{buyAmount} WHERE stock_no = #{stockNo};
+    </update>
+    <select id="getStockPubInfo" parameterType="int" resultType="com.school.schoolstock.domain.stock.vo.StockVO">
+        SELECT publication_balance AS "publicationBalance", publication_point AS "publicationPoint" FROM stocks WHERE stock_no = #{stockNo};
+    </select>
+</mapper>
