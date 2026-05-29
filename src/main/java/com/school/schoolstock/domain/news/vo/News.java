@@ -1,8 +1,14 @@
 package com.school.schoolstock.domain.news.vo;
 
-import org.apache.ibatis.annotations.Mapper;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-@Mapper
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
 
 public class News {
     private int newsNo;
