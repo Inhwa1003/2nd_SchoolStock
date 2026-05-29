@@ -4,12 +4,14 @@ spring:
 
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://127.0.0.1:3306/mydb
-    username: mydbid
-    password: mydbpw
+    url: jdbc:mariadb://127.0.0.1:3306/schoolstock
+    username: schoolstock
+    password: schoolstock!
 
 server:
-    port: 8882
+  port: 8882
 
 mybatis:
   mapper-locations: classpath:mappers/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
