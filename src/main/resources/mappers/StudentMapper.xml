@@ -1,5 +1,255 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="">
+<mapper namespace="com.school.schoolstock.domain.student.repository.StudentRepository">
+    <!-- 아이디 중복 체크 -->
+    <select id="getIdCheck" parameterType="String" resultType="String">
+        SELECT student_id
+        FROM STUDENTS
+        WHERE student_id = #{studentId}
+    </select>
+    <!-- 회원가입 -->
+    <insert id="setMember" parameterType="com.school.schoolstock.domain.student.vo.Students">
+        INSERT INTO STUDENTS
+        (student_id, password, name, grade, class_name, student_number, register_year, total_coupon, total_point)
+        VALUES
+            (#{studentId}, #{password}, #{name}, #{grade}, #{className}, #{studentNumber}, CURDATE(), 0, 30000)
+    </insert>
+    <!-- 로그인 -->
+    <select id="login" parameterType="com.school.schoolstock.domain.student.vo.Students" resultType="com.school.schoolstock.domain.student.vo.Students">
+        SELECT name, grade, class_name, student_number, total_point
+        FROM students
+        WHERE student_id = #{studentId}
+          AND password = #{password}
+    </select>
+    <!-- 총 자산 조회-->
+    <select id="getMyValue" parameterType="String" resultType="int">
+        SELECT s.total_point + COALESCE(SUM(MY_VALUE.value), 0) AS total_asset
+        FROM STUDENTS s
+                 LEFT JOIN (
+            SELECT
+                o.student_id,
+                o.stock_no,
+                SUM(
+                        CASE
+                            WHEN o.order_content = 'BUY' THEN o.amount
+                            ELSE -o.amount
+                            END
+                )
+                    *
+                COALESCE(
+                        (
+                            SELECT recent_o.order_point
+                            FROM ORDERS recent_o
+                            WHERE recent_o.stock_no = o.stock_no
+                              AND recent_o.order_state = 'MATCHED'
+                            ORDER BY recent_o.order_date DESC
+                        LIMIT 1
+                    ),
+            st.publication_point
+        ) AS value
+            FROM ORDERS o
+                JOIN STOCKS st ON o.stock_no = st.stock_no
+            WHERE o.order_state = 'MATCHED'
+            GROUP BY o.student_id, o.stock_no, st.publication_point
+        ) MY_VALUE
+                           ON s.student_id = MY_VALUE.student_id
+        WHERE s.student_id = #{studentId}
+        GROUP BY s.student_id, s.total_point
+    </select>
+    <!-- 학생 가용포인트 조회-->
+    <select id="getMyPoint" parameterType="String" resultType="int">
+        SELECT total_point FROM students WHERE student_id = #{studentId}
+    </select>
+    <!-- 총 손익 조회 -->
+    <select id="getTotalProfit" parameterType="String" resultType="int">
+        SELECT COALESCE(SUM(stock_profit), 0) AS totalProfit
+        FROM (
+                 SELECT
+                     (
+                         SUM(
+                                 CASE
+                                     WHEN o.order_content = 'BUY' THEN o.amount
+                                     ELSE -o.amount
+                                     END
+                         )
+                             *
+                         COALESCE(
+                                 (
+                                     SELECT recent_o.order_point
+                                     FROM ORDERS recent_o
+                                     WHERE recent_o.stock_no = o.stock_no
+                                       AND recent_o.order_state = 'MATCHED'
+                                     ORDER BY recent_o.order_date DESC
+                                 LIMIT 1
+                             ),
+                st.publication_point
+            )
+                         )
+                         -
+                     SUM(
+                             CASE
+                                 WHEN o.order_content = 'BUY' THEN o.order_point * o.amount
+                                 ELSE 0
+                                 END
+                     ) AS stock_profit
+                 FROM ORDERS o
+                          JOIN STOCKS st ON o.stock_no = st.stock_no
+                 WHERE o.student_id = #{studentId}
+                   AND o.order_state = 'MATCHED'
+                 GROUP BY o.stock_no, st.publication_point
+             ) AS PROFIT
+    </select>
+    <!-- 보유 쿠폰 수량 조회 -->
+    <select id="getMyCouponAmount" parameterType="String" resultType="int">
+        SELECT COUNT(*) AS total_coupon FROM coupon_purchase WHERE purchase_state = 'NOT_USED' AND student_id = #{studentId}
+    </select>
+    <!-- 특정 보유 주식 수량 조회 -->
+    <select id="getMyStockAmount" parameterType="Map" resultType="int">
+        SELECT COALESCE(
+                       SUM(
+                               CASE
+                                   WHEN order_content = 'BUY' THEN amount
+                                   ELSE -amount
+                                   END
+                       ),
+                       0
+               ) AS amount
+        FROM ORDERS
+        WHERE student_id = #{studentId}
+          AND stock_no = #{stockNo}
+          AND order_state = 'MATCHED'
+    </select>
+    <!-- 특정 보유 주식 평균가격 조회 -->
+    <select id="getAveragePoint" parameterType="Map" resultType="int">
+        SELECT COALESCE((SUM(order_point * amount) / SUM(amount)), 0) AS average
+        FROM ORDERS
+        WHERE student_id = #{studentId}
+          AND stock_no = #{stockNo}
+          AND order_state = 'MATCHED'
+          AND order_content = 'BUY'
+    </select>
+    <!-- 특정 보유 주식 총 구매 비용 조회 -->
+    <select id="getPurchasePoint" parameterType="Map" resultType="int">
+        SELECT COALESCE(SUM(order_point * amount), 0) AS purchasePrice
+        FROM ORDERS
+        WHERE student_id = #{studentId}
+          AND stock_no = #{stockNo}
+          AND order_state = 'MATCHED'
+          AND order_content = 'BUY'
+    </select>
+    <!-- 학생이 구매한 주식 조회 -->
+    <select id="getMyStockNos" parameterType="String" resultType="Integer">
+        SELECT DISTINCT stock_no
+        FROM ORDERS
+        WHERE student_id = #{studentId}
+          AND order_state = 'MATCHED'
+    </select>
+    <!-- 특정 보유 주식 수익금 조회 -->
+    <select id="getStockProfit" parameterType="Map" resultType="int">
+        SELECT COALESCE(
+                       (
+                           (
+                               SUM(
+                                       CASE
+                                           WHEN o.order_content = 'BUY' THEN o.amount
+                                           ELSE -o.amount
+                                           END
+                               )
+                                   *
+                               (
+                                   SELECT COALESCE(
+                                                  (
+                                                      SELECT recent_o.order_point
+                                                      FROM ORDERS recent_o
+                                                      WHERE recent_o.stock_no = #{stockNo}
+                                                        AND recent_o.order_state = 'MATCHED'
+                                                      ORDER BY recent_o.order_date DESC
+                                                  LIMIT 1
+                                              ),
+                    st.publication_point
+                )
+                                   FROM STOCKS st
+                                   WHERE st.stock_no = o.stock_no
+                               )
+                               )
+                               -
+                           SUM(
+                                   CASE
+                                       WHEN o.order_content = 'BUY' THEN o.order_point * o.amount
+                                       ELSE 0
+                                       END
+                           )
+                           ),
+                       0
+               ) AS profit
+        FROM ORDERS o
+        WHERE o.student_id = #{studentId}
+          AND o.stock_no = #{stockNo}
+          AND o.order_state = 'MATCHED'
+        GROUP BY o.stock_no
+    </select>
+    <!-- 내 주문 요청 조회 -->
+    <select id="getTotalMyOrder" parameterType="Map" resultType="Map">
+        SELECT order_no AS "orderNo", order_content AS "orderContent", order_point AS "orderPoint", amount AS "amount", order_date AS "orderDate", order_state AS "orderState" FROM orders
+        WHERE student_id = #{studentId} AND stock_no = #{stockNo} AND order_state ='PENDING' ORDER BY order_date ASC
+    </select>
+    <!-- 보유 포인트 증가 -->
+    <update id="setStudentPointUp" parameterType="Map">
+        UPDATE students SET total_point = total_point + #{totalPoint} WHERE student_id = #{studentId}
+    </update>
+    <!-- 보유 포인트 차감 -->
+    <update id="setStudentPointDown" parameterType="Map">
+        UPDATE students SET total_point = total_point - #{totalPoint} WHERE student_id = #{studentId}
+    </update>
+    <!-- 내 포인트 내역 정보 조회(쿠폰, 지급, 주식) -->
+    <select id="getMyPointHistoryList" parameterType="String" resultType="Map">
+        SELECT cp.purchase_date          AS history_date,
+               '쿠폰'                    AS history_type,
+               cp.name                   AS history_content,
+               -cp.purchase_point        AS point_change
+        FROM COUPON_PURCHASE cp
+        WHERE cp.student_id = #{studentId}
 
+        UNION ALL
+
+        SELECT gp.get_point_date         AS history_date,
+               '지급'                    AS history_type,
+               gp.get_point_content      AS history_content,
+               gp.point                  AS point_change
+        FROM GET_POINT gp
+        WHERE gp.student_id = #{studentId}
+
+        UNION ALL
+
+        SELECT t.trade_date              AS history_date,
+               '매수'                    AS history_type,
+               s.name                    AS history_content,
+               -(o.order_point * o.amount) AS point_change
+        FROM TRADE t
+                 INNER JOIN ORDERS o ON t.buy_order_no = o.order_no
+                 INNER JOIN STOCKS s ON o.stock_no = s.stock_no
+        WHERE o.student_id = #{studentId}
+
+        UNION ALL
+
+        SELECT t.trade_date              AS history_date,
+               '매도'                    AS history_type,
+               s.name                    AS history_content,
+               (o.order_point * o.amount) AS point_change
+        FROM TRADE t
+                 INNER JOIN ORDERS o ON t.sell_order_no = o.order_no
+                 INNER JOIN STOCKS s ON o.stock_no = s.stock_no
+        WHERE o.student_id = #{studentId}
+
+        ORDER BY history_date DESC
+    </select>
+    <!-- 학생 포인트 차감 및 보유쿠폰 수량 증가 -->
+    <update id="setStudentAssets" parameterType="Map">
+        UPDATE students SET total_point = total_point - #{point}, total_coupon = total_coupon + 1
+        WHERE student_id = #{studentId} AND total_point >= #{point}
+    </update>
+    <!-- 보유 쿠폰 정보 조회 -->
+    <select id="getMyCouponList" parameterType="String">
+        SELECT name, purchase_point FROM coupon_purchase WHERE purchase_state = 'NOT_USED' AND student_id = #{studentId}
+    </select>
 </mapper>
