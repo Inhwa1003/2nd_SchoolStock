@@ -1,6 +1,5 @@
-package com.school.schoolstock.domain.news;
+package com.school.schoolstock.domain.news.repository;
 
-import com.school.schoolstock.domain.news.repository.NewsRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,7 +13,7 @@ public class NewsRepositoryTest {
     NewsRepository newsRepository;
 
     @Test
-    void getNewsList(){
+    void getNewsListTest(){
         List<String> result = newsRepository.getNewsList();
         System.out.println("등록된 전체 뉴스 내용: "+ result);
     }
