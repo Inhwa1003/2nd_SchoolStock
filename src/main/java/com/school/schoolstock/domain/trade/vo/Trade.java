@@ -1,6 +1,11 @@
 package com.school.schoolstock.domain.trade.vo;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.Setter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+import lombok.Builder;
 
 import java.time.LocalDateTime;
 
