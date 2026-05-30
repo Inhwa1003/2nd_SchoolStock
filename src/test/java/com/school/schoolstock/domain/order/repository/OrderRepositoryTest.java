@@ -1,6 +1,5 @@
-package com.school.schoolstock.domain.order;
+package com.school.schoolstock.domain.order.repository;
 
-import com.school.schoolstock.domain.order.repository.OrderRepository;
 import com.school.schoolstock.domain.order.vo.Orders;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
