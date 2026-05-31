@@ -1,4 +1,4 @@
-package com.school.schoolstock.domain.student.repository.service;
+package com.school.schoolstock.domain.student.service;
 
 
 import com.school.schoolstock.domain.student.service.StudentServiceImpl;

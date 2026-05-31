@@ -1,12 +1,14 @@
-package com.school.schoolstock.domain.stock.repository;
+package com.school.schoolstock.domain.stock.service;
 
 import com.school.schoolstock.domain.stock.vo.Stocks;
-import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
-@Mapper
-public interface StockRepository {
+public interface StockService {
+    // 매도
+    String setSellOrder(String studentId, int sellPoint, int sellAmount, int stockNo);
+    // 매수
+    String setBuyOrder(String studentId, int buyPoint, int buyAmount, int stockNo);
     // 주식명 조회
     String getStockName(int stockNo);
     // 주식명 리스트 조회
