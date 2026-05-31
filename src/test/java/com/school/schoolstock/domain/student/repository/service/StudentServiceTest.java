@@ -81,16 +81,16 @@ public class StudentServiceTest {
     @Test
     public void getTotalProfitTest(){
         //NO
-        //존재하지 않는 아이디(BindingException발생 null 반환이 리턴타입 int가 받지 못해서 발생)
-        Assertions.assertThrows(BindingException.class, () -> studentService.getTotalProfit("testid1111"));
+        //존재하지 않는 아이디(총 손익이 존재 하지 않는 사람과 같은 0 반환 아이디중복체크 업무 들어가면 좋을듯)
+        Assertions.assertEquals(0, studentService.getTotalProfit("testid1111"));
         //YES
-        log.info("총 손익 : " + studentService.getTotalProfit("abc"));
+        log.info("총 손익 : " + studentService.getTotalProfit("abca"));
     }
     @Test
     public void getMyCouponAmountTest(){
         //NO
-        //존재하지 않는 아이디(BindingException발생 null 반환이 리턴타입 int가 받지 못해서 발생)
-        Assertions.assertThrows(BindingException.class, () -> studentService.getMyCouponAmount("testid1111"));
+        //존재하지 않는 아이디(보유 쿠폰이 존재 하지 않는 사람과 같은 0 반환 아이디중복체크 업무 들어가면 좋을듯)
+        Assertions.assertEquals(0, studentService.getMyCouponAmount("testid1111"));
         //YES
         log.info("보유쿠폰 수량 : " + studentService.getMyCouponAmount("abc"));
     }
