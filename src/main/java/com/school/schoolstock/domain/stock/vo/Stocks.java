@@ -8,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @ToString
-public class StockVO {
+public class Stocks {
     private int stockNo;
     private String name;
     private String stockContent;

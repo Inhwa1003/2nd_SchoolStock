@@ -1,6 +1,6 @@
 package com.school.schoolstock.domain.stock.repository;
 
-import com.school.schoolstock.domain.stock.vo.StockVO;
+import com.school.schoolstock.domain.stock.vo.Stocks;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -10,9 +10,9 @@ public interface StockRepository {
     // 주식명 조회
     String getStockName(int stockNo);
     // 주식명 리스트 조회
-    List<StockVO> getStockNameList();
+    List<Stocks> getStockNameList();
     // 주식 기본 정보 조회
-    List<StockVO> getStockInfo(int stockNo);
+    List<Stocks> getStockInfo(int stockNo);
     // 주식 현재가격 조회
     int getStockPrice(int stockNo);
     // 주식 이전가 대비 가격 조회
@@ -24,5 +24,5 @@ public interface StockRepository {
     // 발행 개수 변경
     boolean setStockPubBalance(int buyAmount, int stockNo);
     // 발행 정보 조회
-    StockVO getStockPubInfo(int stockNo);
+    Stocks getStockPubInfo(int stockNo);
 }
