@@ -7,7 +7,7 @@ import java.util.List;
 
 @Mapper
 public interface StockRepository {
-    // 보유 주식명 조회
+    // 주식명 조회
     String getStockName(int stockNo);
     // 주식명 리스트 조회
     List<StockVO> getStockNameList();
