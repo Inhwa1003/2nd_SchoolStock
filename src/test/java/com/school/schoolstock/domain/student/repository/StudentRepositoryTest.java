@@ -1,5 +1,6 @@
 package com.school.schoolstock.domain.student.repository;
 
+import com.school.schoolstock.domain.student.vo.Students;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,7 +18,13 @@ public class StudentRepositoryTest {
 
     @Test
     public void setMemberTest(){
-        boolean flag = studentRepository.setMember("choi", "1234", "최동석", 5, "5", 42);
+        boolean flag = studentRepository.setMember(Students.builder()
+                .studentId("choi")
+                .password("1234")
+                .studentNumber(44)
+                .name("최동석")
+                .className("5")
+                .grade(6).build());
         System.out.println(flag);
     }
     @Test

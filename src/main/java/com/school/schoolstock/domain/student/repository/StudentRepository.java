@@ -11,7 +11,7 @@ public interface StudentRepository {
     // 아이디 중복 체크
     String getIdCheck(String studentId);
     // 회원가입
-    boolean setMember(String studentId, String password, String name, int grade, String className, int studentNumber);
+    boolean setMember(Students students);
     // 로그인
     Students login(String studentId, String password);
     // 총 자산 조회
