@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @ToString(exclude = {"password"})
 public class Students {
     private String studentId;
-    private String password;
+    //private String password; students 테이블에서 password users로 이동
     private String name;
     private int grade;
     private String className;

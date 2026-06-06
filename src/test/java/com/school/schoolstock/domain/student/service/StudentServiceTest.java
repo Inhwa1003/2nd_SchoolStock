@@ -34,7 +34,6 @@ public class StudentServiceTest {
         //존재하는 아이디 입력(DuplicateKeyException 발생)
         Assertions.assertThrows(DuplicateKeyException.class, () -> studentService.setMember(Students.builder()
                 .studentId("abc")
-                .password("1234")
                 .name("최동석")
                 .grade(5)
                 .className("5")
@@ -43,7 +42,6 @@ public class StudentServiceTest {
         //YES
         log.info("회원가입 결과 : " + studentService.setMember(Students.builder()
                 .studentId("choi")
-                .password("1234")
                 .name("최동석")
                 .grade(5)
                 .className("5")
