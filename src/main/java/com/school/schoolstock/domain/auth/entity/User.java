@@ -18,7 +18,7 @@ public class User {
     @Column(name = "login_id", length = 50, nullable = false, updatable = false)
     private String loginId;
 
-    @Column(name = "email", length = 30, nullable = false)
+    @Column(name = "email", length = 30, nullable = true)
     private String email;
 
     @Column(name = "password", length = 100, nullable = false)

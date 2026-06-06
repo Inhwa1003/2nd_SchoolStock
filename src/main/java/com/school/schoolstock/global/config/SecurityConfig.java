@@ -1,5 +1,6 @@
 package com.school.schoolstock.global.config;
 
+import com.school.schoolstock.global.security.RoleSuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -18,20 +19,30 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, RoleSuccessHandler SuccessHandler) throws Exception{
 
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers("/schoolstock/s/**").hasRole("STUDENT")
                 .requestMatchers("/schoolstock/t/**").hasRole("TEACHER")
-                .anyRequest().permitAll());
+                .requestMatchers(
+                        "/",
+                        "/schoolstock/login-view",
+                        "/schoolstock/login",
+                        "/schoolstock/add-member-view",
+                        "/schoolstock/add-member",
+                        "/css/**",
+                        "/js/**").permitAll()
+                .anyRequest().authenticated());
 
         http.formLogin(form -> form
-                .loginPage("/loginView")
-                .loginProcessingUrl("/login")
-                .failureUrl("/loginView?error=true"));
+                .loginPage("/schoolstock/login-view")
+                .loginProcessingUrl("/schoolstock/login")
+                .successHandler(SuccessHandler)
+                .failureUrl("/schoolstock/login-view?error=true"));
 
         http.logout(logout -> logout
-                .logoutSuccessUrl("/loginView")
+                .logoutUrl("/schoolstock/logout")
+                .logoutSuccessUrl("/schoolstock/login-view")
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID"));
 
