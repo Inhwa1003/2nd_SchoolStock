@@ -12,7 +12,7 @@ public interface StockRepository {
     // 주식명 리스트 조회
     List<Stocks> getStockNameList();
     // 주식 기본 정보 조회
-    List<Stocks> getStockInfo(int stockNo);
+    Stocks getStockInfo(int stockNo);
     // 주식 현재가격 조회
     int getStockPrice(int stockNo);
     // 주식 이전가 대비 가격 조회

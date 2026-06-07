@@ -10,14 +10,14 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
-public class CouponServiceTest {
+public class CouponServiceImplTest {
 
     @Autowired
-    private CouponService couponService;
+    private CouponServiceImpl couponServiceImpl;
 
     @Test
     void getCouponListTest(){
-        List<Coupons> couponList = couponService.getCouponList();
+        List<Coupons> couponList = couponServiceImpl.getCouponList();
         assertNotNull(couponList);
         System.out.println("구매한 쿠폰: "+ couponList);
     }

@@ -1,19 +1,10 @@
 package com.school.schoolstock.domain.coupon.service;
 
-import com.school.schoolstock.domain.coupon.repository.CouponRepository;
 import com.school.schoolstock.domain.coupon.vo.Coupons;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
-public class CouponService {
-    @Autowired
-    private CouponRepository couponRepository;
-
-    public List<Coupons> getCouponList(){
-        return couponRepository.getCouponList();
-    }
-
+public interface CouponService {
+    // 쿠폰 상점 목록 조회
+    List<Coupons> getCouponList();
 }

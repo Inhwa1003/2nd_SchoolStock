@@ -10,14 +10,14 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
-public class NewsServiceTest {
+public class NewsServiceImplTest {
 
     @Autowired
-    private NewsService newsService;
+    private NewsServiceImpl newsServiceImpl;
 
     @Test
     void getNewsListTest(){
-        List<String> newsList = newsService.getNewsList();
+        List<String> newsList = newsServiceImpl.getNewsList();
 
         assertNotNull(newsList);
 

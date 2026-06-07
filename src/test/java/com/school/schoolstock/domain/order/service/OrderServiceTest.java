@@ -1,126 +1,64 @@
 package com.school.schoolstock.domain.order.service;
 
-import com.school.schoolstock.domain.order.vo.Orders;
+import com.school.schoolstock.domain.order.dto.request.OrderRequest;
+import com.school.schoolstock.domain.order.dto.response.OrderResponse;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.binding.BindingException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-@SpringBootTest
 @Transactional
+@Slf4j
+@SpringBootTest
 public class OrderServiceTest {
 
     @Autowired
-    private OrderService orderService;
+    private OrderServiceImpl orderService;
 
     @Test
-    void getMatchOrderTest() {
-        Map<String, Object> result = orderService.getMatchOrder(
-                1,
-                1000,
-                1,
-                "abc",
-                "매수"
-        );
+    void getStockOrdersTest() {
+        // YES — 종목3은 PENDING 매수/매도 주문 있음
+        List<OrderResponse> sell = orderService.getStockOrders(3, "SELL");
+        List<OrderResponse> buy  = orderService.getStockOrders(3, "BUY");
+        log.info("주식번호 3번 매도목록: {}", sell);
+        log.info("주식번호 3번 매수목록: {}", buy);
+        Assertions.assertNotNull(sell);
+        Assertions.assertNotNull(buy);
 
-        System.out.println("주문 매칭 결과 = " + result);
-
-        // 매칭되는 주문이 없으면 null일 수도 있으므로 출력 확인용으로 먼저 사용
-        // assertNotNull(result);
+        // NO — 대기주문 없는 종목 -> 빈 리스트
+        Assertions.assertTrue(orderService.getStockOrders(2, "SELL").isEmpty());
     }
 
     @Test
-    void setOrderRequestTest() {
-        boolean result = orderService.setOrderRequest(
-                "BUY",
-                1000,
-                1,
-                "PENDING",
-                "abc",
-                1
-        );
+    void setSellOrderTest() {
+        // NO — 없는 학생: 보유수량 0 → "보유 주식량보다 많은..." 반환
+        log.info(orderService.setSellOrder("testid1111",
+                OrderRequest.builder().stockNo(1).orderPoint(1000).orderAmount(1).build()));
 
-        assertTrue(result);
+        // NO — 없는 종목: getStockPubInfo null -> NullPointerException
+        Assertions.assertThrows(NullPointerException.class, () ->
+                orderService.setSellOrder("abc", OrderRequest.builder().stockNo(1111).orderPoint(1000).orderAmount(2).build()));
 
-        System.out.println("주문 요청 등록 결과 = " + result);
+        // YES — abc 매도 (매칭/대기 결과 로그로 확인)
+        log.info(orderService.setSellOrder("abc", OrderRequest.builder().stockNo(1).orderPoint(11111).orderAmount(2).build()));
     }
 
     @Test
-    void getMyOrderNoTest() {
-        int result = orderService.getMyOrderNo(
-                "BUY",
-                "abc",
-                1,
-                "MATCHED",
-                2,
-                800
-        );
+    void setBuyOrderTest() {
+        // NO — 없는 학생: getMyPoint(int)가 null 못 받아 BindingException
+        Assertions.assertThrows(BindingException.class, () ->
+                orderService.setBuyOrder("testid1111", OrderRequest.builder().stockNo(1).orderPoint(800).orderAmount(2).build()));
 
-        System.out.println("최근 등록한 주문 번호 = " + result);
+        // NO — 잘못된 종목: getStockPubInfo null → NullPointerException
+        Assertions.assertThrows(NullPointerException.class, () ->
+                orderService.setBuyOrder("abc", OrderRequest.builder().stockNo(1111).orderPoint(800).orderAmount(2).build()));
 
-        // DB에 해당 조건의 주문이 반드시 존재한다면 사용
-        // assertTrue(result > 0);
-    }
-
-    @Test
-    void getTotalOrderTest() {
-        List<Orders> result = orderService.getTotalOrder(1);
-
-        assertNotNull(result);
-
-        System.out.println("특정 주식 대기 주문 전체 조회 = " + result);
-    }
-
-    @Test
-    void getTotalSellOrderTest() {
-        List<Orders> result = orderService.getTotalSellOrder(1);
-
-        assertNotNull(result);
-
-        System.out.println("특정 주식 대기 매도 주문 조회 = " + result);
-    }
-
-    @Test
-    void getTotalBuyOrderTest() {
-        List<Orders> result = orderService.getTotalBuyOrder(1);
-
-        assertNotNull(result);
-
-        System.out.println("특정 주식 대기 매수 주문 조회 = " + result);
-    }
-
-    @Test
-    void setOrderStatePendingTest() {
-        boolean result = orderService.setOrderStatePending(1);
-
-        System.out.println("주문 상태 대기 변경 결과 = " + result);
-
-        // order_no = 1이 실제 DB에 존재한다면 사용
-        // assertTrue(result);
-    }
-
-    @Test
-    void setOrderStateCancelTest() {
-        boolean result = orderService.setOrderStateCancel(1);
-
-        System.out.println("주문 상태 취소 변경 결과 = " + result);
-
-        // order_no = 1이 실제 DB에 존재한다면 사용
-        // assertTrue(result);
-    }
-
-    @Test
-    void setOrderStateMatchedTest() {
-        boolean result = orderService.setOrderStateMatched(1);
-
-        System.out.println("주문 상태 체결 변경 결과 = " + result);
-
-        // order_no = 1이 실제 DB에 존재한다면 사용
-        // assertTrue(result);
+        // YES — abc 매수 (대기/매칭 결과 로그)
+        log.info(orderService.setBuyOrder("abc", OrderRequest.builder().stockNo(1).orderPoint(1).orderAmount(4).build()));
     }
 }

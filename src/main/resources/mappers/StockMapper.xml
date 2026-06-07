@@ -34,7 +34,7 @@
                  SELECT o.order_point AS price
                  FROM TRADE t
                           JOIN ORDERS o ON t.buy_order_no = o.order_no
-                 WHERE o.stock_no = 1
+                 WHERE o.stock_no = #{stockNo}
                  ORDER BY t.trade_date DESC
                      LIMIT 1
              ) AS recent
@@ -50,7 +50,7 @@
                  SELECT o.order_point AS price
                  FROM TRADE t
                           JOIN ORDERS o ON t.buy_order_no = o.order_no
-                 WHERE o.stock_no = 1
+                 WHERE o.stock_no = #{stockNo}
                  ORDER BY t.trade_date DESC
                      LIMIT 1
              ) AS recent

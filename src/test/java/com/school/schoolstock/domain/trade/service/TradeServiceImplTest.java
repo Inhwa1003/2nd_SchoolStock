@@ -5,14 +5,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class TradeServiceTest {
+public class TradeServiceImplTest {
 
     @Autowired
-    private TradeService tradeService;
+    private TradeServiceImpl tradeServiceImpl;
 
     @Test
     void setTradeServiceTest(){
-        boolean result = tradeService.setMatchedOrder(
+        boolean result = tradeServiceImpl.setMatchedOrder(
                 1,
                 2
         );
