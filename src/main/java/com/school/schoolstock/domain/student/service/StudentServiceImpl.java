@@ -1,109 +1,75 @@
 package com.school.schoolstock.domain.student.service;
 
+import com.school.schoolstock.domain.order.repository.OrderRepository;
+import com.school.schoolstock.domain.stock.repository.StockRepository;
+import com.school.schoolstock.domain.stock.service.StockService;
+import com.school.schoolstock.domain.student.dto.response.*;
 import com.school.schoolstock.domain.student.repository.StudentRepository;
-import com.school.schoolstock.domain.student.vo.Students;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @RequiredArgsConstructor
 @Service
-public class StudentServiceImpl implements StudentService{
+public class StudentServiceImpl implements StudentService {
     private final StudentRepository studentRepository;
+    private final OrderRepository orderRepository;
+    private final StockRepository stockRepository;
+    private final StockService stockService;
+
+    @Transactional
     @Override
-    public String getIdCheck(String studentId) {
-        return studentRepository.getIdCheck(studentId);
+    public boolean setMyOrderCancel(int orderNo) {
+        return orderRepository.setOrderStateCancel(orderNo);
     }
 
+    @Transactional(readOnly = true)
     @Override
-    public boolean setMember(Students students) {
-        return studentRepository.setMember(Students.builder()
-                .studentId(students.getStudentId())
-                .name(students.getName())
-                .grade(students.getGrade())
-                .className(students.getClassName())
-                .studentNumber(students.getStudentNumber()).build());
+    public MyAssetResponse getMyAsset(String studentId) {
+        List<MyStockResponse> myStocks = new ArrayList<>();
+        List<Integer> myStockNos = studentRepository.getMyStockNos(studentId);
+
+        for (Integer stockNo : myStockNos) {
+            myStocks.add(MyStockResponse.builder()
+                    .stockName(stockRepository.getStockName(stockNo))
+                    .stockAmount(studentRepository.getMyStockAmount(studentId, stockNo))
+                    .nowPoint(stockService.getStockPrice(stockNo))
+                    .averagePoint(studentRepository.getAveragePoint(studentId, stockNo))
+                    .purchasePoint(studentRepository.getPurchasePoint(studentId, stockNo))
+                    .stockProfit(studentRepository.getStockProfit(studentId, stockNo)).build());
+        }
+        return MyAssetResponse.builder()
+                .totalValue(studentRepository.getMyValue(studentId))
+                .myPoint(studentRepository.getMyPoint(studentId))
+                .totalProfit(studentRepository.getTotalProfit(studentId))
+                .couponAmount(studentRepository.getMyCouponAmount(studentId))
+                .myStocks(myStocks).build();
     }
 
-    @Override
-    public Students login(String studentId, String password) {
-        return studentRepository.login(studentId, password);
-    }
-
-    @Override
-    public int getMyValue(String studentId) {
-        return studentRepository.getMyValue(studentId);
-    }
-
-    @Override
-    public int getMyPoint(String studentId) {
-        return studentRepository.getMyPoint(studentId);
-    }
-
-    @Override
-    public int getTotalProfit(String studentId) {
-        return studentRepository.getTotalProfit(studentId);
-    }
-
-    @Override
-    public int getMyCouponAmount(String studentId) {
-        return studentRepository.getMyCouponAmount(studentId);
-    }
-
-    @Override
-    public int getMyStockAmount(String studentId, int stockNo) {
-        return studentRepository.getMyStockAmount(studentId, stockNo);
-    }
-
-    @Override
-    public int getAveragePoint(String studentId, int stockNo) {
-        return studentRepository.getAveragePoint(studentId, stockNo);
-    }
-
-    @Override
-    public int getPurchasePoint(String studentId, int stockNo) {
-        return studentRepository.getPurchasePoint(studentId, stockNo);
-    }
-
-    @Override
-    public List<Integer> getMyStockNos(String studentId) {
-        return studentRepository.getMyStockNos(studentId);
-    }
-
-    @Override
-    public int getStockProfit(String studentId, int stockNo) {
-        return studentRepository.getStockProfit(studentId, stockNo);
-    }
-
-    @Override
-    public List<Map<String, Object>> getTotalMyOrder(String studentId, int stockNo) {
-        return studentRepository.getTotalMyOrder(studentId, stockNo);
-    }
-
+    @Transactional
     @Override
     public boolean setStudentPointUp(String studentId, int totalPoint) {
         return studentRepository.setStudentPointUp(studentId, totalPoint);
     }
 
+    @Transactional(readOnly = true)
     @Override
-    public boolean setStudentPointDown(String studentId, int totalPoint) {
-        return studentRepository.setStudentPointDown(studentId, totalPoint);
-    }
-
-    @Override
-    public List<Map<String, Object>> getMyPointHistoryList(String studentId) {
+    public List<MyPointHistoryResponse> getMyPointHistory(String studentId) {
         return studentRepository.getMyPointHistoryList(studentId);
     }
 
+    @Transactional(readOnly = true)
     @Override
-    public boolean setStudentAssets(String studentId, int point) {
-        return studentRepository.setStudentAssets(studentId, point);
+    public List<MyOrderResponse> getMyOrder(String studentId, int stockNo) {
+        return studentRepository.getTotalMyOrder(studentId, stockNo);
     }
 
+    @Transactional(readOnly = true)
     @Override
-    public List<Map<String, Object>> getMyCouponList(String studentId) {
+    public List<MyCouponResponse> getMyCoupon(String studentId) {
         return studentRepository.getMyCouponList(studentId);
     }
 }

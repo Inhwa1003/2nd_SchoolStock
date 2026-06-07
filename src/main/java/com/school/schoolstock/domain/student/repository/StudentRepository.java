@@ -1,10 +1,12 @@
 package com.school.schoolstock.domain.student.repository;
 
+import com.school.schoolstock.domain.student.dto.response.MyCouponResponse;
+import com.school.schoolstock.domain.student.dto.response.MyOrderResponse;
+import com.school.schoolstock.domain.student.dto.response.MyPointHistoryResponse;
 import com.school.schoolstock.domain.student.vo.Students;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
-import java.util.Map;
 
 @Mapper
 public interface StudentRepository {
@@ -33,15 +35,15 @@ public interface StudentRepository {
     // 특정 보유 주식 수익금 조회
     int getStockProfit(String studentId, int stockNo);
     // 내 주문 요청 조회
-    List<Map<String, Object>> getTotalMyOrder(String studentId, int stockNo);
+    List<MyOrderResponse> getTotalMyOrder(String studentId, int stockNo);
     // 보유 포인트 증가
     boolean setStudentPointUp(String studentId, int totalPoint);
     // 보유 포인트 차감
     boolean setStudentPointDown(String studentId, int totalPoint);
     // 내 포인트 내역 정보 조회(쿠폰, 지급, 주식)
-    List<Map<String, Object>> getMyPointHistoryList(String studentId);
+    List<MyPointHistoryResponse> getMyPointHistoryList(String studentId);
     // 학생 포인트 차감 및 보유쿠폰 수량 증가
     boolean setStudentAssets(String studentId, int point);
     // 보유 쿠폰 정보 조회
-    List<Map<String, Object>> getMyCouponList(String studentId);
+    List<MyCouponResponse> getMyCouponList(String studentId);
 }
