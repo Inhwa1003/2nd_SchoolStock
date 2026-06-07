@@ -5,7 +5,7 @@
 
 <mapper namespace="com.school.schoolstock.domain.news.repository.NewsRepository">
 
-    <select id="getNewsList">
+    <select id="getNewsList" resultType="String">
         SELECT news_content FROM news
     </select>
 
