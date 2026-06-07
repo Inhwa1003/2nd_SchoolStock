@@ -1,30 +1,18 @@
 package com.school.schoolstock.domain.stock.service;
 
-import com.school.schoolstock.domain.stock.vo.Stocks;
+import com.school.schoolstock.domain.stock.dto.response.StockDetailResponse;
+import com.school.schoolstock.domain.stock.dto.response.StockListResponse;
+import com.school.schoolstock.domain.stock.dto.response.StockPriceResponse;
 
 import java.util.List;
 
 public interface StockService {
-    // 매도
-    String setSellOrder(String studentId, int sellPoint, int sellAmount, int stockNo);
-    // 매수
-    String setBuyOrder(String studentId, int buyPoint, int buyAmount, int stockNo);
-    // 주식명 조회
-    String getStockName(int stockNo);
-    // 주식명 리스트 조회
-    List<Stocks> getStockNameList();
-    // 주식 기본 정보 조회
-    List<Stocks> getStockInfo(int stockNo);
-    // 주식 현재가격 조회
+    //현재가 조회
     int getStockPrice(int stockNo);
-    // 주식 이전가 대비 가격 조회
-    int getStockPriceChange(int stockNo);
-    // 주식 등락률 조회
-    double getChangeRate(int stockNo);
-    // 주식 이전가격(전장마감가) 조회
-    int getPrevPoint(int stockNo);
-    // 발행 개수 변경
-    boolean setStockPubBalance(int buyAmount, int stockNo);
-    // 발행 정보 조회
-    Stocks getStockPubInfo(int stockNo);
+    //가격(현재가, (현재가 - 이전가), 등락률) 비동기 조회
+    StockPriceResponse getStockPriceInfo(int stockNo);
+    //주식목록 페이지
+    List<StockListResponse> getStockList();
+    //주식상세 페이지
+    StockDetailResponse getStockDetail(int stockNo);
 }
