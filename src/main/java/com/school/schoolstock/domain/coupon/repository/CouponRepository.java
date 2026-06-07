@@ -7,6 +7,8 @@ import java.util.List;
 @Mapper
 
 public interface CouponRepository {
+    //쿠폰 단건 조회(0608새로추가)
+    Coupons getCoupon(int couponNo);
 
     //쿠폰 상점에 등록된 쿠폰 조회
     List<Coupons> getCouponList();

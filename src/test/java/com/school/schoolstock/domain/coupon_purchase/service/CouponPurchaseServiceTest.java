@@ -1,31 +1,28 @@
 package com.school.schoolstock.domain.coupon_purchase.service;
 
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
+@Transactional
+@Slf4j
 @SpringBootTest
-
 public class CouponPurchaseServiceTest {
 
     @Autowired
     private CouponPurchaseService couponPurchaseService;
 
     @Test
-    void setPurchaseRecordTest(){
-        int result = couponPurchaseService.setPurchaseRecord(
-                "abc",
-                1,
-                "매점 1000원 할인 쿠폰",
-                1000,
-                "NOT_USED"
-        );
+    void buyCouponTest() {
+        // YES — 포인트 충분 + 보유쿠폰<3 (test01: 30000P, 쿠폰0)
+        Assertions.assertTrue(couponPurchaseService.buyCoupon("test01", 1));
+        log.info("구매 성공");
 
-        assertEquals(1, result);
-
-        System.out.println("쿠폰 구매 내역 등록 결과 = " + result);
+        // NO — 없는 쿠폰 -> false
+        Assertions.assertFalse(couponPurchaseService.buyCoupon("test01", 99999));
     }
 
 }

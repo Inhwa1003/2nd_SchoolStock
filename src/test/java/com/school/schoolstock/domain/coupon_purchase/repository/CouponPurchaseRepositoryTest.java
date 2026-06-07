@@ -1,5 +1,7 @@
 package com.school.schoolstock.domain.coupon_purchase.repository;
 
+import com.school.schoolstock.domain.coupon_purchase.vo.CouponPurchase;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -7,15 +9,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@SpringBootTest
 @Transactional
+@Slf4j
+@SpringBootTest
 class CouponPurchaseRepositoryTest {
 
     @Autowired
     CouponPurchaseRepository couponPurchaseRepository;
 
     @Test
-    void setPurchaseRecord_test() {
+    void setPurchaseRecordTest() {
         // given
         String studentId = "abc";
         int couponNo = 1;
@@ -24,16 +27,15 @@ class CouponPurchaseRepositoryTest {
         String purchaseState = "NOT_USED";
 
         // when
-        int result = couponPurchaseRepository.setPurchaseRecord(
-                studentId,
-                couponNo,
-                couponName,
-                couponPrice,
-                purchaseState
-        );
+        int result = couponPurchaseRepository.setPurchaseRecord(CouponPurchase.builder()
+                .studentId(studentId)
+                .couponNo(couponNo)
+                .purchasePoint(couponPrice)
+                .name(couponName)
+                .purchaseState(purchaseState).build());
 
         // then
-        System.out.println("쿠폰 구매 내역 등록 결과: " + result);
+        log.info("쿠폰 구매 내역 등록 결과: " + result);
         assertEquals(1, result);
     }
 }
