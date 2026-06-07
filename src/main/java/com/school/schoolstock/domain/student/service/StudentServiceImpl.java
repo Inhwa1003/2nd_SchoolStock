@@ -21,7 +21,6 @@ public class StudentServiceImpl implements StudentService{
     public boolean setMember(Students students) {
         return studentRepository.setMember(Students.builder()
                 .studentId(students.getStudentId())
-                .password(students.getPassword())
                 .name(students.getName())
                 .grade(students.getGrade())
                 .className(students.getClassName())
