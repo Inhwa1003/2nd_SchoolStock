@@ -9,8 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-
 @Transactional
 @Slf4j
 @SpringBootTest
@@ -35,9 +33,9 @@ public class StockRepositoryTest {
     @Test
     void getStockInfoTest(){
         //NO
-        //없는 주식번호 조회([]반환)
-        Assertions.assertEquals(0,stockRepository.getStockInfo(111).size());
-        Assertions.assertFalse(stockRepository.getStockInfo(111).size() > 0);
+        //없는 주식번호 조회(null반환)
+        Assertions.assertEquals(null,stockRepository.getStockInfo(111));
+        Assertions.assertFalse(stockRepository.getStockInfo(111) != null);
         //YES
         log.info("주식 기본 정보 : " + stockRepository.getStockInfo(1));
     }
