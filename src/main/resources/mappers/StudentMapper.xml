@@ -188,7 +188,7 @@
         GROUP BY o.stock_no
     </select>
     <!-- 내 주문 요청 조회 -->
-    <select id="getTotalMyOrder" parameterType="Map" resultType="Map">
+    <select id="getTotalMyOrder" parameterType="Map" resultType="com.school.schoolstock.domain.student.dto.response.MyOrderResponse">
         SELECT order_no AS "orderNo", order_content AS "orderContent", order_point AS "orderPoint", amount AS "amount", order_date AS "orderDate", order_state AS "orderState" FROM orders
         WHERE student_id = #{studentId} AND stock_no = #{stockNo} AND order_state ='PENDING' ORDER BY order_date ASC
     </select>
@@ -201,7 +201,7 @@
         UPDATE students SET total_point = total_point - #{totalPoint} WHERE student_id = #{studentId}
     </update>
     <!-- 내 포인트 내역 정보 조회(쿠폰, 지급, 주식) -->
-    <select id="getMyPointHistoryList" parameterType="String" resultType="Map">
+    <select id="getMyPointHistoryList" parameterType="String" resultType="com.school.schoolstock.domain.student.dto.response.MyPointHistoryResponse">
         SELECT cp.purchase_date          AS history_date,
                '쿠폰'                    AS history_type,
                cp.name                   AS history_content,
@@ -248,7 +248,7 @@
         WHERE student_id = #{studentId} AND total_point >= #{point}
     </update>
     <!-- 보유 쿠폰 정보 조회 -->
-    <select id="getMyCouponList" parameterType="String">
+    <select id="getMyCouponList" parameterType="com.school.schoolstock.domain.student.dto.response.MyCouponResponse">
         SELECT name, purchase_point FROM coupon_purchase WHERE purchase_state = 'NOT_USED' AND student_id = #{studentId}
     </select>
 </mapper>
