@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>쿠폰 상점</title>
+
+  <meta name="_csrf" th:content="${_csrf.token}">
+  <meta name="_csrf_header" th:content="${_csrf.headerName}">
+
+  <link rel="stylesheet" href="/css/CouponMarket.css">
+</head>
+<body>
+
+<div class="coupon-market-container">
+
+  <section class="coupon-market-header">
+    <h1 class="coupon-market-title">쿠폰 상점</h1>
+    <p class="coupon-market-description">
+      보유 포인트로 원하는 쿠폰을 구매할 수 있습니다.
+    </p>
+  </section>
+
+  <section class="coupon-market-content">
+
+    <div class="coupon-list" th:if="${couponList != null and !couponList.isEmpty()}">
+
+      <div class="coupon-card" th:each="coupon : ${couponList}">
+
+        <div class="coupon-info">
+          <h2 class="coupon-name" th:text="${coupon.name}">
+            쿠폰 이름
+          </h2>
+
+          <p class="coupon-point">
+            <span th:text="${coupon.couponPoint}">500</span>P
+          </p>
+        </div>
+
+        <button
+                type="button"
+                class="coupon-buy-button"
+                th:attr="data-coupon-no=${coupon.couponNo},
+                     data-coupon-name=${coupon.name},
+                     data-coupon-price=${coupon.couponPoint}">
+          구매하기
+        </button>
+
+      </div>
+
+    </div>
+
+    <div class="empty-message" th:if="${couponList == null or couponList.isEmpty()}">
+      등록된 쿠폰이 없습니다.
+    </div>
+
+    <p id="resultMessage" class="result-message"></p>
+    <pre id="jsonResult" class="json-result"></pre>
+
+  </section>
+
+</div>
+
+<script src="/js/coupon-market.js"></script>
+</body>
+</html>
