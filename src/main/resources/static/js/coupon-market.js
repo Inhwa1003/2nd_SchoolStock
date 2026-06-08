@@ -1,4 +1,16 @@
 /**
+ * 구매 버튼에서 쿠폰 정보를 꺼내서 buyCoupon 함수로 전달
+ * @param button 구매 버튼
+ */
+function buyCouponFromButton(button) {
+    const couponNo = button.dataset.couponNo;
+    const couponName = button.dataset.couponName;
+    const couponPoint = button.dataset.couponPoint;
+
+    buyCoupon(couponNo, couponName, couponPoint);
+}
+
+/**
  * 쿠폰 구매 확인 및 요청 처리 함수
  * @param couponNo 쿠폰 번호
  * @param couponName 쿠폰 이름

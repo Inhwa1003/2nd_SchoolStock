@@ -13,16 +13,10 @@ import java.util.Map;
 
 @RequiredArgsConstructor
 @Controller
-@RequestMapping("/schoolstock/s/coupons")
+@RequestMapping("/schoolstock/s/me/coupon-purchases")
 public class CouponPurchaseController {
 
     private final CouponPurchaseService couponPurchaseService;
-
-    // 임시 테스트 화면
-    @GetMapping("/test")
-    public String couponPurchaseTestPage() {
-        return "couponMarket";
-    }
 
     @PostMapping
     public ResponseEntity<Map<String, Object>> buyCoupon(
