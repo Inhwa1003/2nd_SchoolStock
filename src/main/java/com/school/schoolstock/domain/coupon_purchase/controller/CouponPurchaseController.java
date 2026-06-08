@@ -13,27 +13,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RequiredArgsConstructor
-@Controller
+@RestController
 @RequestMapping("/schoolstock/s/me/coupon-purchases")
 public class CouponPurchaseController {
 
     private final CouponPurchaseService couponPurchaseService;
 
-    // HTML 화면 확인용
-    @GetMapping("/test")
-    public String couponPurchaseTest(){
-        return "couponPurchase";
-    }
-
-    @ResponseBody
     @PostMapping
     public ResponseEntity<Map<String, Object>> buyCoupon(
             @RequestBody CouponPurchaseRequest request,
-            // Spring Security때문에 HttpSession이 아니라, Authentication 사용
             Authentication authentication
     ) {
-        System.out.println("쿠폰 구매 API Controller 진입");
-
         if (authentication == null || !authentication.isAuthenticated()) {
             Map<String, Object> error = new HashMap<>();
             error.put("status", 401);
@@ -60,7 +50,7 @@ public class CouponPurchaseController {
         Map<String, Object> response = new HashMap<>();
         response.put("code", 200);
         response.put("data", data);
-        response.put("message", "쿠폰 구매 내역이 정상적으로 등록되었습니다.");
+        response.put("message", "쿠폰을 정상적으로 구매했습니다.");
 
         return ResponseEntity.ok(response);
     }
