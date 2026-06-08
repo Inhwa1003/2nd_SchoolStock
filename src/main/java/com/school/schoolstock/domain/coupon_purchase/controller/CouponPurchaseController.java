@@ -13,7 +13,7 @@ import java.util.Map;
 
 @RequiredArgsConstructor
 @Controller
-@RequestMapping("/schoolstock/s/me/coupon-purchases")
+@RequestMapping("/schoolstock/s/coupons")
 public class CouponPurchaseController {
 
     private final CouponPurchaseService couponPurchaseService;
@@ -21,7 +21,7 @@ public class CouponPurchaseController {
     // 임시 테스트 화면
     @GetMapping("/test")
     public String couponPurchaseTestPage() {
-        return "couponPurchase";
+        return "couponMarket";
     }
 
     @PostMapping

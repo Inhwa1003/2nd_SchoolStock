@@ -1,65 +1,91 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <head>
   <meta charset="UTF-8">
-  <title>쿠폰 상점</title>
+  <title>쿠폰 구매 테스트</title>
 
   <meta name="_csrf" th:content="${_csrf.token}">
   <meta name="_csrf_header" th:content="${_csrf.headerName}">
 
-  <link rel="stylesheet" href="/css/CouponMarket.css">
+  <script th:src="@{/js/coupon-market.js}"></script>
 </head>
+
 <body>
 
-<div class="coupon-market-container">
+<header style="display:flex; justify-content:space-between; align-items:center;">
+  <h1>쿠폰 상점 및 구매 테스트</h1>
 
-  <section class="coupon-market-header">
-    <h1 class="coupon-market-title">쿠폰 상점</h1>
-    <p class="coupon-market-description">
-      보유 포인트로 원하는 쿠폰을 구매할 수 있습니다.
-    </p>
-  </section>
+  <div>
+    <span sec:authentication="name">아이디</span>님
 
-  <section class="coupon-market-content">
+    <form method="post" th:action="@{/logout}" style="display:inline;">
+      <button type="submit">로그아웃</button>
+    </form>
+  </div>
+</header>
 
-    <div class="coupon-list" th:if="${couponList != null and !couponList.isEmpty()}">
+<hr>
 
-      <div class="coupon-card" th:each="coupon : ${couponList}">
+<h2>쿠폰 목록</h2>
 
-        <div class="coupon-info">
-          <h2 class="coupon-name" th:text="${coupon.name}">
-            쿠폰 이름
-          </h2>
+<table border="1" cellpadding="8" cellspacing="0">
+  <thead>
+  <tr>
+    <th>쿠폰 번호</th>
+    <th>쿠폰 이름</th>
+    <th>가격</th>
+    <th>구매</th>
+  </tr>
+  </thead>
 
-          <p class="coupon-point">
-            <span th:text="${coupon.couponPoint}">500</span>P
-          </p>
-        </div>
+  <tbody>
+  <tr>
+    <td>1</td>
+    <td>간식 교환권</td>
+    <td>500P</td>
+    <td>
+      <button type="button"
+              onclick="buyCoupon(1, '간식 교환권', 500)">
+        구매하기
+      </button>
+    </td>
+  </tr>
 
-        <button
-                type="button"
-                class="coupon-buy-button"
-                th:attr="data-coupon-no=${coupon.couponNo},
-                     data-coupon-name=${coupon.name},
-                     data-coupon-price=${coupon.couponPoint}">
-          구매하기
-        </button>
+  <tr>
+    <td>2</td>
+    <td>청소당번 면제권</td>
+    <td>3000P</td>
+    <td>
+      <button type="button"
+              onclick="buyCoupon(2, '청소당번 면제권', 3000)">
+        구매하기
+      </button>
+    </td>
+  </tr>
 
-      </div>
+  <tr>
+    <td>3</td>
+    <td>분리수거 면제권</td>
+    <td>1000P</td>
+    <td>
+      <button type="button"
+              onclick="buyCoupon(3, '분리수거 면제권', 1000)">
+        구매하기
+      </button>
+    </td>
+  </tr>
+  </tbody>
+</table>
 
-    </div>
+<hr>
 
-    <div class="empty-message" th:if="${couponList == null or couponList.isEmpty()}">
-      등록된 쿠폰이 없습니다.
-    </div>
+<h3>응답 결과</h3>
+<p id="resultMessage">아직 구매 요청 전입니다.</p>
 
-    <p id="resultMessage" class="result-message"></p>
-    <pre id="jsonResult" class="json-result"></pre>
+<pre id="jsonResult"></pre>
 
-  </section>
-
-</div>
-
-<script src="/js/coupon-market.js"></script>
 </body>
 </html>
