@@ -1,6 +1,5 @@
 package com.school.schoolstock.domain.coupon_purchase.service;
 
-import com.school.schoolstock.domain.coupon_purchase.dto.CouponPurchaseResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

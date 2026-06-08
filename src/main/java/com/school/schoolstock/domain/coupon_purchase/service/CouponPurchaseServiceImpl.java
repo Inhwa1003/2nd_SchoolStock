@@ -2,7 +2,6 @@ package com.school.schoolstock.domain.coupon_purchase.service;
 
 import com.school.schoolstock.domain.coupon.repository.CouponRepository;
 import com.school.schoolstock.domain.coupon.vo.Coupons;
-import com.school.schoolstock.domain.coupon_purchase.dto.CouponPurchaseResponse;
 import com.school.schoolstock.domain.coupon_purchase.repository.CouponPurchaseRepository;
 import com.school.schoolstock.domain.coupon_purchase.vo.CouponPurchase;
 import com.school.schoolstock.domain.student.repository.StudentRepository;

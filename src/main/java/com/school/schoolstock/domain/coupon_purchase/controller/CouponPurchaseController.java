@@ -1,12 +1,10 @@
 package com.school.schoolstock.domain.coupon_purchase.controller;
 
 import com.school.schoolstock.domain.coupon_purchase.dto.CouponPurchaseRequest;
-import com.school.schoolstock.domain.coupon_purchase.dto.CouponPurchaseResponse;
 import com.school.schoolstock.domain.coupon_purchase.service.CouponPurchaseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
