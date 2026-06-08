@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>내 자산 · SchoolStock</title>
+</head>
+<body>
+<header style="display:flex; justify-content:space-between; align-items:center;">
+    <h1>내 자산</h1>
+    <div>
+        <span sec:authentication="name">아이디</span> 님
+        <form method="post" th:action="@{/schoolstock/logout}" style="display:inline;">
+            <button type="submit">로그아웃</button>
+        </form>
+    </div>
+</header>
+<hr>
+<p>학생 내자산 화면 (구현 예정)</p>
+</body>
+</html>

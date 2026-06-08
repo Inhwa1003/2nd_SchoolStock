@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.school.schoolstock.domain.coupon.repository.CouponRepository">
+
+    <select id="getCouponList" resultType="com.school.schoolstock.domain.coupon.vo.Coupons">
+        SELECT coupon_no AS couponNo, name, coupon_point AS couponPoint FROM COUPONS ORDER BY coupon_no ASC
+    </select>
+    <!--쿠폰 구매를 위해 추가 (0608)-->
+    <select id="getCoupon" parameterType="int" resultType="com.school.schoolstock.domain.coupon.vo.Coupons">
+        SELECT coupon_no AS couponNo, name, coupon_point AS couponPoint
+        FROM coupons
+        WHERE coupon_no = #{couponNo}
+    </select>
+</mapper>
