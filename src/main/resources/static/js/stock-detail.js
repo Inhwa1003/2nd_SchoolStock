@@ -1,21 +1,38 @@
 document.addEventListener("DOMContentLoaded", function () {
     const orderTypeSelect = document.getElementById("orderTypeSelect");
-    const orderListBody = document.getElementById("orderListBody");
     const backBtn = document.getElementById("backBtn");
+    const sellBtn = document.getElementById("sellBtn");
+
+    console.log("stock-detail.js 로딩됨");
+    console.log("sellBtn:", sellBtn);
 
     // 처음 화면 진입 시 기본값은 매도
     loadOrderList("sell");
 
     // 매수/매도 선택 변경 시 주문 목록 다시 조회
-    orderTypeSelect.addEventListener("change", function () {
-        const orderType = orderTypeSelect.value;
-        loadOrderList(orderType);
-    });
+    if (orderTypeSelect) {
+        orderTypeSelect.addEventListener("change", function () {
+            const orderType = orderTypeSelect.value;
+            loadOrderList(orderType);
+        });
+    }
 
     // 뒤로가기 버튼
-    backBtn.addEventListener("click", function () {
-        history.back();
-    });
+    if (backBtn) {
+        backBtn.addEventListener("click", function () {
+            history.back();
+        });
+    }
+
+    // 매도 버튼 클릭 시 매도 주문 요청
+    if (sellBtn) {
+        sellBtn.addEventListener("click", function () {
+            console.log("매도 버튼 클릭됨");
+            requestSellOrder();
+        });
+    } else {
+        console.error("sellBtn을 찾을 수 없습니다.");
+    }
 
     // 주가 변동 표시
     setPriceChange();
@@ -81,16 +98,25 @@ async function requestSellOrder() {
         return;
     }
 
+    const headers = {
+        "Content-Type": "application/json"
+    };
+
+    const csrfTokenMeta = document.querySelector("meta[name='_csrf']");
+    const csrfHeaderMeta = document.querySelector("meta[name='_csrf_header']");
+
+    if (csrfTokenMeta && csrfHeaderMeta) {
+        const csrfToken = csrfTokenMeta.getAttribute("content");
+        const csrfHeader = csrfHeaderMeta.getAttribute("content");
+        headers[csrfHeader] = csrfToken;
+    }
+
     try {
-        const csrfToken = document.querySelector("meta[name='_csrf']").getAttribute("content");
-        const csrfHeader = document.querySelector("meta[name='_csrf_header']").getAttribute("content");
+        console.log("매도 요청 전송:", `/schoolstock/s/me/stocks/${stockNo}/sell`);
 
         const response = await fetch(`/schoolstock/s/me/stocks/${stockNo}/sell`, {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                [csrfHeader]: csrfToken
-            },
+            headers: headers,
             body: JSON.stringify({
                 orderPoint: orderPoint,
                 orderAmount: orderAmount
@@ -102,8 +128,8 @@ async function requestSellOrder() {
         alert(result.message);
 
         if (response.ok) {
-            loadOrderList("sell");
             document.getElementById("orderTypeSelect").value = "sell";
+            loadOrderList("sell");
         }
 
     } catch (error) {
@@ -111,7 +137,6 @@ async function requestSellOrder() {
         alert("매도 주문 요청 중 오류가 발생했습니다.");
     }
 }
-
 
 /**
  * BUY / SELL 한글 변환
@@ -150,7 +175,7 @@ function setPriceChange() {
     const diff = nowPrice - prevPrice;
 
     if (diff > 0) {
-        priceChange.textContent = `▲ ${diff}P`;
+        priceChange.textContent = ` ${diff}P`;
         priceChange.classList.add("up");
     } else if (diff < 0) {
         priceChange.textContent = `▼ ${Math.abs(diff)}P`;
