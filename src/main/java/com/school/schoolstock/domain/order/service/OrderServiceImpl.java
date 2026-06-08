@@ -17,6 +17,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+// 매도 기능: setSellOrder
+// 매수 기능: setBuyOrder
+// 매수, 매도 조회 기능: getStockOrders
 
 @RequiredArgsConstructor
 @Service
@@ -42,6 +45,7 @@ public class OrderServiceImpl implements OrderService {
         return result;
     }
 
+    // 매도 기능
     @Transactional
     @Override
     public String setSellOrder(String studentId, OrderRequest request) {
@@ -78,6 +82,7 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
+    // 매수 기능
     @Transactional
     @Override
     public String setBuyOrder(String studentId, OrderRequest request) {
