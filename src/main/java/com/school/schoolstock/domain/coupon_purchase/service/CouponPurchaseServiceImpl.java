@@ -20,20 +20,20 @@ public class CouponPurchaseServiceImpl implements CouponPurchaseService {
 
     @Transactional
     @Override
-    public CouponPurchaseResponse buyCoupon(String studentId, int couponNo) {
+    public boolean buyCoupon(String studentId, int couponNo) {
         //학생 보유쿠폰 수량 초과시
         if(studentRepository.getMyCouponAmount(studentId) >= 3)
-            return null;
+            return false;
 
         //1.쿠폰 정보 조회
         Coupons coupon = couponRepository.getCoupon(couponNo);
         //없는 쿠폰
         if(coupon == null)
-            return null;
+            return false;
 
         //2.포인트 충분하면 차감 + 보유쿠폰 +1 (부족하면 0행 -> false)
         if(!studentRepository.setStudentAssets(studentId, coupon.getCouponPoint()))
-            return null;
+            return false;
 
         //3.구매내역 등록 (구매 당시 이름·가격 저장)
         CouponPurchase couponPurchase = CouponPurchase.builder()
@@ -47,13 +47,6 @@ public class CouponPurchaseServiceImpl implements CouponPurchaseService {
         //4. 구매 내역 등록
         couponPurchaseRepository.setPurchaseRecord(couponPurchase);
 
-        // 5. ResponseDTO 반환
-        return CouponPurchaseResponse.builder()
-                .couponPurchaseNo(couponPurchase.getCouponPurchaseNo())
-                .couponNo(couponNo)
-                .couponName(coupon.getName())
-                .purchasePoint(coupon.getCouponPoint())
-                .purchaseState("NOT_USED")
-                .build();
+        return true;
     }
 }
