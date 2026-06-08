@@ -21,9 +21,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, RoleSuccessHandler SuccessHandler) throws Exception{
 
+        http.csrf(csrf -> csrf
+                .ignoringRequestMatchers("/schoolstock/s/me/coupon-purchases")
+        );
+
         http.authorizeHttpRequests(auth -> auth
-                .requestMatchers("/schoolstock/s/**").hasRole("STUDENT")
-                .requestMatchers("/schoolstock/t/**").hasRole("TEACHER")
                 .requestMatchers(
                         "/",
                         "/schoolstock/login-view",
@@ -31,8 +33,14 @@ public class SecurityConfig {
                         "/schoolstock/add-member-view",
                         "/schoolstock/add-member",
                         "/css/**",
-                        "/js/**").permitAll()
-                .anyRequest().authenticated());
+                        "/js/**")
+                .permitAll()
+
+                .requestMatchers("/schoolstock/s/**").hasRole("STUDENT")
+                .requestMatchers("/schoolstock/t/**").hasRole("TEACHER")
+
+                .anyRequest().authenticated()
+        );
 
         http.formLogin(form -> form
                 .loginPage("/schoolstock/login-view")
