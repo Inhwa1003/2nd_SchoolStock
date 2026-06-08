@@ -5,17 +5,24 @@ import com.school.schoolstock.domain.coupon_purchase.service.CouponPurchaseServi
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @RequiredArgsConstructor
-@RestController
+@Controller
 @RequestMapping("/schoolstock/s/me/coupon-purchases")
 public class CouponPurchaseController {
 
     private final CouponPurchaseService couponPurchaseService;
+
+    // 임시 테스트 화면
+    @GetMapping("/test")
+    public String couponPurchaseTestPage() {
+        return "couponPurchase";
+    }
 
     @PostMapping
     public ResponseEntity<Map<String, Object>> buyCoupon(
@@ -32,12 +39,12 @@ public class CouponPurchaseController {
 
         String studentId = authentication.getName();
 
-        CouponPurchaseResponse data = couponPurchaseService.buyCoupon(
+        boolean result = couponPurchaseService.buyCoupon(
                 studentId,
                 request.getCouponNo()
         );
 
-        if (data == null) {
+        if (!result) {
             Map<String, Object> error = new HashMap<>();
             error.put("status", 400);
             error.put("code", "BAD_REQUEST");
@@ -47,8 +54,8 @@ public class CouponPurchaseController {
 
         Map<String, Object> response = new HashMap<>();
         response.put("code", 200);
-        response.put("data", data);
-        response.put("message", "쿠폰을 정상적으로 구매했습니다.");
+        response.put("data", null);
+        response.put("message", "쿠폰 구매가 완료되었습니다.");
 
         return ResponseEntity.ok(response);
     }

@@ -18,26 +18,18 @@ public class CouponPurchaseServiceTest {
     @Test
     void buyCouponTest() {
         // YES — 포인트 충분 + 보유쿠폰 < 3
-        // studentId가 123인 값이 없으면, 실패로 뜸. DB 데이터 확인!
-        CouponPurchaseResponse response = couponPurchaseService.buyCoupon("123", 1);
+        // DB 데이터 확인!
+        boolean success = couponPurchaseService.buyCoupon("789", 1);
 
-        Assertions.assertNotNull(response);
-        Assertions.assertEquals(1, response.getCouponNo());
-        Assertions.assertEquals("NOT_USED", response.getPurchaseState());
-        Assertions.assertTrue(response.getPurchasePoint() > 0);
-        Assertions.assertNotNull(response.getCouponName());
-
-        log.info("구매 성공");
-        log.info("couponPurchaseNo = {}", response.getCouponPurchaseNo());
-        log.info("couponNo = {}", response.getCouponNo());
-        log.info("couponName = {}", response.getCouponName());
-        log.info("purchasePoint = {}", response.getPurchasePoint());
-        log.info("purchaseState = {}", response.getPurchaseState());
-
+        Assertions.assertTrue(success);
+        
+        log.info("쿠폰 구매 성공 정상 처리");
+        
         // NO — 없는 쿠폰 -> null
-        CouponPurchaseResponse failResponse = couponPurchaseService.buyCoupon("test01", 99999);
+        boolean failResponse = couponPurchaseService.buyCoupon("test01", 99999);
 
-        Assertions.assertNull(failResponse);
-        log.info("없는 쿠폰 구매 실패 정상 처리");
+        Assertions.assertFalse(failResponse);
+
+        log.info("없는 쿠폰 및 사용자 구매 실패 정상 처리");
     }
 }
