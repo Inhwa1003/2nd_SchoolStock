@@ -48,7 +48,7 @@ async function loadOrderList(orderType) {
                 <tr>
                     <td>${convertOrderContent(order.orderContent)}</td>
                     <td>${order.orderPoint}</td>
-                    <td>${order.amount}</td>
+                    <td>${order.orderAmount}</td>
                 </tr>
             `;
 
@@ -65,6 +65,53 @@ async function loadOrderList(orderType) {
         `;
     }
 }
+
+/**
+ * 매도 주문 요청
+ */
+async function requestSellOrder() {
+    const sellPrice = document.getElementById("sellPrice");
+    const sellAmount = document.getElementById("sellAmount");
+
+    const orderPoint = Number(sellPrice.value);
+    const orderAmount = Number(sellAmount.value);
+
+    if (orderPoint <= 0 || orderAmount <= 0) {
+        alert("가격과 수량을 올바르게 입력해주세요.");
+        return;
+    }
+
+    try {
+        const csrfToken = document.querySelector("meta[name='_csrf']").getAttribute("content");
+        const csrfHeader = document.querySelector("meta[name='_csrf_header']").getAttribute("content");
+
+        const response = await fetch(`/schoolstock/s/me/stocks/${stockNo}/sell`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                [csrfHeader]: csrfToken
+            },
+            body: JSON.stringify({
+                orderPoint: orderPoint,
+                orderAmount: orderAmount
+            })
+        });
+
+        const result = await response.json();
+
+        alert(result.message);
+
+        if (response.ok) {
+            loadOrderList("sell");
+            document.getElementById("orderTypeSelect").value = "sell";
+        }
+
+    } catch (error) {
+        console.error("매도 주문 요청 실패:", error);
+        alert("매도 주문 요청 중 오류가 발생했습니다.");
+    }
+}
+
 
 /**
  * BUY / SELL 한글 변환
