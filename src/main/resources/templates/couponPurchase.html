@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+  <meta charset="UTF-8">
+  <title>쿠폰 구매 POST 테스트</title>
+
+  <meta name="_csrf" th:content="${_csrf.token}">
+  <meta name="_csrf_header" th:content="${_csrf.headerName}">
+</head>
+
+<body>
+
+<header style="display:flex; justify-content:space-between; align-items:center;">
+  <h1>쿠폰 구매 POST 테스트</h1>
+
+  <div>
+    <span sec:authentication="name">아이디</span>님
+
+    <form method="post" th:action="@{/logout}" style="display:inline;">
+      <button type="submit">로그아웃</button>
+    </form>
+  </div>
+</header>
+
+<hr>
+
+<h2>POST 요청 테스트</h2>
+
+<p>
+  버튼을 누르면 <strong>POST /schoolstock/s/me/coupon-purchases</strong> 로 요청이 갑니다.
+</p>
+
+<label>
+  쿠폰 번호:
+  <input type="number" id="couponNo" value="1">
+</label>
+
+<button type="button" onclick="buyCoupon()">POST 테스트</button>
+
+<hr>
+
+<h3>응답 결과</h3>
+
+<p id="resultMessage">아직 요청 전입니다.</p>
+
+<table border="1" cellpadding="8" cellspacing="0" id="resultTable" style="display:none;">
+  <tr>
+    <th>쿠폰 구매 번호</th>
+    <td id="couponPurchaseNo"></td>
+  </tr>
+  <tr>
+    <th>쿠폰 번호</th>
+    <td id="resultCouponNo"></td>
+  </tr>
+  <tr>
+    <th>쿠폰 이름</th>
+    <td id="couponName"></td>
+  </tr>
+  <tr>
+    <th>구매 포인트</th>
+    <td id="purchasePoint"></td>
+  </tr>
+  <tr>
+    <th>사용 상태</th>
+    <td id="purchaseState"></td>
+  </tr>
+</table>
+
+<h3>전체 JSON 응답</h3>
+<pre id="jsonResult"></pre>
+
+<script>
+  async function buyCoupon() {
+    const couponNo = document.getElementById("couponNo").value;
+
+    const resultMessage = document.getElementById("resultMessage");
+    const resultTable = document.getElementById("resultTable");
+    const jsonResult = document.getElementById("jsonResult");
+
+    const csrfToken = document.querySelector("meta[name='_csrf']").getAttribute("content");
+    const csrfHeader = document.querySelector("meta[name='_csrf_header']").getAttribute("content");
+
+    resultMessage.innerText = "POST 요청 중...";
+    resultTable.style.display = "none";
+    jsonResult.innerText = "";
+
+    try {
+      const response = await fetch("/schoolstock/s/me/coupon-purchases", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          [csrfHeader]: csrfToken
+        },
+        body: JSON.stringify({
+          couponNo: Number(couponNo)
+        })
+      });
+
+      const result = await response.json();
+
+      console.log(result);
+      jsonResult.innerText = JSON.stringify(result, null, 2);
+
+      if (!response.ok) {
+        resultMessage.innerText = "실패: " + result.message;
+        return;
+      }
+
+      resultMessage.innerText = "성공: " + result.message;
+
+      document.getElementById("couponPurchaseNo").innerText = result.data.couponPurchaseNo;
+      document.getElementById("resultCouponNo").innerText = result.data.couponNo;
+      document.getElementById("couponName").innerText = result.data.couponName;
+      document.getElementById("purchasePoint").innerText = result.data.purchasePoint;
+      document.getElementById("purchaseState").innerText = result.data.purchaseState;
+
+      resultTable.style.display = "table";
+
+    } catch (error) {
+      console.error(error);
+      resultMessage.innerText = "요청 중 오류가 발생했습니다.";
+      jsonResult.innerText = error;
+    }
+  }
+</script>
+
+</body>
+</html>

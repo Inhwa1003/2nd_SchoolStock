@@ -6,17 +6,24 @@ import com.school.schoolstock.domain.coupon_purchase.service.CouponPurchaseServi
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @RequiredArgsConstructor
-@RestController
+@Controller
 @RequestMapping("/schoolstock/s/me/coupon-purchases")
 public class CouponPurchaseController {
 
     private final CouponPurchaseService couponPurchaseService;
+
+    // HTML 화면 확인용
+    @GetMapping("/test")
+    public String couponPurchaseTest(){
+        return "couponPurchase";
+    }
 
     @PostMapping
     public ResponseEntity<Map<String, Object>> buyCoupon(

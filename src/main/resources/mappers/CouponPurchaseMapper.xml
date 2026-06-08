@@ -7,14 +7,8 @@
 
     <!-- 쿠폰 구매 내역 등록 -->
     <insert id="setPurchaseRecord"
-            parameterType="com.school.schoolstock.domain.coupon_purchase.vo.CouponPurchase"
-            <!--→ DB에서 AUTO_INCREMENT로 생성된 PK 값을 가져오겠다는 뜻-->
-            useGeneratedKeys="true"
+            parameterType="com.school.schoolstock.domain.coupon_purchase.vo.CouponPurchase">
 
-            <!--→ 가져온 PK 값을 Java 객체의 couponPurchaseNo 필드에 넣겠다는 뜻-->
-            keyProperty="couponPurchaseNo"
-            <!-- DB 테이블에서 자동 생성되는 컬럼명이 coupon_purchase_no라는 뜻 -->
-            keyColumn="coupon_purchase_no">
         INSERT INTO COUPON_PURCHASE ( student_id, coupon_no, purchase_date, purchase_point, name, purchase_state )
         VALUES ( #{studentId}, #{couponNo}, NOW(), #{purchasePoint}, #{name}, #{purchaseState} )
     </insert>
