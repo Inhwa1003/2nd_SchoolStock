@@ -26,6 +26,7 @@ public class StudentRepositoryTest {
         // 존재하지 않는 아이디 (null 반환)
         log.info(studentRepository.getIdCheck("testid"));
     }
+
     @Test
     public void setMemberTest(){
         //NO
@@ -46,6 +47,7 @@ public class StudentRepositoryTest {
                 .studentNumber(44)
                 .build()));
     }
+
     @Test
     public void loginTest(){
         //NO
@@ -58,6 +60,7 @@ public class StudentRepositoryTest {
         //YES
         log.info(studentRepository.login("abc", "abc123!").toString());
     }
+
     @Test
     public void getMyValueTest(){
         //NO
@@ -66,6 +69,7 @@ public class StudentRepositoryTest {
         //YES
         log.info("내 총자산 : " + studentRepository.getMyValue("abc"));
     }
+
     @Test
     public void getMyPointTest(){
         //NO
@@ -74,6 +78,7 @@ public class StudentRepositoryTest {
         //YES
         log.info("내 가용포인트 : " + studentRepository.getMyPoint("abc"));
     }
+
     @Test
     public void getTotalProfitTest(){
         //NO
@@ -82,6 +87,7 @@ public class StudentRepositoryTest {
         //YES
         log.info("총 손익 : " + studentRepository.getTotalProfit("abca"));
     }
+
     @Test
     public void getMyCouponAmountTest(){
         //NO
@@ -90,6 +96,7 @@ public class StudentRepositoryTest {
         //YES
         log.info("보유쿠폰 수량 : " + studentRepository.getMyCouponAmount("abc"));
     }
+
     @Test
     public void getMyStockAmountTest(){
         //NO
@@ -102,6 +109,7 @@ public class StudentRepositoryTest {
         //YES
         log.info("특정 보유주식 수량 : " + studentRepository.getMyStockAmount("abc", 1));
     }
+
     @Test
     public void getAveragePointTest(){
         //NO
@@ -114,6 +122,7 @@ public class StudentRepositoryTest {
         //YES
         log.info("특정 보유 주식 평균가격 : " + studentRepository.getAveragePoint("abc", 1));
     }
+
     @Test
     public void getPurchasePointTest(){
         //NO
@@ -126,6 +135,7 @@ public class StudentRepositoryTest {
         //YES
         log.info("특정 보유 주식 총 구매 비용 : " + studentRepository.getPurchasePoint("abc", 1));
     }
+
     @Test
     public void getMyStockNosTest(){
         //NO
@@ -136,6 +146,7 @@ public class StudentRepositoryTest {
         //YES
         log.info("학생이 구매한 주식 번호 : " + studentRepository.getMyStockNos("abc"));
     }
+
     @Test
     public void getStockProfitTest(){
         //NO
@@ -148,6 +159,7 @@ public class StudentRepositoryTest {
         //YES
         log.info("특정 보유 주식 수익금 : " + studentRepository.getStockProfit("abc", 1));
     }
+
     @Test
     public void getTotalMyOrderTest(){
         //NO
@@ -162,6 +174,7 @@ public class StudentRepositoryTest {
         //없는 결과 [] 반환
         log.info("특정 주식 내 주문 요청 : " + studentRepository.getTotalMyOrder("abc", 1));
     }
+
     @Test
     public void setStudentPointUpTest(){
         //NO
@@ -171,6 +184,7 @@ public class StudentRepositoryTest {
         //YES
         log.info("보유 포인트 증가 결과 : " + studentRepository.setStudentPointDown("abc", 100));
     }
+
     @Test
     public void getMyPointHistoryListTest(){
         //NO
@@ -181,6 +195,7 @@ public class StudentRepositoryTest {
         //YES
         log.info("내 포인트 내역 정보 (쿠폰, 지급, 주식) : " + studentRepository.getMyPointHistoryList("abc"));
     }
+
     @Test
     public void setStudentAssetsTest(){
         //NO
@@ -193,6 +208,7 @@ public class StudentRepositoryTest {
         Assertions.assertTrue(studentRepository.setStudentAssets("abc", -100));
         log.info("학생 포인트 차감 및 보유쿠폰 수량 증가 결과 : " + studentRepository.setStudentAssets("abc", 100));
     }
+
     @Test
     public void getMyCouponListTest(){
         //NO

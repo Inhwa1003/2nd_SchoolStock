@@ -49,9 +49,11 @@ public class OrderServiceImpl implements OrderService {
         //1. 발행 잔량 확인 있으면 학생간 거래x 매도 요청x
         if(stockRepository.getStockPubInfo(request.getStockNo()).getPublicationBalance() > 0)
             return "발행 잔량이 남아 매도요청 할 수 없습니다.";
+
         //2. (보유한 주식 수량 < 매도요청 수량 )체크
         if(studentRepository.getMyStockAmount(studentId, request.getStockNo()) < request.getOrderAmount())
             return  "보유 주식량보다 많은 매도 요청은 할 수 없습니다.";
+
         //3. 매수 주문 매칭 시도 (가격 수량 다맞는 조건)
         matchOrder = orderRepository.getMatchOrder(request.getStockNo(), request.getOrderPoint(), request.getOrderAmount(), studentId,"BUY");
 
@@ -66,7 +68,9 @@ public class OrderServiceImpl implements OrderService {
             //4-4. 매도자 포인트 증가(매수자는 등록할때 포인트 감소)
             studentRepository.setStudentPointUp(studentId, (request.getOrderAmount() * request.getOrderPoint()));
             return "매도가 완료되었습니다.";
+
         }else{
+
             //5. 매칭X
             // 5-1. 주문 대기로 요청
             orderRepository.setOrderRequest("SELL", request.getOrderPoint(), request.getOrderAmount(), "PENDING", studentId, request.getStockNo());
@@ -81,6 +85,7 @@ public class OrderServiceImpl implements OrderService {
         // 학생이 주문 요청한 가격보다 보유포인트가 적을때 실행
         if(studentRepository.getMyPoint(studentId) < (request.getOrderAmount() * request.getOrderPoint()))
             return "보유포인트가 부족합니다.";
+
         // 1. 발행 개수가 남았는지 체크 있으면 실행
         Stocks pubInfo = stockRepository.getStockPubInfo(request.getStockNo());
         if(pubInfo.getPublicationBalance() > 0){
@@ -99,8 +104,8 @@ public class OrderServiceImpl implements OrderService {
                 return "발행 가격 " + pubInfo.getPublicationPoint() + "P 매수가 완료 되었습니다. 남은 발행잔량은 " + (pubInfo.getPublicationBalance() - buyFromPub) + "주 입니다.";
             }
         }
-
         matchOrder = orderRepository.getMatchOrder(request.getStockNo(), request.getOrderPoint(), request.getOrderAmount(), studentId, "SELL");
+
         // 2. 매수 요청에 따른 매도 요청이 있을경우 실행
         if(matchOrder != null && !matchOrder.isEmpty()){
             // 2-1 매도 주문 '체결'로 업데이트
@@ -114,7 +119,9 @@ public class OrderServiceImpl implements OrderService {
             // 2-5. 매도 학생 보유 포인트 증가
             studentRepository.setStudentPointUp(matchOrder.get("studentId").toString(), (request.getOrderAmount() * request.getOrderPoint()));
             return "매수가 완료되었습니다.";
+
         }else {
+
             // 3. 발행 잔량 다 팔리고 학생간 거래 매칭도 없다면 실행
             // 3-1. 주문 대기로 요청
             orderRepository.setOrderRequest("BUY", request.getOrderPoint(), request.getOrderAmount(), "PENDING", studentId, request.getStockNo());

@@ -7,6 +7,7 @@
         FROM STUDENTS
         WHERE student_id = #{studentId}
     </select>
+
     <!-- 회원가입 -->
     <insert id="setMember" parameterType="com.school.schoolstock.domain.student.vo.Students">
         INSERT INTO STUDENTS
@@ -14,6 +15,7 @@
         VALUES
             (#{studentId}, #{name}, #{grade}, #{className}, #{studentNumber}, CURDATE(), 0, 30000)
     </insert>
+
     <!-- 로그인(JPA로 구현하면서 사실상 필요없어짐 삭제예정) -->
     <select id="login" parameterType="com.school.schoolstock.domain.student.vo.Students" resultType="com.school.schoolstock.domain.student.vo.Students">
         SELECT name, grade, class_name, student_number, total_point
