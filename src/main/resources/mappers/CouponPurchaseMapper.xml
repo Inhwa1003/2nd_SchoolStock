@@ -6,7 +6,9 @@
 <mapper namespace="com.school.schoolstock.domain.coupon_purchase.repository.CouponPurchaseRepository">
 
     <!-- 쿠폰 구매 내역 등록 -->
-    <insert id="setPurchaseRecord">
+    <insert id="setPurchaseRecord"
+            parameterType="com.school.schoolstock.domain.coupon_purchase.vo.CouponPurchase">
+
         INSERT INTO COUPON_PURCHASE ( student_id, coupon_no, purchase_date, purchase_point, name, purchase_state )
         VALUES ( #{studentId}, #{couponNo}, NOW(), #{purchasePoint}, #{name}, #{purchaseState} )
     </insert>

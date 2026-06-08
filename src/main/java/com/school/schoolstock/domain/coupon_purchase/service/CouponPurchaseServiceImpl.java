@@ -34,7 +34,7 @@ public class CouponPurchaseServiceImpl implements CouponPurchaseService {
         if(!studentRepository.setStudentAssets(studentId, coupon.getCouponPoint()))
             return false;
 
-        //3.구매내역 등록 (구매 당시 이름·가격 저장)
+        // 3. 구매내역 객체 생성
         couponPurchaseRepository.setPurchaseRecord(CouponPurchase.builder()
                 .studentId(studentId)
                 .couponNo(couponNo)

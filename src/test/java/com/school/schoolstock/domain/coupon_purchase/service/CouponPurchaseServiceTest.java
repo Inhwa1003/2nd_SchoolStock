@@ -17,12 +17,19 @@ public class CouponPurchaseServiceTest {
 
     @Test
     void buyCouponTest() {
-        // YES — 포인트 충분 + 보유쿠폰<3 (test01: 30000P, 쿠폰0)
-        Assertions.assertTrue(couponPurchaseService.buyCoupon("test01", 1));
-        log.info("구매 성공");
+        // YES — 포인트 충분 + 보유쿠폰 < 3
+        // DB 데이터 확인!
+        boolean success = couponPurchaseService.buyCoupon("789", 1);
 
-        // NO — 없는 쿠폰 -> false
-        Assertions.assertFalse(couponPurchaseService.buyCoupon("test01", 99999));
+        Assertions.assertTrue(success);
+        
+        log.info("쿠폰 구매 성공 정상 처리");
+        
+        // NO — 없는 쿠폰 -> null
+        boolean failResponse = couponPurchaseService.buyCoupon("test01", 99999);
+
+        Assertions.assertFalse(failResponse);
+
+        log.info("없는 쿠폰 및 사용자 구매 실패 정상 처리");
     }
-
 }
