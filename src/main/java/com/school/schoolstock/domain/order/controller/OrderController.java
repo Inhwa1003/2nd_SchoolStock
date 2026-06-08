@@ -2,10 +2,13 @@ package com.school.schoolstock.domain.order.controller;
 
 import com.school.schoolstock.domain.order.dto.response.OrderResponse;
 import com.school.schoolstock.domain.order.service.OrderService;
+import com.school.schoolstock.domain.stock.repository.StockRepository;
+import com.school.schoolstock.domain.stock.vo.Stocks;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedHashMap;
@@ -18,6 +21,25 @@ import java.util.Map;
 public class OrderController {
 
     private final OrderService orderService;
+    private final StockRepository stockRepository;
+
+    // 주식 상세 페이지 화면 반환
+    @GetMapping("/{stockNo}")
+    public String getStockDetailPage(@PathVariable int stockNo, Model model) {
+
+        Stocks stock = stockRepository.getStockPubInfo(stockNo);
+
+        model.addAttribute("stockNo", stock.getStockNo());
+        model.addAttribute("stockName", stock.getName());
+        model.addAttribute("stockContent", stock.getStockContent());
+
+        // 현재 Stocks VO에는 nowPrice가 없어서 publicationPoint를 현재가처럼 사용
+        model.addAttribute("nowPrice", stock.getPublicationPoint());
+
+        model.addAttribute("prevPrice", stock.getPrevPoint());
+
+        return "stockDetail";
+    }
 
     // 대기 매수 주문 목록 조회
     @ResponseBody

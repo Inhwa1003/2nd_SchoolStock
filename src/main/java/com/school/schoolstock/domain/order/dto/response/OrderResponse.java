@@ -19,7 +19,7 @@ public class OrderResponse {
     //가격
     private int orderPoint;
     //수량
-    private int amount;
+    private int orderAmount;
     private String orderState;
     private LocalDateTime orderDate;
 }
