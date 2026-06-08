@@ -50,14 +50,14 @@ public class OrderController {
 
             if (buyOrders == null || buyOrders.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(response(
+                        .body(errorResponse(
                                 404,
-                                null,
+                                "BUY_ORDER_NOT_FOUND",
                                 "대기 중인 매수 주문을 찾을 수 없습니다."
                         ));
             }
 
-            return ResponseEntity.ok(response(
+            return ResponseEntity.ok(successResponse(
                     200,
                     buyOrders,
                     "대기 매수 주문 목록이 정상적으로 조회되었습니다."
@@ -65,9 +65,9 @@ public class OrderController {
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(response(
+                    .body(errorResponse(
                             500,
-                            null,
+                            "INTERNAL_SERVER_ERROR",
                             "서버 내부 오류로 대기 매수 주문 목록 조회에 실패했습니다."
                     ));
         }
@@ -82,14 +82,14 @@ public class OrderController {
 
             if (sellOrders == null || sellOrders.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(response(
+                        .body(errorResponse(
                                 404,
-                                null,
+                                "SELL_ORDER_NOT_FOUND",
                                 "대기 중인 매도 주문을 찾을 수 없습니다."
                         ));
             }
 
-            return ResponseEntity.ok(response(
+            return ResponseEntity.ok(successResponse(
                     200,
                     sellOrders,
                     "대기 매도 주문 목록이 정상적으로 조회되었습니다."
@@ -97,19 +97,27 @@ public class OrderController {
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(response(
+                    .body(errorResponse(
                             500,
-                            null,
+                            "INTERNAL_SERVER_ERROR",
                             "서버 내부 오류로 대기 매도 주문 목록 조회에 실패했습니다."
                     ));
         }
     }
 
-    private Map<String, Object> response(int code, Object data, String message) {
-        Map<String, Object> response = new LinkedHashMap<>();
-        response.put("code", code);
-        response.put("data", data);
-        response.put("message", message);
-        return response;
+    private Map<String, Object> successResponse(int code, Object data, String message) {
+        Map<String, Object> result = new LinkedHashMap<>();
+        result.put("code", code);
+        result.put("data", data);
+        result.put("message", message);
+        return result;
+    }
+
+    private Map<String, Object> errorResponse(int status, String code, String message) {
+        Map<String, Object> result = new LinkedHashMap<>();
+        result.put("status", status);
+        result.put("code", code);
+        result.put("message", message);
+        return result;
     }
 }
