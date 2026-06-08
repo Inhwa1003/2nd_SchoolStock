@@ -51,6 +51,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Transactional
     @Override
+    // 선생님
     public boolean setStudentPointUp(String studentId, int totalPoint) {
         return studentRepository.setStudentPointUp(studentId, totalPoint);
     }

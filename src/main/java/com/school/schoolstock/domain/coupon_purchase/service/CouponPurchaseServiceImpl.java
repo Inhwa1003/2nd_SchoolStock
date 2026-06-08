@@ -23,14 +23,17 @@ public class CouponPurchaseServiceImpl implements CouponPurchaseService {
         //학생 보유쿠폰 수량 초과시
         if(studentRepository.getMyCouponAmount(studentId) >= 3)
             return false;
+
         //1.쿠폰 정보 조회
         Coupons coupon = couponRepository.getCoupon(couponNo);
         //없는 쿠폰
         if(coupon == null)
             return false;
+
         //2.포인트 충분하면 차감 + 보유쿠폰 +1 (부족하면 0행 -> false)
         if(!studentRepository.setStudentAssets(studentId, coupon.getCouponPoint()))
             return false;
+
         //3.구매내역 등록 (구매 당시 이름·가격 저장)
         couponPurchaseRepository.setPurchaseRecord(CouponPurchase.builder()
                 .studentId(studentId)
