@@ -25,6 +25,7 @@ public class CouponPurchaseController {
         return "couponPurchase";
     }
 
+    @ResponseBody
     @PostMapping
     public ResponseEntity<Map<String, Object>> buyCoupon(
             @RequestBody CouponPurchaseRequest request,
