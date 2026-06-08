@@ -34,6 +34,16 @@ document.addEventListener("DOMContentLoaded", function () {
         console.error("sellBtn을 찾을 수 없습니다.");
     }
 
+    // 매수 버튼 클릭 시 매수 주문 요청
+    if (buyBtn) {
+        buyBtn.addEventListener("click", function () {
+            console.log("매수 버튼 클릭됨");
+            requestBuyOrder();
+        });
+    } else {
+        console.error("buyBtn을 찾을 수 없습니다.");
+    }
+
     // 주가 변동 표시
     setPriceChange();
 });
@@ -135,6 +145,61 @@ async function requestSellOrder() {
     } catch (error) {
         console.error("매도 주문 요청 실패:", error);
         alert("매도 주문 요청 중 오류가 발생했습니다.");
+    }
+}
+
+/**
+ * 매수 주문 요청
+ */
+async function requestBuyOrder() {
+    const buyPrice = document.getElementById("buyPrice");
+    const buyAmount = document.getElementById("buyAmount");
+
+    const orderPoint = Number(buyPrice.value);
+    const orderAmount = Number(buyAmount.value);
+
+    if (orderPoint <= 0 || orderAmount <= 0) {
+        alert("가격과 수량을 올바르게 입력해주세요.");
+        return;
+    }
+
+    const headers = {
+        "Content-Type": "application/json"
+    };
+
+    const csrfTokenMeta = document.querySelector("meta[name='_csrf']");
+    const csrfHeaderMeta = document.querySelector("meta[name='_csrf_header']");
+
+    if (csrfTokenMeta && csrfHeaderMeta) {
+        const csrfToken = csrfTokenMeta.getAttribute("content");
+        const csrfHeader = csrfHeaderMeta.getAttribute("content");
+        headers[csrfHeader] = csrfToken;
+    }
+
+    try {
+        console.log("매수 요청 전송:", `/schoolstock/s/me/stocks/${stockNo}/buy`);
+
+        const response = await fetch(`/schoolstock/s/me/stocks/${stockNo}/buy`, {
+            method: "POST",
+            headers: headers,
+            body: JSON.stringify({
+                orderPoint: orderPoint,
+                orderAmount: orderAmount
+            })
+        });
+
+        const result = await response.json();
+
+        alert(result.message);
+
+        if (response.ok) {
+            document.getElementById("orderTypeSelect").value = "buy";
+            loadOrderList("buy");
+        }
+
+    } catch (error) {
+        console.error("매수 주문 요청 실패:", error);
+        alert("매수 주문 요청 중 오류가 발생했습니다.");
     }
 }
 

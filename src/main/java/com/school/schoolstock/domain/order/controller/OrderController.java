@@ -158,6 +158,55 @@ public class OrderController {
         }
     }
 
+    // 매수 주문 요청
+    @ResponseBody
+    @PostMapping("/me/stocks/{stockNo}/buy")
+    public ResponseEntity<Map<String, Object>> setBuyOrder(
+            @PathVariable int stockNo,
+            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestBody OrderRequest request
+    ) {
+        try {
+            if (userDetails == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(errorResponse(
+                                401,
+                                "UNAUTHORIZED",
+                                "로그인이 필요합니다."
+                        ));
+            }
+
+            request.setStockNo(stockNo);
+
+            String studentId = userDetails.getUsername();
+
+            String message = orderService.setBuyOrder(studentId, request);
+
+            if ("보유포인트가 부족합니다.".equals(message)) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(errorResponse(
+                                400,
+                                "BAD_REQUEST",
+                                message
+                        ));
+            }
+
+            return ResponseEntity.ok(successResponse(
+                    200,
+                    null,
+                    message
+            ));
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(errorResponse(
+                            500,
+                            "INTERNAL_SERVER_ERROR",
+                            "서버 내부 오류로 매수 주문 처리에 실패했습니다."
+                    ));
+        }
+    }
+
 
     // 성공 메세지 보내는 구조: code, data, message => 추후 공통으로 뺄 것
     private Map<String, Object> successResponse(int code, Object data, String message) {
