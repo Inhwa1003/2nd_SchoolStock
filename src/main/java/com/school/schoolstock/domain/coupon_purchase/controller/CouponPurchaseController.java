@@ -18,12 +18,6 @@ public class CouponPurchaseController {
 
     private final CouponPurchaseService couponPurchaseService;
 
-    // 임시 테스트 화면
-    @GetMapping("/test")
-    public String couponPurchaseTestPage() {
-        return "couponPurchase";
-    }
-
     @PostMapping
     public ResponseEntity<Map<String, Object>> buyCoupon(
             @RequestBody CouponPurchaseRequest request,

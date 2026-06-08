@@ -10,13 +10,13 @@
   <meta name="_csrf" th:content="${_csrf.token}">
   <meta name="_csrf_header" th:content="${_csrf.headerName}">
 
-  <script th:src="@{/js/coupon-purchase.js}"></script>
+  <script th:src="@{/js/coupon-market.js}"></script>
 </head>
 
 <body>
 
 <header style="display:flex; justify-content:space-between; align-items:center;">
-  <h1>쿠폰 구매 테스트</h1>
+  <h1>쿠폰 상점 및 구매 테스트</h1>
 
   <div>
     <span sec:authentication="name">아이디</span>님
@@ -42,37 +42,16 @@
   </thead>
 
   <tbody>
-  <tr>
-    <td>1</td>
-    <td>간식 교환권</td>
-    <td>500P</td>
+  <tr th:each="coupon : ${couponList}">
+    <td th:text="${coupon.couponNo}">쿠폰 번호</td>
+    <td th:text="${coupon.name}">쿠폰 이름</td>
+    <td th:text="${coupon.couponPoint + 'P'}">가격</td>
     <td>
       <button type="button"
-              onclick="buyCoupon(1, '간식 교환권', 500)">
-        구매하기
-      </button>
-    </td>
-  </tr>
-
-  <tr>
-    <td>2</td>
-    <td>청소당번 면제권</td>
-    <td>3000P</td>
-    <td>
-      <button type="button"
-              onclick="buyCoupon(2, '청소당번 면제권', 3000)">
-        구매하기
-      </button>
-    </td>
-  </tr>
-
-  <tr>
-    <td>3</td>
-    <td>분리수거 면제권</td>
-    <td>1000P</td>
-    <td>
-      <button type="button"
-              onclick="buyCoupon(3, '분리수거 면제권', 1000)">
+              th:data-coupon-no="${coupon.couponNo}"
+              th:data-coupon-name="${coupon.name}"
+              th:data-coupon-point="${coupon.couponPoint}"
+              onclick="buyCouponFromButton(this)">
         구매하기
       </button>
     </td>
