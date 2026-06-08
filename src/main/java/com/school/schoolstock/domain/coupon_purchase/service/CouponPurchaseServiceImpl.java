@@ -34,18 +34,13 @@ public class CouponPurchaseServiceImpl implements CouponPurchaseService {
         if(!studentRepository.setStudentAssets(studentId, coupon.getCouponPoint()))
             return false;
 
-        //3.구매내역 등록 (구매 당시 이름·가격 저장)
-        CouponPurchase couponPurchase = CouponPurchase.builder()
+        // 3. 구매내역 객체 생성
+        couponPurchaseRepository.setPurchaseRecord(CouponPurchase.builder()
                 .studentId(studentId)
                 .couponNo(couponNo)
                 .purchasePoint(coupon.getCouponPoint())
                 .name(coupon.getName())
-                .purchaseState("NOT_USED")
-                .build();
-
-        //4. 구매 내역 등록
-        couponPurchaseRepository.setPurchaseRecord(couponPurchase);
-
+                .purchaseState("NOT_USED").build());
         return true;
     }
 }
