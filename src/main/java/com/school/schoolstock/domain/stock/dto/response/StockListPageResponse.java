@@ -7,7 +7,7 @@ import lombok.ToString;
 @ToString
 @Getter
 @Builder
-public class StockListResponse {
+public class StockListPageResponse {
     //주식번호
     private int stockNo;
     //주식이름
