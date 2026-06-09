@@ -5,9 +5,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const sellBtn = document.getElementById("sellBtn");
     // 매수 버튼
     const buyBtn = document.getElementById("buyBtn");
-
-    console.log("stock-detail.js 로딩됨");
-    console.log("sellBtn:", sellBtn);
+    // 내 요청 주문 '조회' 버튼
+    const refreshBtn = document.getElementById("refreshBtn");
 
     // 처음 화면 진입 시 기본값은 매도
     loadOrderList("sell");
@@ -45,6 +44,23 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     } else {
         console.error("buyBtn을 찾을 수 없습니다.");
+    }
+
+    //내 주문 목록 불러오기
+    if (refreshBtn) {
+        refreshBtn.addEventListener("click", function () {
+            loadMyOrderList();
+        });
+    }
+
+    // 내 주문 취소
+    const myOrderBody = document.getElementById("myOrderListBody");
+    if (myOrderBody) {
+        myOrderBody.addEventListener("click", function (e) {
+            const btn = e.target.closest(".cancel-btn");  // 취소버튼(또는 그 안쪽) 클릭인지
+            if (!btn) return;                              // 아니면 무시
+            cancelMyOrder(btn.dataset.orderNo);            // data-order-no 값 넘김
+        });
     }
 
     // 주가 변동 표시
@@ -253,5 +269,76 @@ function setPriceChange() {
         priceChange.classList.add("down");
     } else {
         priceChange.textContent = `0P(0.00%)`;
+    }
+}
+
+/**
+ * 내 요청 주문 조회 → #myOrderListBody 채우기
+ */
+async function loadMyOrderList() {
+    const body = document.getElementById("myOrderListBody");
+
+    try {
+        const res = await fetch(`/schoolstock/s/me/students/${stockNo}/orders`);
+        if (!res.ok) throw new Error("status " + res.status);
+
+        const orders = await res.json();
+
+        body.innerHTML = "";
+
+        if (orders.length === 0) {
+            body.innerHTML = `<tr><td colspan="5">내 주문이 없습니다.</td></tr>`;
+            return;
+        }
+
+        orders.forEach(function (o) {
+            const row = `
+                <tr>
+                    <td>${convertOrderContent(o.orderContent)}</td>
+                    <td>${o.orderPoint}</td>
+                    <td>${o.amount}</td>
+                    <td>${o.orderDate ? o.orderDate.substring(0, 10) : ''}</td>
+                    <td>
+                        <button type="button" class="cancel-btn" data-order-no="${o.orderNo}">취소</button>
+                    </td>
+                </tr>
+            `;
+            body.insertAdjacentHTML("beforeend", row);
+        });
+
+    } catch (error) {
+        console.error("내 주문 조회 실패:", error);
+        body.innerHTML = `<tr><td colspan="5">내 주문 조회 중 오류가 발생했습니다.</td></tr>`;
+    }
+}
+
+/**
+ * 내 주문 취소 요청
+ */
+async function cancelMyOrder(orderNo) {
+    if (!confirm("이 주문을 취소할까요?")) return;   // 사용자 확인
+
+    const headers = { "Content-Type": "application/json" };
+    const csrfTokenMeta = document.querySelector("meta[name='_csrf']");
+    const csrfHeaderMeta = document.querySelector("meta[name='_csrf_header']");
+    if (csrfTokenMeta && csrfHeaderMeta) {
+        headers[csrfHeaderMeta.getAttribute("content")] = csrfTokenMeta.getAttribute("content");
+    }
+
+    try {
+        const res = await fetch(`/schoolstock/s/me/students/${orderNo}/orders/cancel`, {
+            method: "POST",
+            headers: headers
+        });
+        const result = await res.json();
+        alert(result.message);
+
+        if (res.ok) {
+            loadMyOrderList();   // 내 주문 목록 새로고침(취소 반영)
+            loadOrderList(document.getElementById("orderTypeSelect").value); // 대기 주문판도 갱신
+        }
+    } catch (error) {
+        console.error("주문 취소 실패:", error);
+        alert("주문 취소 중 오류가 발생했습니다.");
     }
 }
