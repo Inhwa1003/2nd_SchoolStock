@@ -1,9 +1,6 @@
 package com.school.schoolstock.domain.student.service;
 
-import com.school.schoolstock.domain.student.dto.response.MyAssetResponse;
-import com.school.schoolstock.domain.student.dto.response.MyCouponResponse;
-import com.school.schoolstock.domain.student.dto.response.MyOrderResponse;
-import com.school.schoolstock.domain.student.dto.response.MyPointHistoryResponse;
+import com.school.schoolstock.domain.student.dto.response.*;
 
 import java.util.List;
 
@@ -26,4 +23,7 @@ public interface StudentService {
 
     //보유 쿠폰 정보 조회
     List<MyCouponResponse> getMyCoupon(String studentId);
+
+    //학생 기본정보 조회 (사이드바 용)
+    StudentInfoResponse getStudentInfo(String studentId);
 }
