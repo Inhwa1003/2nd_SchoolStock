@@ -10,6 +10,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // 처음 화면 진입 시 기본값은 매도
     loadOrderList("sell");
+    // 처음 화면 진입 시 내 주문요청 조회
+    loadMyOrderList();
+
 
     // 매수/매도 선택 변경 시 주문 목록 다시 조회
     if (orderTypeSelect) {
