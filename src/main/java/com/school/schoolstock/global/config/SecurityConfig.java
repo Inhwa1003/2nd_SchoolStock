@@ -21,9 +21,9 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, RoleSuccessHandler SuccessHandler) throws Exception{
 
-        http.csrf(csrf -> csrf
-                .ignoringRequestMatchers("/schoolstock/s/me/coupon-purchases")
-        );
+//        http.csrf(csrf -> csrf
+//                .ignoringRequestMatchers("/schoolstock/s/me/coupon-purchases")
+//        );
 
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers(
