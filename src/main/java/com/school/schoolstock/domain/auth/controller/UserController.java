@@ -21,12 +21,12 @@ public class UserController {
 
     @GetMapping("/login-view")
     public String loginView(){
-        return "LoginView";
+        return "loginView";
     }
 
     @GetMapping("/add-member-view")
     public String addMemberView(){
-        return "AddMember";
+        return "addMember";
     }
 
     @PostMapping("/add-member")
@@ -38,6 +38,6 @@ public class UserController {
     }
     @GetMapping("/t/main")
     public String teacherMainView(){
-        return "TeacherMain";
+        return "teacherMain";
     }
 }

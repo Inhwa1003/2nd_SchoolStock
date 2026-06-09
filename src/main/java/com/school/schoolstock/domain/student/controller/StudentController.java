@@ -20,20 +20,20 @@ public class StudentController {
     @GetMapping("/history")
     public String getMyPointHistory(@AuthenticationPrincipal SchoolUserDetails userDetails, Model model) {
         model.addAttribute("pointHistory",studentService.getMyPointHistory(userDetails.getUsername()));
-        return "MyPointHistory";
+        return "myPointHistory";
     }
 
     @GetMapping("/assets")
     public String studentMainView(@AuthenticationPrincipal SchoolUserDetails userDetails, Model model) {
         model.addAttribute("myAssets", studentService.getMyAsset(userDetails.getUsername()));
-        return "MyAssets";
+        return "myAssets";
     }
 
     @GetMapping("/coupons")
     public String getMyCoupons(@AuthenticationPrincipal SchoolUserDetails userDetails, Model model) {
         model.addAttribute("studentName", userDetails.getUser().getLoginId());
         model.addAttribute("coupons", studentService.getMyCoupon(userDetails.getUsername()));
-        return "MyCoupons";
+        return "myCoupons";
     }
 
     @GetMapping("/assets/stocks")
