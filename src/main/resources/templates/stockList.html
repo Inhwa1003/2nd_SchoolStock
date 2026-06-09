@@ -61,7 +61,7 @@
 
             <td th:classappend="${stock.changeRate >= 0} ? ' up' : ' down'"
                 class="change-rate"
-                th:text="${stock.changeRate >= 0 ? '+' + stock.changeRate + '%' : stock.changeRate + '%'}">
+                th:text="${stock.changeRate >= 0 ? '+' + #numbers.formatDecimal(stock.changeRate, 1, 2) + '%' : #numbers.formatDecimal(stock.changeRate, 1, 2) + '%'}">
               등락률
             </td>
           </tr>
