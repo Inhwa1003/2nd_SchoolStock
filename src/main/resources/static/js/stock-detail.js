@@ -66,8 +66,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // 주가 변동 표시
-    setPriceChange();
+    startPricePolling();
 });
 
 /**
@@ -243,35 +242,34 @@ function convertOrderContent(orderContent) {
 /**
  * 현재가와 이전가 비교해서 상승/하락 표시
  */
-function setPriceChange() {
-    const stockPrice = document.querySelector(".stock-price");
-    const priceNow = document.querySelector(".price-now");
-    const priceChange = document.querySelector(".price-change");
+async function refreshPrice() {
+    try {
+        const res = await fetch(`/schoolstock/s/stocks/${stockNo}/price`);
+        if (!res.ok) return;
+        const p = await res.json();                 // {nowPoint, priceChange, changeRate}
+        const prev = p.nowPoint - p.priceChange;
 
-    if (!stockPrice || !priceNow || !priceChange) {
-        return;
-    }
+        const priceNow    = document.querySelector(".price-now");
+        const priceBase   = document.querySelector(".price-base");
+        const priceChange = document.querySelector(".price-change");
 
-    const prevPrice = Number(stockPrice.dataset.prevPrice);
-    const nowPrice = Number(priceNow.textContent.replace("P", "").trim());
+        if (priceNow)  priceNow.textContent  = p.nowPoint + "P";
+        if (priceBase) priceBase.textContent = prev + "P";
 
-    if (isNaN(prevPrice) || isNaN(nowPrice)) {
-        return;
-    }
-
-    const diff = nowPrice - prevPrice;
-    const changeRate = prevPrice == 0 ? 0 : (diff * 100) / prevPrice;
-
-    priceChange.classList.remove("up", "down");
-
-    if (diff > 0) {
-        priceChange.textContent = ` ${diff}P(+${changeRate.toFixed(2)}%)`;
-        priceChange.classList.add("up");
-    } else if (diff < 0) {
-        priceChange.textContent = ` ${Math.abs(diff)}P(${changeRate.toFixed(2)}%)`;
-        priceChange.classList.add("down");
-    } else {
-        priceChange.textContent = `0P(0.00%)`;
+        if (priceChange) {
+            priceChange.classList.remove("up", "down");
+            if (p.priceChange > 0) {
+                priceChange.textContent = `+${p.priceChange}P(+${p.changeRate.toFixed(2)}%)`;
+                priceChange.classList.add("up");
+            } else if (p.priceChange < 0) {
+                priceChange.textContent = `${p.priceChange}P(${p.changeRate.toFixed(2)}%)`;
+                priceChange.classList.add("down");
+            } else {
+                priceChange.textContent = `0P(0.00%)`;
+            }
+        }
+    } catch (e) {
+        console.error("시세 폴링 실패:", e);
     }
 }
 
@@ -345,3 +343,23 @@ async function cancelMyOrder(orderNo) {
         alert("주문 취소 중 오류가 발생했습니다.");
     }
 }
+
+let priceTimer = null;
+
+function startPricePolling() {
+    refreshPrice();                                 // 즉시 1번 (다시 보일 때 바로 최신화)
+    priceTimer = setInterval(refreshPrice, 5000);
+}
+function stopPricePolling() {
+    clearInterval(priceTimer);
+    priceTimer = null;
+}
+
+// 탭 보임/숨김에 따라 폴링 on/off
+document.addEventListener("visibilitychange", function () {
+    if (document.hidden) {
+        stopPricePolling();                          // 숨겨지면 멈춤
+    } else if (priceTimer === null) {
+        startPricePolling();                         // 다시 보이면 재개
+    }
+});
