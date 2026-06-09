@@ -1,10 +1,10 @@
 package com.school.schoolstock.domain.order.controller;
 
 import com.school.schoolstock.domain.order.dto.request.BuySellOrderRequest;
-import com.school.schoolstock.domain.order.dto.response.OrderResponse;
+import com.school.schoolstock.domain.order.dto.response.StockOrderResponse;
 import com.school.schoolstock.domain.order.service.OrderService;
-import com.school.schoolstock.domain.stock.repository.StockRepository;
-import com.school.schoolstock.domain.stock.vo.Stocks;
+import com.school.schoolstock.domain.stock.dto.response.StockDetailPageResponse;
+import com.school.schoolstock.domain.stock.service.StockService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,13 +24,13 @@ import java.util.Map;
 public class OrderController {
 
     private final OrderService orderService;
-    private final StockRepository stockRepository;
+    private final StockService stockService;
 
     // 주식 상세 페이지 화면 반환
     @GetMapping("/orders/{stockNo}")
     public String getStockDetailPage(@PathVariable int stockNo, Model model) {
 
-        Stocks stock = stockRepository.getStockPubInfo(stockNo);
+        StockDetailPageResponse stock = stockService.getStockDetail(stockNo);
 
         model.addAttribute("stockNo", stock.getStockNo());
         model.addAttribute("stockName", stock.getName());
@@ -49,7 +49,7 @@ public class OrderController {
     @GetMapping("/orders/{stockNo}/buy")
     public ResponseEntity<Map<String, Object>> getBuyOrders(@PathVariable int stockNo) {
         try {
-            List<OrderResponse> buyOrders = orderService.getStockOrders(stockNo, "BUY");
+            List<StockOrderResponse> buyOrders = orderService.getStockOrders(stockNo, "BUY");
 
             if (buyOrders == null || buyOrders.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -81,7 +81,7 @@ public class OrderController {
     @GetMapping("/orders/{stockNo}/sell")
     public ResponseEntity<Map<String, Object>> getSellOrders(@PathVariable int stockNo) {
         try {
-            List<OrderResponse> sellOrders = orderService.getStockOrders(stockNo, "SELL");
+            List<StockOrderResponse> sellOrders = orderService.getStockOrders(stockNo, "SELL");
 
             if (sellOrders == null || sellOrders.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)

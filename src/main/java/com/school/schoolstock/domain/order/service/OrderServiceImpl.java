@@ -2,7 +2,7 @@ package com.school.schoolstock.domain.order.service;
 
 
 import com.school.schoolstock.domain.order.dto.request.BuySellOrderRequest;
-import com.school.schoolstock.domain.order.dto.response.OrderResponse;
+import com.school.schoolstock.domain.order.dto.response.StockOrderResponse;
 import com.school.schoolstock.domain.order.repository.OrderRepository;
 import com.school.schoolstock.domain.order.vo.Orders;
 import com.school.schoolstock.domain.stock.repository.StockRepository;
@@ -32,12 +32,12 @@ public class OrderServiceImpl implements OrderService {
     // 매수, 매도 주문 토글로 조회하는 기능
     @Transactional(readOnly = true)
     @Override
-    public List<OrderResponse> getStockOrders(int stockNo, String content) {
+    public List<StockOrderResponse> getStockOrders(int stockNo, String content) {
         List<Orders> orders = content.equals("BUY")? orderRepository.getTotalBuyOrder(stockNo): orderRepository.getTotalSellOrder(stockNo);
-        List<OrderResponse> result = new ArrayList<>();
+        List<StockOrderResponse> result = new ArrayList<>();
 
         for (Orders order : orders) {
-            result.add(OrderResponse.builder()
+            result.add(StockOrderResponse.builder()
                     .orderContent(order.getOrderContent())
                     .orderPoint(order.getOrderPoint())
                     .orderAmount(order.getAmount()).build());

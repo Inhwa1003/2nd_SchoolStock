@@ -2,15 +2,16 @@ package com.school.schoolstock.domain.order.dto.response;
 
 import lombok.*;
 
-import java.time.LocalDateTime;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
 @Setter
 @Getter
 @Builder
-public class OrderResponse {
+
+// 매수, 매도 주문 토글로 조회할 때, Response
+
+public class StockOrderResponse {
     private String orderContent;
     private int orderPoint;
     private int orderAmount;

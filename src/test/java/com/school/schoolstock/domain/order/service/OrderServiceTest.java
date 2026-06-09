@@ -1,7 +1,7 @@
 package com.school.schoolstock.domain.order.service;
 
 import com.school.schoolstock.domain.order.dto.request.BuySellOrderRequest;
-import com.school.schoolstock.domain.order.dto.response.OrderResponse;
+import com.school.schoolstock.domain.order.dto.response.StockOrderResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.binding.BindingException;
 import org.junit.jupiter.api.Assertions;
@@ -23,8 +23,8 @@ public class OrderServiceTest {
     @Test
     void getStockOrdersTest() {
         // YES — 종목3은 PENDING 매수/매도 주문 있음
-        List<OrderResponse> sell = orderService.getStockOrders(3, "SELL");
-        List<OrderResponse> buy  = orderService.getStockOrders(3, "BUY");
+        List<StockOrderResponse> sell = orderService.getStockOrders(3, "SELL");
+        List<StockOrderResponse> buy  = orderService.getStockOrders(3, "BUY");
         log.info("주식번호 3번 매도목록: {}", sell);
         log.info("주식번호 3번 매수목록: {}", buy);
         Assertions.assertNotNull(sell);

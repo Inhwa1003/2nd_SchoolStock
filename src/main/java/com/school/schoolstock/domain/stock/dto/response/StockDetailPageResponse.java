@@ -7,7 +7,9 @@ import lombok.ToString;
 @ToString
 @Getter
 @Builder
-public class StockDetailResponse {
+
+// 주식 상세 페이지 UI 로딩할 때, 뿌려주는 response.
+public class StockDetailPageResponse {
     //주식번호
     private int stockNo;
     //주식이름
