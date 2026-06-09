@@ -246,10 +246,10 @@ function setPriceChange() {
     priceChange.classList.remove("up", "down");
 
     if (diff > 0) {
-        priceChange.textContent = ` ${diff}P`;
+        priceChange.textContent = ` ${diff}P(+${changeRate.toFixed(2)}%)`;
         priceChange.classList.add("up");
     } else if (diff < 0) {
-        priceChange.textContent = `▼ ${Math.abs(diff)}P`;
+        priceChange.textContent = `▼ ${Math.abs(diff)}P(${changeRate.toFixed(2)}%)`;
         priceChange.classList.add("down");
     } else {
         priceChange.textContent = `0P(0.00%)`;
