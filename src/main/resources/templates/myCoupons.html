@@ -21,7 +21,7 @@
             <div class="hd-name" th:text="${info.name} + '의 보유 쿠폰'">보유 쿠폰</div>
         </header>
 
-        <div class="main">
+        <div class="main cp-grid">
             <div class="cp-panel" th:each="c : ${coupons}">
                 <div class="cp-name" th:text="${c.name}">쿠폰명</div>
                 <div class="cp-price" th:text="${#numbers.formatInteger(c.purchasePoint, 1, 'COMMA')} + 'P'">0P</div>
