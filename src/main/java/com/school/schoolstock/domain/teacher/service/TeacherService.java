@@ -7,5 +7,5 @@ import java.util.List;
 public interface TeacherService {
 
     // 선생님이 맡은 반 학생 목록 조회
-    List<StudentListResponse> getMyStudents(String teacherId);
+    List<StudentListResponse> getMyStudentsList(String teacherId);
 }

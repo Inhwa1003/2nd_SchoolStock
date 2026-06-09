@@ -8,7 +8,9 @@ import java.util.List;
 @Mapper
 public interface TeacherRepository {
 
-    // 로그인 후 첫 화면: 담당학생의 정보(이름, 번호, 보유 포인트)를 조회
-    List<StudentListResponse> getMyStudents(String teacherId);
+    // 선생님 계정 존재 여부 확인
+    String getTeacherIdCheck(String teacherId);
 
+    // 선생님이 맡은 반 학생 목록 조회
+    List<StudentListResponse> getMyStudents(String teacherId);
 }
