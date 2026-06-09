@@ -30,9 +30,7 @@ public class OrderController {
     @GetMapping("/orders/{stockNo}")
     public String getStockDetailPage(@PathVariable int stockNo, Model model) {
 
-        StockDetailPageResponse stockDetail = stockService.getStockDetail(stockNo);
-
-        model.addAttribute("stockDetail", stockDetail);
+        model.addAttribute("stockDetail", stockService.getStockDetail(stockNo));
 
         return "stockDetail";
     }
