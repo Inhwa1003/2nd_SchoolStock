@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:text="${stockName} + ' 주식 상세'">주식 상세</title>
+    <title th:text="${stockDetail.name} + ' 주식 상세'">주식 상세</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -22,7 +22,7 @@
 
 <body>
 <script th:inline="javascript">
-    const stockNo = /*[[${stockNo}]]*/ 0;
+    const stockNo = /*[[${stockDetail.stockNo}]]*/ 0;
 </script>
 
 <div class="app">
@@ -36,15 +36,30 @@
 
         <div class="stock">
             <div class="stock-info">
-                <h2 th:text="${stockName}">주식명</h2>
-                <p th:text="${stockContent}">주식 설명</p>
+                <h2 th:text="${stockDetail.name}">주식명</h2>
+                <p th:text="${stockDetail.stockContent}">주식 설명</p>
             </div>
 
             <div class="stock-price"
-                 th:attr="data-prev-price=${prevPrice}, data-stock-no=${stockNo}">
-                <div class="price-now" th:text="${nowPrice} + 'P'">0P</div>
-                <div class="price-change"></div>
-                <div class="price-base" th:text="${prevPrice} + 'P'">0P</div>
+                 th:attr="data-prev-price=${stockDetail.prevPoint}, data-stock-no=${stockDetail.stockNo}">
+                <div class="price-now" th:text="${stockDetail.nowPoint} + 'P'">0P</div>
+                <div class="price-change">
+                <span th:if="${stockDetail.priceChange > 0}"
+                      th:text="'▲ +' + ${stockDetail.priceChange} + 'P(+' + ${#numbers.formatDecimal(stockDetail.changeRate, 1, 2)} + '%)'">
+                        ▲ +0P(+0.00%)
+                </span>
+
+                <span th:if="${stockDetail.priceChange < 0}"
+                      th:text="'▼ ' + ${stockDetail.priceChange} + 'P(' + ${#numbers.formatDecimal(stockDetail.changeRate, 1, 2)} + '%)'">
+                        ▼ -0P(-0.00%)
+                </span>
+
+                <span th:if="${stockDetail.priceChange == 0}">
+                    0P(0.00%)
+                </span>
+                </div>
+
+                <div class="price-base" th:text="${stockDetail.prevPoint} + 'P'">0P</div>
             </div>
         </div>
 

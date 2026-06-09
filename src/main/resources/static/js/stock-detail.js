@@ -1,7 +1,10 @@
 document.addEventListener("DOMContentLoaded", function () {
     const orderTypeSelect = document.getElementById("orderTypeSelect");
     const backBtn = document.getElementById("backBtn");
+    // 매도 버튼
     const sellBtn = document.getElementById("sellBtn");
+    // 매수 버튼
+    const buyBtn = document.getElementById("buyBtn");
 
     console.log("stock-detail.js 로딩됨");
     console.log("sellBtn:", sellBtn);
@@ -231,13 +234,16 @@ function setPriceChange() {
     }
 
     const prevPrice = Number(stockPrice.dataset.prevPrice);
-    const nowPrice = Number(priceNow.textContent.replace("P", ""));
+    const nowPrice = Number(priceNow.textContent.replace("P", "").trim());
 
     if (isNaN(prevPrice) || isNaN(nowPrice)) {
         return;
     }
 
     const diff = nowPrice - prevPrice;
+    const changeRate = prevPrice == 0 ? 0 : (diff * 100) / prevPrice;
+
+    priceChange.classList.remove("up", "down");
 
     if (diff > 0) {
         priceChange.textContent = ` ${diff}P`;
@@ -246,6 +252,6 @@ function setPriceChange() {
         priceChange.textContent = `▼ ${Math.abs(diff)}P`;
         priceChange.classList.add("down");
     } else {
-        priceChange.textContent = "-";
+        priceChange.textContent = `0P(0.00%)`;
     }
 }
