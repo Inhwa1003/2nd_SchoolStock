@@ -1,6 +1,6 @@
 package com.school.schoolstock.domain.stock.service;
 
-import com.school.schoolstock.domain.stock.dto.response.StockDetailResponse;
+import com.school.schoolstock.domain.stock.dto.response.StockDetailPageResponse;
 import com.school.schoolstock.domain.stock.dto.response.StockListResponse;
 import com.school.schoolstock.domain.stock.dto.response.StockPriceResponse;
 import com.school.schoolstock.domain.stock.repository.StockRepository;
@@ -18,6 +18,7 @@ import java.util.List;
 public class StockServiceImpl implements StockService {
     private final StockRepository stockRepository;
 
+    // 주식 현재가격(포인트) 가져오기 -> 발행잔량이 존재할 때, 발행 포인트 표시
     @Transactional(readOnly = true)
     @Override
     public int getStockPrice(int stockNo) {
@@ -27,6 +28,7 @@ public class StockServiceImpl implements StockService {
         return stockRepository.getStockPrice(stockNo);
     }
 
+    // 현재 포인트
     @Transactional(readOnly = true)
     @Override
     public StockPriceResponse getStockPriceInfo(int stockNo) {
@@ -42,6 +44,7 @@ public class StockServiceImpl implements StockService {
                 .changeRate(changeRate).build();
     }
 
+    // 주식 목록 페이지를 가져온다.
     @Transactional(readOnly = true)
     @Override
     public List<StockListResponse> getStockList() {
@@ -61,14 +64,16 @@ public class StockServiceImpl implements StockService {
         return result;
     }
 
+
+    // 주식 상세 페이지를 가져온다.
     @Transactional(readOnly = true)
     @Override
-    public StockDetailResponse getStockDetail(int stockNo) {
+    public StockDetailPageResponse getStockDetail(int stockNo) {
         Stocks info = stockRepository.getStockInfo(stockNo);
         Stocks pub =  stockRepository.getStockPubInfo(stockNo);
         StockPriceResponse price = getStockPriceInfo(stockNo);
 
-        return StockDetailResponse.builder()
+        return StockDetailPageResponse.builder()
                 .stockNo(stockNo)
                 .name(info.getName())
                 .stockContent(info.getStockContent())

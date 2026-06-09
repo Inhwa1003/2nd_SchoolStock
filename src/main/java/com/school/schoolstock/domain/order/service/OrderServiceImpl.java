@@ -1,8 +1,8 @@
 package com.school.schoolstock.domain.order.service;
 
 
-import com.school.schoolstock.domain.order.dto.request.OrderRequest;
-import com.school.schoolstock.domain.order.dto.response.OrderResponse;
+import com.school.schoolstock.domain.order.dto.request.BuySellOrderRequest;
+import com.school.schoolstock.domain.order.dto.response.StockOrderResponse;
 import com.school.schoolstock.domain.order.repository.OrderRepository;
 import com.school.schoolstock.domain.order.vo.Orders;
 import com.school.schoolstock.domain.stock.repository.StockRepository;
@@ -17,6 +17,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+// 매도 기능: setSellOrder
+// 매수 기능: setBuyOrder
+// 매수, 매도 조회 기능: getStockOrders
 
 @RequiredArgsConstructor
 @Service
@@ -26,14 +29,15 @@ public class OrderServiceImpl implements OrderService {
     private final StudentRepository studentRepository;
     private final TradeRepository tradeRepository;
 
+    // 매수, 매도 주문 토글로 조회하는 기능
     @Transactional(readOnly = true)
     @Override
-    public List<OrderResponse> getStockOrders(int stockNo, String content) {
+    public List<StockOrderResponse> getStockOrders(int stockNo, String content) {
         List<Orders> orders = content.equals("BUY")? orderRepository.getTotalBuyOrder(stockNo): orderRepository.getTotalSellOrder(stockNo);
-        List<OrderResponse> result = new ArrayList<>();
+        List<StockOrderResponse> result = new ArrayList<>();
 
         for (Orders order : orders) {
-            result.add(OrderResponse.builder()
+            result.add(StockOrderResponse.builder()
                     .orderContent(order.getOrderContent())
                     .orderPoint(order.getOrderPoint())
                     .orderAmount(order.getAmount()).build());
@@ -42,9 +46,10 @@ public class OrderServiceImpl implements OrderService {
         return result;
     }
 
+    // 매도 기능
     @Transactional
     @Override
-    public String setSellOrder(String studentId, OrderRequest request) {
+    public String setSellOrder(String studentId, BuySellOrderRequest request) {
         Map<String, Object> matchOrder;
         //1. 발행 잔량 확인 있으면 학생간 거래x 매도 요청x
         if(stockRepository.getStockPubInfo(request.getStockNo()).getPublicationBalance() > 0)
@@ -78,9 +83,10 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
+    // 매수 기능
     @Transactional
     @Override
-    public String setBuyOrder(String studentId, OrderRequest request) {
+    public String setBuyOrder(String studentId, BuySellOrderRequest request) {
         Map<String, Object> matchOrder;
         // 학생이 주문 요청한 가격보다 보유포인트가 적을때 실행
         if(studentRepository.getMyPoint(studentId) < (request.getOrderAmount() * request.getOrderPoint()))

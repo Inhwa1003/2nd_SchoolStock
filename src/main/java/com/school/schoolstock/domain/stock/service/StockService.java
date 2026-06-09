@@ -1,6 +1,6 @@
 package com.school.schoolstock.domain.stock.service;
 
-import com.school.schoolstock.domain.stock.dto.response.StockDetailResponse;
+import com.school.schoolstock.domain.stock.dto.response.StockDetailPageResponse;
 import com.school.schoolstock.domain.stock.dto.response.StockListResponse;
 import com.school.schoolstock.domain.stock.dto.response.StockPriceResponse;
 
@@ -14,5 +14,5 @@ public interface StockService {
     //주식목록 페이지
     List<StockListResponse> getStockList();
     //주식상세 페이지
-    StockDetailResponse getStockDetail(int stockNo);
+    StockDetailPageResponse getStockDetail(int stockNo);
 }
