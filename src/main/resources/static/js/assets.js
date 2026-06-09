@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function refreshAssets() {
     try {
-        const res = await fetch('/schoolstock/s/me/student/assets/stocks');
+        const res = await fetch('/schoolstock/s/me/students/assets/stocks');
         if (!res.ok) throw new Error('status ' + res.status);
         const data = await res.json();
 

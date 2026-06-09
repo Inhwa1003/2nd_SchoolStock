@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @RequiredArgsConstructor
-@RequestMapping("/schoolstock/s/me/student")
+@RequestMapping("/schoolstock/s/me/students")
 @Controller
 public class StudentController {
     private final StudentService studentService;
