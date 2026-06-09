@@ -31,6 +31,6 @@ public class TeacherController {
 
         model.addAttribute("studentList", myStudentList);
 
-        return "MyStudentList";
+        return "myStudentList";
     }
 }
