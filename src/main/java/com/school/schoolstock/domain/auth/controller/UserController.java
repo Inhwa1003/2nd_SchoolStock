@@ -21,12 +21,12 @@ public class UserController {
 
     @GetMapping("/login-view")
     public String loginView(){
-        return "loginView";
+        return "LoginView";
     }
 
     @GetMapping("/add-member-view")
     public String addMemberView(){
-        return "addMember";
+        return "AddMember";
     }
 
     @PostMapping("/add-member")
@@ -36,12 +36,8 @@ public class UserController {
         }
         return "redirect:/schoolstock/add-member-view";
     }
-    @GetMapping("/s/assets")
-    public String studentMainView(){
-        return "assets";
-    }
     @GetMapping("/t/main")
     public String teacherMainView(){
-        return "teacherMain";
+        return "TeacherMain";
     }
 }
