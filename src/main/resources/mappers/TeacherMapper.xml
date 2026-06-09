@@ -8,12 +8,9 @@
     <!-- 선생님 계정 존재 여부 확인 -->
     <select id="getTeacherIdCheck" resultType="string">
         SELECT
-            t.teacher_id
-        FROM teachers t
-                 JOIN users u
-                      ON t.teacher_id = u.login_id
-        WHERE t.teacher_id = #{teacherId}
-          AND u.role = 'TEACHER'
+            teacher_id
+        FROM teachers
+        WHERE teacher_id = #{teacherId}
     </select>
 
     <!-- 선생님이 맡은 반 학생 목록 조회 -->
