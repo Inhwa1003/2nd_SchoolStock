@@ -14,7 +14,7 @@ public class RoleSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         boolean isTeacher = authentication.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("ROLE_TEACHER"));
-        String targetUrl = isTeacher ? "/schoolstock/t/main" : "/schoolstock/s/assets";
+        String targetUrl = isTeacher ? "/schoolstock/t/main" : "/schoolstock/s/me/student/assets";
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
 }
