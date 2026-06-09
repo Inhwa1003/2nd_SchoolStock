@@ -30,16 +30,9 @@ public class OrderController {
     @GetMapping("/orders/{stockNo}")
     public String getStockDetailPage(@PathVariable int stockNo, Model model) {
 
-        StockDetailPageResponse stock = stockService.getStockDetail(stockNo);
+        StockDetailPageResponse stockDetail = stockService.getStockDetail(stockNo);
 
-        model.addAttribute("stockNo", stock.getStockNo());
-        model.addAttribute("stockName", stock.getName());
-        model.addAttribute("stockContent", stock.getStockContent());
-
-        // 현재 Stocks VO에는 nowPrice가 없어서 publicationPoint를 현재가처럼 사용
-        model.addAttribute("nowPrice", stock.getPublicationPoint());
-
-        model.addAttribute("prevPrice", stock.getPrevPoint());
+        model.addAttribute("stockDetail", stockDetail);
 
         return "stockDetail";
     }
