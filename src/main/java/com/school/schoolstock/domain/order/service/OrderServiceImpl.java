@@ -1,7 +1,7 @@
 package com.school.schoolstock.domain.order.service;
 
 
-import com.school.schoolstock.domain.order.dto.request.OrderRequest;
+import com.school.schoolstock.domain.order.dto.request.BuySellOrderRequest;
 import com.school.schoolstock.domain.order.dto.response.OrderResponse;
 import com.school.schoolstock.domain.order.repository.OrderRepository;
 import com.school.schoolstock.domain.order.vo.Orders;
@@ -29,6 +29,7 @@ public class OrderServiceImpl implements OrderService {
     private final StudentRepository studentRepository;
     private final TradeRepository tradeRepository;
 
+    // 매수, 매도 주문 토글로 조회하는 기능
     @Transactional(readOnly = true)
     @Override
     public List<OrderResponse> getStockOrders(int stockNo, String content) {
@@ -48,7 +49,7 @@ public class OrderServiceImpl implements OrderService {
     // 매도 기능
     @Transactional
     @Override
-    public String setSellOrder(String studentId, OrderRequest request) {
+    public String setSellOrder(String studentId, BuySellOrderRequest request) {
         Map<String, Object> matchOrder;
         //1. 발행 잔량 확인 있으면 학생간 거래x 매도 요청x
         if(stockRepository.getStockPubInfo(request.getStockNo()).getPublicationBalance() > 0)
@@ -85,7 +86,7 @@ public class OrderServiceImpl implements OrderService {
     // 매수 기능
     @Transactional
     @Override
-    public String setBuyOrder(String studentId, OrderRequest request) {
+    public String setBuyOrder(String studentId, BuySellOrderRequest request) {
         Map<String, Object> matchOrder;
         // 학생이 주문 요청한 가격보다 보유포인트가 적을때 실행
         if(studentRepository.getMyPoint(studentId) < (request.getOrderAmount() * request.getOrderPoint()))

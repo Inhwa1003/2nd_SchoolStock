@@ -11,15 +11,7 @@ import java.time.LocalDateTime;
 @Getter
 @Builder
 public class OrderResponse {
-    private int orderNo;
-    private String studentId;
-    private int stockNo;
-        //종류 (BUY / SELL)
     private String orderContent;
-    //가격
     private int orderPoint;
-    //수량
     private int orderAmount;
-    private String orderState;
-    private LocalDateTime orderDate;
 }

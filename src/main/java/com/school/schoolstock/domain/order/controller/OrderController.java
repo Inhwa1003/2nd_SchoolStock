@@ -1,6 +1,6 @@
 package com.school.schoolstock.domain.order.controller;
 
-import com.school.schoolstock.domain.order.dto.request.OrderRequest;
+import com.school.schoolstock.domain.order.dto.request.BuySellOrderRequest;
 import com.school.schoolstock.domain.order.dto.response.OrderResponse;
 import com.school.schoolstock.domain.order.service.OrderService;
 import com.school.schoolstock.domain.stock.repository.StockRepository;
@@ -114,7 +114,7 @@ public class OrderController {
     public ResponseEntity<Map<String, Object>> setSellOrder(
             @PathVariable int stockNo,
             @AuthenticationPrincipal UserDetails userDetails,
-            @RequestBody OrderRequest request
+            @RequestBody BuySellOrderRequest request
     ) {
         try {
             if (userDetails == null) {
@@ -164,7 +164,7 @@ public class OrderController {
     public ResponseEntity<Map<String, Object>> setBuyOrder(
             @PathVariable int stockNo,
             @AuthenticationPrincipal UserDetails userDetails,
-            @RequestBody OrderRequest request
+            @RequestBody BuySellOrderRequest request
     ) {
         try {
             if (userDetails == null) {

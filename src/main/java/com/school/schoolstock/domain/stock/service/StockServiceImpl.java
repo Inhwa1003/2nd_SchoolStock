@@ -18,6 +18,7 @@ import java.util.List;
 public class StockServiceImpl implements StockService {
     private final StockRepository stockRepository;
 
+    // 주식 현재가격(포인트) 가져오기 -> 발행잔량이 존재할 때, 발행 포인트 표시
     @Transactional(readOnly = true)
     @Override
     public int getStockPrice(int stockNo) {
@@ -27,6 +28,7 @@ public class StockServiceImpl implements StockService {
         return stockRepository.getStockPrice(stockNo);
     }
 
+    // 현재 포인트
     @Transactional(readOnly = true)
     @Override
     public StockPriceResponse getStockPriceInfo(int stockNo) {
