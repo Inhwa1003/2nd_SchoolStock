@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>내 자산 관리</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/Common.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/MyAssets.css}">
+</head>
+<body>
+<div class="app">
+    <div class="content">
+        <header class="hd">
+            <div class="hd-name">내 자산</div>
+        </header>
+        <div class="main">
+            <div class="summary-container">
+                <div class="card">
+                    <span class="label">총 자산</span>
+                    <div class="value" id="total-assets"
+                         th:text="${#numbers.formatInteger(myAssets.totalValue, 1, 'COMMA')} + ' P'">0 P</div>
+                </div>
+                <div class="card">
+                    <span class="label">보유 포인트</span>
+                    <div class="value" id="total-points"
+                         th:text="${#numbers.formatInteger(myAssets.getMyPoint(), 1, 'COMMA')} + ' P'">0 P</div>
+                </div>
+                <div class="card">
+                    <span class="label">총 손익</span>
+                    <div class="value" id="total-profit"
+                         th:classappend="${myAssets.totalProfit ge 0} ? 'plus' : 'minus'"
+                         th:text="${(myAssets.totalProfit gt 0 ? '+' : '') + #numbers.formatInteger(myAssets.totalProfit, 1, 'COMMA')} + ' P'">0 P</div>
+                </div>
+                <div class="card" id="coupon-card" style="cursor:pointer;"
+                    th:data-href="@{/schoolstock/s/me/student/coupons}">
+                    <span class="label">보유 쿠폰</span>
+                    <div class="value" id="coupon-count" th:text="${myAssets.couponAmount} + '개'">0개</div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="table-header">
+                    <h3>보유 주식 상세</h3>
+                    <button type="button" class="refresh-all-btn" id="refresh-btn">🔄</button>
+                </div>
+
+                <table id="stock-table">
+                    <thead>
+                        <tr>
+                            <th>주식명</th><th>보유수량</th><th>현재가격</th>
+                            <th>평균단가</th><th>총 구매 비용</th><th>수익금</th>
+                        </tr>
+                    </thead>
+                    <tbody id="stock-list">
+                        <tr th:each="s, stat : ${myAssets.myStocks}"
+                            th:id="'row-' + ${stat.index}" class="stock-row-item">
+                            <td th:text="${s.stockName}">주식명</td>
+                            <td th:text="${s.stockAmount} + '개'">0개</td>
+                            <td class="stock-price"
+                                th:text="${#numbers.formatInteger(s.nowPoint, 1, 'COMMA')} + 'P'">0P</td>
+                            <td th:text="${#numbers.formatInteger(s.averagePoint, 1, 'COMMA')} + 'P'">0P</td>
+                            <td th:text="${#numbers.formatInteger(s.purchasePoint, 1, 'COMMA')} + 'P'">0P</td>
+                            <td th:classappend="${s.stockProfit ge 0} ? 'plus' : 'minus'"
+                                th:text="${(s.stockProfit gt 0 ? '+' : '') + #numbers.formatInteger(s.stockProfit, 1, 'COMMA')} + 'P'">0P</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:src="@{/js/assets.js}"></script>
+</body>
+</html>
