@@ -1,7 +1,7 @@
 package com.school.schoolstock.domain.stock.service;
 
 import com.school.schoolstock.domain.stock.dto.response.StockDetailPageResponse;
-import com.school.schoolstock.domain.stock.dto.response.StockListResponse;
+import com.school.schoolstock.domain.stock.dto.response.StockListPageResponse;
 import com.school.schoolstock.domain.stock.dto.response.StockPriceResponse;
 import com.school.schoolstock.domain.stock.repository.StockRepository;
 import com.school.schoolstock.domain.stock.vo.Stocks;
@@ -47,14 +47,14 @@ public class StockServiceImpl implements StockService {
     // 주식 목록 페이지를 가져온다.
     @Transactional(readOnly = true)
     @Override
-    public List<StockListResponse> getStockList() {
-        List<StockListResponse> result = new ArrayList<>();
+    public List<StockListPageResponse> getStockList() {
+        List<StockListPageResponse> result = new ArrayList<>();
 
         for (Stocks stock : stockRepository.getStockNameList()) {
 
             StockPriceResponse price = getStockPriceInfo(stock.getStockNo());
 
-            result.add(StockListResponse.builder()
+            result.add(StockListPageResponse.builder()
                     .stockNo(stock.getStockNo())
                     .name(stock.getName())
                     .nowPoint(price.getNowPoint())

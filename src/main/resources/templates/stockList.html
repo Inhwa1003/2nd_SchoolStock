@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>주식 목록</title>
+
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+
+  <link rel="stylesheet" th:href="@{/css/Common.css}">
+  <link rel="stylesheet" th:href="@{/css/StockList.css}">
+</head>
+
+<body>
+<div class="app">
+
+  <div class="content">
+
+    <header class="hd">
+      <div class="hd-name">주식 목록</div>
+    </header>
+
+    <div class="main">
+      <div class="panel">
+
+        <table class="stock-table">
+          <thead>
+          <tr>
+            <th>주식명</th>
+            <th>현재가격</th>
+            <th>이전가격</th>
+            <th>(현재가격-이전가격)</th>
+            <th>등락률(%)</th>
+          </tr>
+          </thead>
+
+          <tbody>
+          <!-- 주식 목록이 비어 있을 때 -->
+          <tr th:if="${#lists.isEmpty(stockList)}">
+            <td colspan="5">등록된 주식이 없습니다.</td>
+          </tr>
+
+          <!-- 주식 목록 출력 -->
+          <tr th:each="stock : ${stockList}"
+              th:data-stock-no="${stock.stockNo}"
+              th:data-stock-name="${stock.name}">
+
+            <td th:text="${stock.name}">주식명</td>
+
+            <td class="current-price"
+                th:text="${stock.nowPoint + 'P'}">현재가격</td>
+
+            <td class="prev-price"
+                th:text="${(stock.nowPoint - stock.priceChange) + 'P'}">이전가격</td>
+
+            <td th:classappend="${stock.priceChange >= 0} ? ' up' : ' down'"
+                class="price-change"
+                th:text="${stock.priceChange >= 0 ? '+' + stock.priceChange + 'P' : stock.priceChange + 'P'}">
+              가격변동
+            </td>
+
+            <td th:classappend="${stock.changeRate >= 0} ? ' up' : ' down'"
+                class="change-rate"
+                th:text="${stock.changeRate >= 0 ? '+' + #numbers.formatDecimal(stock.changeRate, 1, 2) + '%' : #numbers.formatDecimal(stock.changeRate, 1, 2) + '%'}">
+              등락률
+            </td>
+          </tr>
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+
+  </div>
+
+<!--  &lt;!&ndash; 사이드바 &ndash;&gt;-->
+<!--  <div th:replace="~{SideBar :: sidebar}"></div>-->
+
+</div>
+
+<script th:src="@{/js/stock-list.js}"></script>
+</body>
+</html>
