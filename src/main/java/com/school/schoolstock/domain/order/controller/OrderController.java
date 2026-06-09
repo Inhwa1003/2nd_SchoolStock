@@ -3,7 +3,6 @@ package com.school.schoolstock.domain.order.controller;
 import com.school.schoolstock.domain.order.dto.request.BuySellOrderRequest;
 import com.school.schoolstock.domain.order.dto.response.StockOrderResponse;
 import com.school.schoolstock.domain.order.service.OrderService;
-import com.school.schoolstock.domain.stock.dto.response.StockDetailPageResponse;
 import com.school.schoolstock.domain.stock.service.StockService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
