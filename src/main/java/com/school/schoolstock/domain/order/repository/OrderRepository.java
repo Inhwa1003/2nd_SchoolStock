@@ -1,5 +1,6 @@
 package com.school.schoolstock.domain.order.repository;
 
+import com.school.schoolstock.domain.order.dto.response.OrderCancelPointResponse;
 import com.school.schoolstock.domain.order.vo.Orders;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -35,5 +36,7 @@ public interface OrderRepository {
     // 주문 요청 상태 '체결' 변경
     boolean setOrderStateMatched(int orderNo);
 
+    // 주문 취소 시, 환불 정보 조회
+    OrderCancelPointResponse getCancelOrderPointInfo(int orderNo);
 
 }
