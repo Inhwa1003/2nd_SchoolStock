@@ -32,6 +32,7 @@ public class SecurityConfig {
                         "/schoolstock/login",
                         "/schoolstock/add-member-view",
                         "/schoolstock/add-member",
+                        "/schoolstock/a/check-id",
                         "/css/**",
                         "/js/**")
                 .permitAll()
