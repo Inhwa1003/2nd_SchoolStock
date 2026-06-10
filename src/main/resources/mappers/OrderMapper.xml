@@ -118,6 +118,7 @@
         UPDATE ORDERS
         SET order_state = 'CANCELED'
         WHERE order_no = #{orderNo}
+        AND order_state = 'PENDING'
     </update>
 
     <!-- 주문 요청 상태 '체결' 변경 -->
