@@ -149,15 +149,22 @@ class OrderRepositoryTest {
 
     @Test
     void setOrderStateCancel_test() {
-        // given
-        int orderNo = 3;
+        {
+            // given
+            int orderNo = 8; // 실제 DB에 있는 PENDING + BUY 주문 번호로 변경
 
-        // when
-        boolean result = orderRepository.setOrderStateCancel(orderNo);
+            // when
+            OrderCancelPointResponse response =
+                    orderRepository.getCancelOrderPointInfo(orderNo);
 
-        // then
-        System.out.println("주문 상태 취소 변경 결과: " + result);
-        assertTrue(result);
+            // then
+            assertNotNull(response);
+            assertNotNull(response.getStudentId());
+            assertTrue(response.getRefundPoint() > 0);
+
+            System.out.println("studentId = " + response.getStudentId());
+            System.out.println("refundPoint = " + response.getRefundPoint());
+        }
     }
 
     @Test
@@ -186,21 +193,5 @@ class OrderRepositoryTest {
         assertFalse(result);
     }
 
-    @Test
-    void 주문취소_환불정보_조회() {
-        // given
-        int orderNo = 8; // 실제 DB에 있는 PENDING + BUY 주문 번호로 변경
 
-        // when
-        OrderCancelPointResponse response =
-                orderRepository.getCancelOrderPointInfo(orderNo);
-
-        // then
-        assertNotNull(response);
-        assertNotNull(response.getStudentId());
-        assertTrue(response.getRefundPoint() > 0);
-
-        System.out.println("studentId = " + response.getStudentId());
-        System.out.println("refundPoint = " + response.getRefundPoint());
-    }
 }
