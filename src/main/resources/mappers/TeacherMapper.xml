@@ -15,7 +15,7 @@
 
     <!-- 선생님이 맡은 반 학생 목록 조회 -->
     <select id="getMyStudents"
-            resultType="com.school.schoolstock.domain.teacher.dto.StudentListResponse">
+            resultType="com.school.schoolstock.domain.teacher.dto.response.StudentListResponse">
         SELECT
             s.student_number AS studentNumber,
             s.name,
@@ -28,4 +28,23 @@
         ORDER BY s.student_number
     </select>
 
+    <!-- 선생님이 맡은 반 학생 반번호로 아이디 조회 -->
+    <select id="getStudentIdInClass" resultType="string">
+        SELECT s.student_id
+        FROM students s
+        JOIN teachers t ON s.grade = t.grade AND s.class_name = t.class_name
+        WHERE t.teacher_id     = #{teacherId}
+        AND s.student_number = #{studentNumber}
+    </select>
+
+    <!-- 선생님 이름 조회(사이드바) -->
+    <select id="getTeacherName" parameterType="String" resultType="string">
+        SELECT name FROM teachers WHERE teacher_id = #{teacherId};
+    </select>
+
+    <!-- 포인트 지급 -->
+    <insert id="setPointGive">
+        INSERT INTO get_point (student_id, point, get_point_content, get_point_date)
+        VALUES (#{studentId}, #{point}, #{content}, NOW())
+    </insert>
 </mapper>
