@@ -37,4 +37,10 @@
         WHERE coupon_no = #{couponNo}
     </update>
 
+    <!-- 쿠폰 삭제 -->
+    <delete id="deleteCoupon">
+        DELETE FROM COUPONS
+        WHERE coupon_no = #{couponNo}
+    </delete>
+
 </mapper>

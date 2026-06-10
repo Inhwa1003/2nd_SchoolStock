@@ -80,5 +80,26 @@ class TeacherRepositoryTest {
         assertThat(couponRepository.getCoupon(failCouponNo)).isNull();
     }
 
+    @Test
+    void deleteCouponTest() {
+        // NO
+        // 존재하지 않는 쿠폰 번호 삭제
+        int failCouponNo = 99999;
+
+        int failResult = teacherRepository.deleteCoupon(failCouponNo);
+
+        assertThat(failResult).isEqualTo(0);
+        assertThat(couponRepository.getCoupon(failCouponNo)).isNull();
+
+
+        // YES
+        // 존재하는 쿠폰 번호 삭제 => coupon_purchase에서 FK로 참조하기 때문에, coupon_no=4가 되도록, insert 쿼리문 커밋 후 테스트 확인
+        int couponNo = 4;
+
+        int result = teacherRepository.deleteCoupon(couponNo);
+
+        assertThat(result).isEqualTo(1);
+        assertThat(couponRepository.getCoupon(couponNo)).isNull();
+    }
     
 }

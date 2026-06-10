@@ -100,4 +100,33 @@ public class TeacherServiceTest {
         log.info("쿠폰 수정 결과 : {}", result);
         log.info("수정된 쿠폰 정보 : {}", updatedCoupon);
     }
+
+    @Test
+    public void deleteCouponTest() {
+        // NO 1
+        // 쿠폰 번호가 0 이하인 경우
+        String invalidCouponNoResult = teacherService.deleteCoupon(0);
+
+        Assertions.assertEquals("삭제할 쿠폰 번호가 올바르지 않습니다.", invalidCouponNoResult);
+
+
+        // NO 2
+        // 존재하지 않는 쿠폰 번호
+        String notFoundResult = teacherService.deleteCoupon(99999);
+
+        Assertions.assertEquals("삭제할 쿠폰을 찾을 수 없습니다.", notFoundResult);
+
+
+        // YES
+        // 존재하는 쿠폰 번호 삭제
+        int couponNo = 4;
+
+        String result = teacherService.deleteCoupon(couponNo);
+
+        Assertions.assertEquals("쿠폰이 정상적으로 삭제되었습니다.", result);
+        Assertions.assertNull(couponRepository.getCoupon(couponNo));
+
+        log.info("쿠폰 삭제 결과 : {}", result);
+    }
+
 }

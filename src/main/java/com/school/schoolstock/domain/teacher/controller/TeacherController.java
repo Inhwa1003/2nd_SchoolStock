@@ -1,5 +1,6 @@
 package com.school.schoolstock.domain.teacher.controller;
 
+import com.school.schoolstock.domain.coupon.dto.CouponDeleteRequest;
 import com.school.schoolstock.domain.coupon.dto.CouponUpdateRequest;
 import com.school.schoolstock.domain.coupon.service.CouponService;
 import com.school.schoolstock.domain.coupon.vo.Coupons;
@@ -50,6 +51,7 @@ public class TeacherController {
         return "teacherCouponMarket";
     }
 
+    // 쿠폰 정보(쿠폰명, 쿠폰 포인트) 수정
     @PatchMapping("/coupons")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> setCoupon(
@@ -83,6 +85,38 @@ public class TeacherController {
         }
 
         // 쿠폰명 공백, 포인트 0 이하 등 요청값 문제
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(errorResponse(400, "INVALID_COUPON_REQUEST", message));
+    }
+
+    // 쿠폰 상점에 있는 쿠폰 삭제
+    @DeleteMapping("/coupons")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> deleteCoupon(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestBody CouponDeleteRequest request
+    ) {
+        if (userDetails == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(errorResponse(401, "UNAUTHORIZED", "로그인이 필요합니다."));
+        }
+
+        String message = teacherService.deleteCoupon(request.getCouponNo());
+
+        // 성공
+        if (message.equals("쿠폰이 정상적으로 삭제되었습니다.")) {
+            return ResponseEntity.ok(
+                    successResponse(200, null, message)
+            );
+        }
+
+        // 삭제할 쿠폰 없음
+        if (message.equals("삭제할 쿠폰을 찾을 수 없습니다.")) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(errorResponse(404, "COUPON_NOT_FOUND", message));
+        }
+
+        // 그 외 요청 문제
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(errorResponse(400, "INVALID_COUPON_REQUEST", message));
     }

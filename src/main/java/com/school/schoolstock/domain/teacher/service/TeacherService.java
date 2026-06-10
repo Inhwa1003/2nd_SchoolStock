@@ -13,4 +13,7 @@ public interface TeacherService {
     // 쿠폰 상점 내 쿠폰명, 쿠폰 포인트 수정
     String setCoupon(Coupons coupon);
 
+    // 쿠폰 상점의 쿠폰을 삭제
+    String deleteCoupon(int couponNo);
+
 }

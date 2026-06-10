@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class CouponResponse {
+public class CouponUpdateResponse {
 
     private int couponNo;
     private String name;
