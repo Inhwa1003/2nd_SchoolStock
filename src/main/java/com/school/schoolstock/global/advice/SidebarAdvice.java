@@ -9,6 +9,7 @@ import com.school.schoolstock.domain.stock.controller.StockController;
 import com.school.schoolstock.domain.student.controller.StudentController;
 import com.school.schoolstock.domain.student.dto.response.StudentInfoResponse;
 import com.school.schoolstock.domain.student.service.StudentService;
+import com.school.schoolstock.domain.teacher.controller.TeacherController;
 import com.school.schoolstock.global.security.SchoolUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -22,7 +23,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
         OrderController.class,
         NewsController.class,
         CouponController.class,
-        UserController.class
+        UserController.class,
+        TeacherController.class
 })
 public class SidebarAdvice {
     private final StudentService studentService;
