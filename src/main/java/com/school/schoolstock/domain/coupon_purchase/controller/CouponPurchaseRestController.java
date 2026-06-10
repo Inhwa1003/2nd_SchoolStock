@@ -5,24 +5,23 @@ import com.school.schoolstock.domain.coupon_purchase.service.CouponPurchaseServi
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @RequiredArgsConstructor
-@Controller
+@RestController
 @RequestMapping("/schoolstock/s/me/coupon-purchases")
-public class CouponPurchaseController {
+public class CouponPurchaseRestController {
 
     private final CouponPurchaseService couponPurchaseService;
 
     @PostMapping
     public ResponseEntity<Map<String, Object>> buyCoupon(
             @RequestBody CouponPurchaseRequest request,
-            Authentication authentication
-    ) {
+            Authentication authentication) {
+
         if (authentication == null || !authentication.isAuthenticated()) {
             Map<String, Object> error = new HashMap<>();
             error.put("status", 401);

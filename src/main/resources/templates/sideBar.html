@@ -19,7 +19,8 @@
                 <span th:text="${info.studentNumber}">1</span>번   <!-- ★ classNumber → studentNumber -->
             </p>
             <p class="point-info" id="studentPoints">
-                보유 포인트 : <span th:text="${#numbers.formatInteger(info.totalPoint, 1, 'COMMA')}">0</span>P
+                보유 포인트 : <span id="sidebarPoint"
+                    th:text="${#numbers.formatInteger(info.totalPoint, 1, 'COMMA')}">0</span>P
             </p>
         </th:block>
         <p sec:authorize="hasRole('TEACHER')" class="role-label">선생님</p>
@@ -48,6 +49,7 @@
                th:href="@{/#}">쿠폰 상점</a>
         </th:block>
     </nav>
+    <script th:src="@{/js/side-bar.js}"></script>
 </aside>
 </body>
 </html>
