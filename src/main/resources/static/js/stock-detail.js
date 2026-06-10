@@ -32,21 +32,15 @@ document.addEventListener("DOMContentLoaded", function () {
     // 매도 버튼 클릭 시 매도 주문 요청
     if (sellBtn) {
         sellBtn.addEventListener("click", function () {
-            console.log("매도 버튼 클릭됨");
             requestSellOrder();
         });
-    } else {
-        console.error("sellBtn을 찾을 수 없습니다.");
     }
 
     // 매수 버튼 클릭 시 매수 주문 요청
     if (buyBtn) {
         buyBtn.addEventListener("click", function () {
-            console.log("매수 버튼 클릭됨");
             requestBuyOrder();
         });
-    } else {
-        console.error("buyBtn을 찾을 수 없습니다.");
     }
 
     //내 주문 목록 불러오기
@@ -66,8 +60,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // 주가 변동 표시
-    setPriceChange();
+    startPricePolling();
 });
 
 /**
@@ -105,7 +98,6 @@ async function loadOrderList(orderType) {
         });
 
     } catch (error) {
-        console.error("주문 목록 조회 실패:", error);
 
         orderListBody.innerHTML = `
             <tr>
@@ -142,9 +134,7 @@ async function requestSellOrder() {
         const csrfHeader = csrfHeaderMeta.getAttribute("content");
         headers[csrfHeader] = csrfToken;
     }
-
-    try {
-        console.log("매도 요청 전송:", `/schoolstock/s/me/stocks/${stockNo}/sell`);
+    try{
 
         const response = await fetch(`/schoolstock/s/me/stocks/${stockNo}/sell`, {
             method: "POST",
@@ -163,9 +153,7 @@ async function requestSellOrder() {
             document.getElementById("orderTypeSelect").value = "sell";
             loadOrderList("sell");
         }
-
     } catch (error) {
-        console.error("매도 주문 요청 실패:", error);
         alert("매도 주문 요청 중 오류가 발생했습니다.");
     }
 }
@@ -197,10 +185,7 @@ async function requestBuyOrder() {
         const csrfHeader = csrfHeaderMeta.getAttribute("content");
         headers[csrfHeader] = csrfToken;
     }
-
-    try {
-        console.log("매수 요청 전송:", `/schoolstock/s/me/stocks/${stockNo}/buy`);
-
+    try{
         const response = await fetch(`/schoolstock/s/me/stocks/${stockNo}/buy`, {
             method: "POST",
             headers: headers,
@@ -218,12 +203,11 @@ async function requestBuyOrder() {
             document.getElementById("orderTypeSelect").value = "buy";
             loadOrderList("buy");
         }
-
     } catch (error) {
-        console.error("매수 주문 요청 실패:", error);
         alert("매수 주문 요청 중 오류가 발생했습니다.");
     }
 }
+
 
 /**
  * BUY / SELL 한글 변환
@@ -243,36 +227,31 @@ function convertOrderContent(orderContent) {
 /**
  * 현재가와 이전가 비교해서 상승/하락 표시
  */
-function setPriceChange() {
-    const stockPrice = document.querySelector(".stock-price");
-    const priceNow = document.querySelector(".price-now");
-    const priceChange = document.querySelector(".price-change");
+async function refreshPrice() {
+        const res = await fetch(`/schoolstock/s/stocks/${stockNo}/price`);
+        if (!res.ok) return;
+        const p = await res.json();                 // {nowPoint, priceChange, changeRate}
+        const prev = p.nowPoint - p.priceChange;
 
-    if (!stockPrice || !priceNow || !priceChange) {
-        return;
-    }
+        const priceNow    = document.querySelector(".price-now");
+        const priceBase   = document.querySelector(".price-base");
+        const priceChange = document.querySelector(".price-change");
 
-    const prevPrice = Number(stockPrice.dataset.prevPrice);
-    const nowPrice = Number(priceNow.textContent.replace("P", "").trim());
+        if (priceNow)  priceNow.textContent  = p.nowPoint + "P";
+        if (priceBase) priceBase.textContent = prev + "P";
 
-    if (isNaN(prevPrice) || isNaN(nowPrice)) {
-        return;
-    }
-
-    const diff = nowPrice - prevPrice;
-    const changeRate = prevPrice == 0 ? 0 : (diff * 100) / prevPrice;
-
-    priceChange.classList.remove("up", "down");
-
-    if (diff > 0) {
-        priceChange.textContent = ` ${diff}P(+${changeRate.toFixed(2)}%)`;
-        priceChange.classList.add("up");
-    } else if (diff < 0) {
-        priceChange.textContent = ` ${Math.abs(diff)}P(${changeRate.toFixed(2)}%)`;
-        priceChange.classList.add("down");
-    } else {
-        priceChange.textContent = `0P(0.00%)`;
-    }
+        if (priceChange) {
+            priceChange.classList.remove("up", "down");
+            if (p.priceChange > 0) {
+                priceChange.textContent = `+${p.priceChange}P(+${p.changeRate.toFixed(2)}%)`;
+                priceChange.classList.add("up");
+            } else if (p.priceChange < 0) {
+                priceChange.textContent = `${p.priceChange}P(${p.changeRate.toFixed(2)}%)`;
+                priceChange.classList.add("down");
+            } else {
+                priceChange.textContent = `0P(0.00%)`;
+            }
+        }
 }
 
 /**
@@ -281,7 +260,7 @@ function setPriceChange() {
 async function loadMyOrderList() {
     const body = document.getElementById("myOrderListBody");
 
-    try {
+    try{
         const res = await fetch(`/schoolstock/s/me/students/${stockNo}/orders`);
         if (!res.ok) throw new Error("status " + res.status);
 
@@ -310,7 +289,6 @@ async function loadMyOrderList() {
         });
 
     } catch (error) {
-        console.error("내 주문 조회 실패:", error);
         body.innerHTML = `<tr><td colspan="5">내 주문 조회 중 오류가 발생했습니다.</td></tr>`;
     }
 }
@@ -341,7 +319,26 @@ async function cancelMyOrder(orderNo) {
             loadOrderList(document.getElementById("orderTypeSelect").value); // 대기 주문판도 갱신
         }
     } catch (error) {
-        console.error("주문 취소 실패:", error);
         alert("주문 취소 중 오류가 발생했습니다.");
     }
 }
+
+let priceTimer = null;
+
+function startPricePolling() {
+    refreshPrice();                                 // 즉시 1번 (다시 보일 때 바로 최신화)
+    priceTimer = setInterval(refreshPrice, 5000);
+}
+function stopPricePolling() {
+    clearInterval(priceTimer);
+    priceTimer = null;
+}
+
+// 탭 보임/숨김에 따라 폴링 on/off
+document.addEventListener("visibilitychange", function () {
+    if (document.hidden) {
+        stopPricePolling();                          // 숨겨지면 멈춤
+    } else if (priceTimer === null) {
+        startPricePolling();                         // 다시 보이면 재개
+    }
+});

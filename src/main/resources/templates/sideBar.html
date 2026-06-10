@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+<aside class="right-sidebar" th:fragment="sidebar(active)">
+
+
+    <div class="user-info" th:if="${info != null}">
+        <form method="post" th:action="@{/schoolstock/logout}" style="margin:0;">
+            <button type="submit" class="logout-btn">로그아웃</button>
+        </form>
+
+        <h2 class="user-name" id="studentName" th:text="${info.name}">이름</h2>
+
+        <th:block sec:authorize="hasRole('STUDENT')">
+            <p id="studentClassInfo">
+                <span th:text="${info.grade}">1</span>학년
+                <span th:text="${info.className}">A</span>반
+                <span th:text="${info.studentNumber}">1</span>번   <!-- ★ classNumber → studentNumber -->
+            </p>
+            <p class="point-info" id="studentPoints">
+                보유 포인트 : <span th:text="${#numbers.formatInteger(info.totalPoint, 1, 'COMMA')}">0</span>P
+            </p>
+        </th:block>
+        <p sec:authorize="hasRole('TEACHER')" class="role-label">선생님</p>
+    </div>
+
+    <div class="round-box"><p>장 운영중</p></div>
+
+    <nav class="sidebar-menu">
+        <th:block sec:authorize="hasRole('STUDENT')">
+            <a class="menu-button" th:classappend="${active == 'assets'}  ? 'active'"
+               th:href="@{/schoolstock/s/me/students/assets}">내 자산</a>
+            <a class="menu-button" th:classappend="${active == 'stocks'}  ? 'active'"
+               th:href="@{/schoolstock/s/stocks}">주식 목록</a>
+            <a class="menu-button" th:classappend="${active == 'news'}    ? 'active'"
+               th:href="@{/schoolstock/s/news}">뉴스 목록</a>
+            <a class="menu-button" th:classappend="${active == 'history'} ? 'active'"
+               th:href="@{/schoolstock/s/me/students/history}">내 포인트 내역</a>
+            <a class="menu-button" th:classappend="${active == 'coupons'} ? 'active'"
+               th:href="@{/schoolstock/s/coupons}">쿠폰 상점</a>
+        </th:block>
+
+        <th:block sec:authorize="hasRole('TEACHER')">
+            <a class="menu-button" th:classappend="${active == '학생목록키들어갈자리'}  ? 'active'"
+               th:href="@{/#}">학생 목록</a>
+            <a class="menu-button" th:classappend="${active == '쿠폰상점키들어갈자리'}  ? 'active'"
+               th:href="@{/#}">쿠폰 상점</a>
+        </th:block>
+    </nav>
+</aside>
+</body>
+</html>

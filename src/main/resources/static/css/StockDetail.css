@@ -123,3 +123,12 @@ input[type="number"], .sell-btn, .buy-btn{
 .price-change.down::before {
     content: "▼ ";
 }
+
+.main.cp-grid {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.main.cp-grid .text-center {
+    grid-column: 1 / -1;
+    text-align: center;
+}

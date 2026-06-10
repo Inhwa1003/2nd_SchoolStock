@@ -9,6 +9,7 @@
 
   <link rel="stylesheet" th:href="@{/css/Common.css}">
   <link rel="stylesheet" th:href="@{/css/StockList.css}">
+  <link rel="stylesheet" th:href="@{/css/SideBar.css}">
 </head>
 
 <body>
@@ -72,10 +73,7 @@
     </div>
 
   </div>
-
-<!--  &lt;!&ndash; 사이드바 &ndash;&gt;-->
-<!--  <div th:replace="~{SideBar :: sidebar}"></div>-->
-
+  <div th:replace="~{sideBar :: sidebar('stocks')}"></div>
 </div>
 
 <script th:src="@{/js/stock-list.js}"></script>

@@ -253,4 +253,10 @@
     <select id="getMyCouponList" parameterType="com.school.schoolstock.domain.student.dto.response.MyCouponResponse">
         SELECT name, purchase_point FROM coupon_purchase WHERE purchase_state = 'NOT_USED' AND student_id = #{studentId}
     </select>
+    <!-- 학생 기본정보 조회 (사이드바 용) -->
+    <select id="getStudentInfo" parameterType="String" resultType="com.school.schoolstock.domain.student.dto.response.StudentInfoResponse">
+        SELECT name, grade, class_name, student_number, total_point
+        FROM students
+        WHERE student_id = #{studentId}
+    </select>
 </mapper>
