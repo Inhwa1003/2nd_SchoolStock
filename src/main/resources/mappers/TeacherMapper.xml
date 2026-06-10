@@ -28,4 +28,13 @@
         ORDER BY s.student_number
     </select>
 
+    <!-- 쿠폰 상점에 등록된, 쿠폰명과 쿠폰 포인트 수정-->
+    <update id="setCoupon">
+        UPDATE COUPONS
+        SET
+            name = #{name},
+            coupon_point = #{couponPoint}
+        WHERE coupon_no = #{couponNo}
+    </update>
+
 </mapper>

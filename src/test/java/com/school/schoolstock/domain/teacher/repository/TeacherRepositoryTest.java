@@ -1,5 +1,7 @@
 package com.school.schoolstock.domain.teacher.repository;
 
+import com.school.schoolstock.domain.coupon.repository.CouponRepository;
+import com.school.schoolstock.domain.coupon.vo.Coupons;
 import com.school.schoolstock.domain.teacher.dto.StudentListResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -8,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
@@ -16,6 +19,9 @@ class TeacherRepositoryTest {
 
     @Autowired
     private TeacherRepository teacherRepository;
+
+    @Autowired
+    private CouponRepository couponRepository;
 
     @Test
     void getMyStudentsTest() {
@@ -35,4 +41,25 @@ class TeacherRepositoryTest {
             log.info("학생 정보 = {}", student);
         }
     }
+
+    @Test
+    void setCouponTest() {
+        int couponNo = 3;
+
+        Coupons coupon = new Coupons();
+        coupon.setCouponNo(couponNo);
+        coupon.setName("수정된 쿠폰명");
+        coupon.setCouponPoint(300);
+
+        int result = teacherRepository.setCoupon(coupon);
+
+        assertThat(result).isEqualTo(1);
+
+        assertThat(couponRepository.getCoupon(couponNo)).isNotNull();
+        assertThat(couponRepository.getCoupon(couponNo).getCouponNo()).isEqualTo(couponNo);
+        assertThat(couponRepository.getCoupon(couponNo).getName()).isEqualTo("수정된 쿠폰명");
+        assertThat(couponRepository.getCoupon(couponNo).getCouponPoint()).isEqualTo(300);
+
+    }
+
 }
