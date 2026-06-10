@@ -18,7 +18,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
 
-            console.log("선택한 뉴스:", newsText.textContent);
         });
     });
 });

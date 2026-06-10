@@ -35,8 +35,6 @@ document.addEventListener("DOMContentLoaded", function () {
             console.log("매도 버튼 클릭됨");
             requestSellOrder();
         });
-    } else {
-        console.error("sellBtn을 찾을 수 없습니다.");
     }
 
     // 매수 버튼 클릭 시 매수 주문 요청
@@ -45,8 +43,6 @@ document.addEventListener("DOMContentLoaded", function () {
             console.log("매수 버튼 클릭됨");
             requestBuyOrder();
         });
-    } else {
-        console.error("buyBtn을 찾을 수 없습니다.");
     }
 
     //내 주문 목록 불러오기
@@ -142,9 +138,6 @@ async function requestSellOrder() {
         headers[csrfHeader] = csrfToken;
     }
 
-    try {
-        console.log("매도 요청 전송:", `/schoolstock/s/me/stocks/${stockNo}/sell`);
-
         const response = await fetch(`/schoolstock/s/me/stocks/${stockNo}/sell`, {
             method: "POST",
             headers: headers,
@@ -162,11 +155,6 @@ async function requestSellOrder() {
             document.getElementById("orderTypeSelect").value = "sell";
             loadOrderList("sell");
         }
-
-    } catch (error) {
-        console.error("매도 주문 요청 실패:", error);
-        alert("매도 주문 요청 중 오류가 발생했습니다.");
-    }
 }
 
 /**
@@ -197,9 +185,6 @@ async function requestBuyOrder() {
         headers[csrfHeader] = csrfToken;
     }
 
-    try {
-        console.log("매수 요청 전송:", `/schoolstock/s/me/stocks/${stockNo}/buy`);
-
         const response = await fetch(`/schoolstock/s/me/stocks/${stockNo}/buy`, {
             method: "POST",
             headers: headers,
@@ -217,11 +202,6 @@ async function requestBuyOrder() {
             document.getElementById("orderTypeSelect").value = "buy";
             loadOrderList("buy");
         }
-
-    } catch (error) {
-        console.error("매수 주문 요청 실패:", error);
-        alert("매수 주문 요청 중 오류가 발생했습니다.");
-    }
 }
 
 /**
@@ -243,7 +223,6 @@ function convertOrderContent(orderContent) {
  * 현재가와 이전가 비교해서 상승/하락 표시
  */
 async function refreshPrice() {
-    try {
         const res = await fetch(`/schoolstock/s/stocks/${stockNo}/price`);
         if (!res.ok) return;
         const p = await res.json();                 // {nowPoint, priceChange, changeRate}
@@ -268,9 +247,6 @@ async function refreshPrice() {
                 priceChange.textContent = `0P(0.00%)`;
             }
         }
-    } catch (e) {
-        console.error("시세 폴링 실패:", e);
-    }
 }
 
 /**
@@ -279,7 +255,7 @@ async function refreshPrice() {
 async function loadMyOrderList() {
     const body = document.getElementById("myOrderListBody");
 
-    try {
+    try{
         const res = await fetch(`/schoolstock/s/me/students/${stockNo}/orders`);
         if (!res.ok) throw new Error("status " + res.status);
 
@@ -308,7 +284,6 @@ async function loadMyOrderList() {
         });
 
     } catch (error) {
-        console.error("내 주문 조회 실패:", error);
         body.innerHTML = `<tr><td colspan="5">내 주문 조회 중 오류가 발생했습니다.</td></tr>`;
     }
 }
@@ -339,7 +314,6 @@ async function cancelMyOrder(orderNo) {
             loadOrderList(document.getElementById("orderTypeSelect").value); // 대기 주문판도 갱신
         }
     } catch (error) {
-        console.error("주문 취소 실패:", error);
         alert("주문 취소 중 오류가 발생했습니다.");
     }
 }

@@ -1,7 +1,6 @@
 const PRICE_POLL_MS = 5000;
 
 document.addEventListener("DOMContentLoaded", function () {
-    // (기존) 행 클릭 → 상세 이동
     document.querySelectorAll(".stock-table tbody tr[data-stock-no]").forEach(function (row) {
         row.style.cursor = "pointer";
         row.addEventListener("click", function () {
@@ -13,7 +12,6 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 async function refreshPrices() {
-    try {
         const res = await fetch("/schoolstock/s/stocks/prices");
         if (!res.ok) return;
         const list = await res.json();
@@ -34,9 +32,6 @@ async function refreshPrices() {
             rateTd.textContent = (s.changeRate >= 0 ? "+" : "") + s.changeRate.toFixed(2) + "%";
             setUpDown(rateTd, s.changeRate);
         });
-    } catch (e) {
-        console.error("시세 폴링 실패:", e);
-    }
 }
 
 function setText(el, text) { if (el) el.textContent = text; }
