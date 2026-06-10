@@ -12,7 +12,7 @@ public interface OrderRepository {
     // 주문 매칭
     Map<String, Object> getMatchOrder(int stockNo, int orderPrice, int orderAmount, String studentId, String content);
 
-    // 매도, 매수 주문 요청
+    // 매도, 매수 주문 요청 => 학생들끼리 거래할 때 사용되는 price
     boolean setOrderRequest(String content, int price, int amount, String state, String studentId, int stockNo);
 
     // 최근 등록한 주문 번호 조회

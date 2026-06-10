@@ -92,25 +92,64 @@ public class OrderServiceImpl implements OrderService {
         if(studentRepository.getMyPoint(studentId) < (request.getOrderAmount() * request.getOrderPoint()))
             return "보유포인트가 부족합니다.";
 
-        // 1. 발행 개수가 남았는지 체크 있으면 실행
         Stocks pubInfo = stockRepository.getStockPubInfo(request.getStockNo());
-        if(pubInfo.getPublicationBalance() > 0){
-            // 1-1. 입력한 값이 발행가격과 같거나 높을때 실행
-            if(pubInfo.getPublicationPoint() <= request.getOrderPoint()){
-                // 1-2. 발행 개수 차감
-                // 발행개수 음수값 차단 작은값으로 거래
-                int buyFromPub = Math.min(pubInfo.getPublicationBalance(), request.getOrderAmount());
-                stockRepository.setStockPubBalance(buyFromPub, request.getStockNo());
-                // 1-3. 주문 체결로 바로 요청
-                orderRepository.setOrderRequest("BUY", request.getOrderPoint(), buyFromPub, "MATCHED", studentId, request.getStockNo());
-                // 1-4. 매수 요청한 주문번호로 주문 완료 등록
-                tradeRepository.setMatchedOrder(orderRepository.getMyOrderNo("BUY", studentId, request.getStockNo(), "MATCHED", buyFromPub, request.getOrderPoint()), null);
-                // 1-5. 보유 포인트 차감
-                studentRepository.setStudentPointDown(studentId, (buyFromPub * request.getOrderPoint()));
-                return "발행 가격 " + pubInfo.getPublicationPoint() + "P 매수가 완료 되었습니다. 남은 발행잔량은 " + (pubInfo.getPublicationBalance() - buyFromPub) + "주 입니다.";
-            }
+
+    // 현재가격보다 낮은 매수 요청 차단
+        if (request.getOrderPoint() < pubInfo.getPublicationPoint()) {
+            return "현재가격 이상으로만 매수 주문이 가능합니다.";
         }
-        matchOrder = orderRepository.getMatchOrder(request.getStockNo(), request.getOrderPoint(), request.getOrderAmount(), studentId, "SELL");
+
+    // 1. 발행 개수가 남았는지 체크 있으면 실행
+        if (pubInfo.getPublicationBalance() > 0) {
+
+            // 발행개수 음수값 차단 작은값으로 거래
+            int buyFromPub = Math.min(pubInfo.getPublicationBalance(), request.getOrderAmount());
+
+            // 1-2. 발행 개수 차감
+            stockRepository.setStockPubBalance(buyFromPub, request.getStockNo());
+
+            // 1-3. 주문 체결로 바로 요청
+            orderRepository.setOrderRequest(
+                    "BUY",
+                    pubInfo.getPublicationPoint(),
+                    buyFromPub,
+                    "MATCHED",
+                    studentId,
+                    request.getStockNo()
+            );
+
+            // 1-4. 매수 요청한 주문번호로 주문 완료 등록
+            tradeRepository.setMatchedOrder(
+                    orderRepository.getMyOrderNo(
+                            "BUY",
+                            studentId,
+                            request.getStockNo(),
+                            "MATCHED",
+                            buyFromPub,
+                            pubInfo.getPublicationPoint()
+                    ),
+                    null
+            );
+
+            // 1-5. 보유 포인트 차감
+            studentRepository.setStudentPointDown(
+                    studentId,
+                    buyFromPub * pubInfo.getPublicationPoint()
+            );
+
+            return "발행 가격 " + pubInfo.getPublicationPoint()
+                    + "P 매수가 완료 되었습니다. 남은 발행잔량은 "
+                    + (pubInfo.getPublicationBalance() - buyFromPub)
+                    + "주 입니다.";
+        }
+
+        matchOrder = orderRepository.getMatchOrder(
+                request.getStockNo(),
+                request.getOrderPoint(),
+                request.getOrderAmount(),
+                studentId,
+                "SELL"
+        );
 
         // 2. 매수 요청에 따른 매도 요청이 있을경우 실행
         if(matchOrder != null && !matchOrder.isEmpty()){
