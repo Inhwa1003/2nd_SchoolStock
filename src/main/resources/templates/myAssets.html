@@ -3,7 +3,7 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>내 자산 관리</title>
+    <title th:text="${assetTitle} ?: '내 자산 관리'">내 자산 관리</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
     <link rel="stylesheet" th:href="@{/css/Common.css}">
     <link rel="stylesheet" th:href="@{/css/MyAssets.css}">
