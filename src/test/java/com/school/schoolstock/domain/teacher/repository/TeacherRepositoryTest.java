@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -69,5 +70,16 @@ class TeacherRepositoryTest {
         // NO
         // 다른(없는) 선생님으로 조회 -> null
         Assertions.assertNull(teacherRepository.getStudentIdInClass("nope_teacher", existingNumber));
+
+    }
+
+    @Transactional
+    @Test
+    void setPointGiveTest() {
+        // YES
+        // 지급 내역(get_point) INSERT 성공 (rows > 0 -> true)
+        Assertions.assertTrue(teacherRepository.setPointGive("abc", 5000, "테스트 지급"));
+
+        log.info("get_point INSERT 결과 : " + teacherRepository.setPointGive("abc", 5000, "테스트 지급"));
     }
 }
