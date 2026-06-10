@@ -128,4 +128,11 @@
         WHERE order_no = #{orderNo}
     </update>
 
+    <!-- orderNo로 환불 금액 조회 -->
+    <select id="getRefundPointByOrderNo" resultType="int">
+        SELECT order_point * amount
+        FROM ORDERS
+        WHERE order_no = #{orderNo}
+    </select>
+
 </mapper>

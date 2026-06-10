@@ -22,7 +22,20 @@ public class StudentServiceImpl implements StudentService {
 
     @Transactional
     @Override
+    // 주식 상세 - 자신의 주문 요청을 취소했을 때
     public boolean setMyOrderCancel(int orderNo) {
+        // 매수
+        // EX) 주식 1개 당 1500P를 2개 매수 대기 걸어둠. 3000p 차감된 상태
+        // 1. 주문 번호로 환불받아야 할 가격 조회 => 3000P
+        
+        // 2. 보유 포인트 증가 => 3000P가 증가
+        
+        // 3. 주문 요청 상태가 'PENDING' -> 'CANCLED'로 변경
+
+        // 매도 => 지금 할 수 없음. 내 포인트 내역이랑 같이 바꿔야 함.
+        // EX) 보유한 주식 2개를 매도 대기 걸어둠. 해당 보유 주식은 총 3개라 가정
+        // 1. 주문 번호로, 주문한 주식수량 조회 => 2개 확인
+        // 2. 주문한 주식 수량만큼 보유 주식 수량 증가 => 해당 보유 주식은 총 5개로 변경
         return orderRepository.setOrderStateCancel(orderNo);
     }
 
