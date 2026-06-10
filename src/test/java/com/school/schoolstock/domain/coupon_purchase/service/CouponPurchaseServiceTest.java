@@ -19,7 +19,7 @@ public class CouponPurchaseServiceTest {
     void buyCouponTest() {
         // YES — 포인트 충분 + 보유쿠폰 < 3
         // DB 데이터 확인!
-        boolean success = couponPurchaseService.buyCoupon("789", 1);
+        boolean success = couponPurchaseService.buyCoupon("123", 1);
 
         Assertions.assertTrue(success);
         
