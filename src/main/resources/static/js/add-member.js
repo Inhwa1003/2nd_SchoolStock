@@ -27,6 +27,11 @@ window.onload = function () {
     // 비밀번호 일치 (확인란/비번 둘 다 입력 때)
     function checkMatch() {
         if (passwordCheck.value.length === 0) { pwdCheckMsg.textContent = ""; return; }
+        if (password.value.length < 8) {
+            pwdCheckMsg.textContent = "비밀번호를 8자리 이상 입력해주세요.";
+            pwdCheckMsg.className = "message error";
+            return;
+        }
         if (password.value === passwordCheck.value) {
             pwdCheckMsg.textContent = "비밀번호가 일치합니다.";
             pwdCheckMsg.className = "message success";
