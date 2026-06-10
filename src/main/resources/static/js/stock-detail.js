@@ -152,6 +152,7 @@ async function requestSellOrder() {
         if (response.ok) {
             document.getElementById("orderTypeSelect").value = "sell";
             loadOrderList("sell");
+            if (typeof refreshSidebar === 'function') refreshSidebar();
         }
     } catch (error) {
         alert("매도 주문 요청 중 오류가 발생했습니다.");
@@ -202,6 +203,7 @@ async function requestBuyOrder() {
         if (response.ok) {
             document.getElementById("orderTypeSelect").value = "buy";
             loadOrderList("buy");
+            if (typeof refreshSidebar === 'function') refreshSidebar();
         }
     } catch (error) {
         alert("매수 주문 요청 중 오류가 발생했습니다.");
@@ -317,6 +319,7 @@ async function cancelMyOrder(orderNo) {
         if (res.ok) {
             loadMyOrderList();   // 내 주문 목록 새로고침(취소 반영)
             loadOrderList(document.getElementById("orderTypeSelect").value); // 대기 주문판도 갱신
+            if (typeof refreshSidebar === 'function') refreshSidebar();
         }
     } catch (error) {
         alert("주문 취소 중 오류가 발생했습니다.");
