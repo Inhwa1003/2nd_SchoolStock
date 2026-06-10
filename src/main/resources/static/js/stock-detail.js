@@ -32,7 +32,6 @@ document.addEventListener("DOMContentLoaded", function () {
     // 매도 버튼 클릭 시 매도 주문 요청
     if (sellBtn) {
         sellBtn.addEventListener("click", function () {
-            console.log("매도 버튼 클릭됨");
             requestSellOrder();
         });
     }
@@ -40,7 +39,6 @@ document.addEventListener("DOMContentLoaded", function () {
     // 매수 버튼 클릭 시 매수 주문 요청
     if (buyBtn) {
         buyBtn.addEventListener("click", function () {
-            console.log("매수 버튼 클릭됨");
             requestBuyOrder();
         });
     }
@@ -100,7 +98,6 @@ async function loadOrderList(orderType) {
         });
 
     } catch (error) {
-        console.error("주문 목록 조회 실패:", error);
 
         orderListBody.innerHTML = `
             <tr>
@@ -137,6 +134,7 @@ async function requestSellOrder() {
         const csrfHeader = csrfHeaderMeta.getAttribute("content");
         headers[csrfHeader] = csrfToken;
     }
+    try{
 
         const response = await fetch(`/schoolstock/s/me/stocks/${stockNo}/sell`, {
             method: "POST",
@@ -155,6 +153,9 @@ async function requestSellOrder() {
             document.getElementById("orderTypeSelect").value = "sell";
             loadOrderList("sell");
         }
+    } catch (error) {
+        alert("매도 주문 요청 중 오류가 발생했습니다.");
+    }
 }
 
 /**
@@ -184,7 +185,7 @@ async function requestBuyOrder() {
         const csrfHeader = csrfHeaderMeta.getAttribute("content");
         headers[csrfHeader] = csrfToken;
     }
-
+    try{
         const response = await fetch(`/schoolstock/s/me/stocks/${stockNo}/buy`, {
             method: "POST",
             headers: headers,
@@ -202,7 +203,11 @@ async function requestBuyOrder() {
             document.getElementById("orderTypeSelect").value = "buy";
             loadOrderList("buy");
         }
+    } catch (error) {
+        alert("매수 주문 요청 중 오류가 발생했습니다.");
+    }
 }
+
 
 /**
  * BUY / SELL 한글 변환
