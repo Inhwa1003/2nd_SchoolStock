@@ -128,11 +128,16 @@
         WHERE order_no = #{orderNo}
     </update>
 
-    <!-- orderNo로 환불 금액 조회 -->
-    <select id="getRefundPointByOrderNo" resultType="int">
-        SELECT order_point * amount
+    <!-- 주문 취소 시 환불 정보 조회 -->
+    <select id="getCancelOrderPointInfo"
+            resultType="com.school.schoolstock.domain.order.dto.response.OrderCancelPointResponse">
+        SELECT
+        student_id AS studentId,
+        order_point * amount AS refundPoint
         FROM ORDERS
         WHERE order_no = #{orderNo}
+        AND order_state = 'PENDING'
+        AND order_content = 'BUY'
     </select>
 
 </mapper>

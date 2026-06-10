@@ -1,5 +1,6 @@
 package com.school.schoolstock.domain.order.repository;
 
+import com.school.schoolstock.domain.order.dto.response.OrderCancelPointResponse;
 import com.school.schoolstock.domain.order.vo.Orders;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -183,5 +184,23 @@ class OrderRepositoryTest {
         // then
         System.out.println("존재하지 않는 주문 상태 변경 결과: " + result);
         assertFalse(result);
+    }
+
+    @Test
+    void 주문취소_환불정보_조회() {
+        // given
+        int orderNo = 8; // 실제 DB에 있는 PENDING + BUY 주문 번호로 변경
+
+        // when
+        OrderCancelPointResponse response =
+                orderRepository.getCancelOrderPointInfo(orderNo);
+
+        // then
+        assertNotNull(response);
+        assertNotNull(response.getStudentId());
+        assertTrue(response.getRefundPoint() > 0);
+
+        System.out.println("studentId = " + response.getStudentId());
+        System.out.println("refundPoint = " + response.getRefundPoint());
     }
 }

@@ -30,7 +30,7 @@ public class StudentServiceImpl implements StudentService {
         
         // 2. 보유 포인트 증가 => 3000P가 증가
         
-        // 3. 주문 요청 상태가 'PENDING' -> 'CANCLED'로 변경
+        // 3. 주문 요청 상태가 'PENDING' -> 'CANCELED'로 변경
 
         // 매도 => 지금 할 수 없음. 내 포인트 내역이랑 같이 바꿔야 함.
         // EX) 보유한 주식 2개를 매도 대기 걸어둠. 해당 보유 주식은 총 3개라 가정
