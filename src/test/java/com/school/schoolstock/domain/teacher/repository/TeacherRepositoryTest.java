@@ -44,6 +44,7 @@ class TeacherRepositoryTest {
 
     @Test
     void setCouponTest() {
+        // 성공 케이스
         int couponNo = 3;
 
         Coupons coupon = new Coupons();
@@ -55,11 +56,27 @@ class TeacherRepositoryTest {
 
         assertThat(result).isEqualTo(1);
 
-        assertThat(couponRepository.getCoupon(couponNo)).isNotNull();
-        assertThat(couponRepository.getCoupon(couponNo).getCouponNo()).isEqualTo(couponNo);
-        assertThat(couponRepository.getCoupon(couponNo).getName()).isEqualTo("수정된 쿠폰명");
-        assertThat(couponRepository.getCoupon(couponNo).getCouponPoint()).isEqualTo(300);
+        Coupons updatedCoupon = couponRepository.getCoupon(couponNo);
 
+        assertThat(updatedCoupon).isNotNull();
+        assertThat(updatedCoupon.getCouponNo()).isEqualTo(couponNo);
+        assertThat(updatedCoupon.getName()).isEqualTo("수정된 쿠폰명");
+        assertThat(updatedCoupon.getCouponPoint()).isEqualTo(300);
+
+
+        // 실패 케이스: 존재하지 않는 쿠폰 번호 수정
+        int failCouponNo = 99999;
+
+        Coupons failCoupon = new Coupons();
+        failCoupon.setCouponNo(failCouponNo);
+        failCoupon.setName("없는 쿠폰");
+        failCoupon.setCouponPoint(1000);
+
+        int failResult = teacherRepository.setCoupon(failCoupon);
+
+        assertThat(failResult).isEqualTo(0);
+        assertThat(couponRepository.getCoupon(failCouponNo)).isNull();
     }
 
+    
 }
