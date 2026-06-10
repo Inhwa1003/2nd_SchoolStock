@@ -260,7 +260,7 @@
         WHERE student_id = #{studentId}
     </select>
     <!-- 같은 학년 같은 반 반번호 중복조회 (회원가입) -->
-    <select id="existsClassNumber" parameterType="com.school.schoolstock.domain.auth.dto.request.AddMemberRequest" resultType="boolean">
+    <select id="existsClassNumber" parameterType="com.school.schoolstock.domain.student.vo.Students" resultType="boolean">
         SELECT COUNT(*) > 0
         FROM students
         WHERE grade = #{grade}

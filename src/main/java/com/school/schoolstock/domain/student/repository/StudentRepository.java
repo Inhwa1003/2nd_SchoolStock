@@ -1,6 +1,5 @@
 package com.school.schoolstock.domain.student.repository;
 
-import com.school.schoolstock.domain.auth.dto.request.AddMemberRequest;
 import com.school.schoolstock.domain.student.dto.response.MyCouponResponse;
 import com.school.schoolstock.domain.student.dto.response.MyOrderResponse;
 import com.school.schoolstock.domain.student.dto.response.MyPointHistoryResponse;
@@ -70,5 +69,5 @@ public interface StudentRepository {
     StudentInfoResponse getStudentInfo(String studentId);
 
     // 학생 같은 학년 같은반 반번호 중복 체크 (회원가입)
-    boolean existsClassNumber(AddMemberRequest request);
+    boolean existsClassNumber(Students students);
 }

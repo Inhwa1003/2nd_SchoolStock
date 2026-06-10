@@ -26,21 +26,24 @@ public class UserServiceImpl implements UserService{
            return false;
         }
 
-        if(studentRepository.existsClassNumber(request)) {
+        Students students = Students.builder()
+                .studentId(request.getLoginId())
+                .name(request.getName())
+                .grade(request.getGrade())
+                .className(request.getClassName())
+                .studentNumber(request.getStudentNumber()).build();
+
+        if(studentRepository.existsClassNumber(students)) {
             return false;
         }
 
         userRepository.save(User.builder()
                 .loginId(request.getLoginId())
+                .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.STUDENT).build());
 
-        studentRepository.setMember(Students.builder()
-                .studentId(request.getLoginId())
-                .studentNumber(request.getStudentNumber())
-                .name(request.getName())
-                .grade(request.getGrade())
-                .className(request.getClassName()).build());
+        studentRepository.setMember(students);
 
         return true;
     }
