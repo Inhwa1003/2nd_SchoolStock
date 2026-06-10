@@ -13,7 +13,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("schoolstock/s/stocks")
+@RequestMapping("/schoolstock/s/stocks")
 public class StockRestController {
 
     private final StockService stockService;
