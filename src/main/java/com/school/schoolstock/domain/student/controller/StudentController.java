@@ -23,6 +23,7 @@ public class StudentController {
 
     @GetMapping("/assets")
     public String studentMainView(@AuthenticationPrincipal SchoolUserDetails userDetails, Model model) {
+        model.addAttribute("assetsRefreshUrl", "/schoolstock/s/me/students/assets/stocks");
         model.addAttribute("myAssets", studentService.getMyAsset(userDetails.getUsername()));
         return "myAssets";
     }
