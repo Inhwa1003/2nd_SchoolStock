@@ -63,6 +63,7 @@ public class TeacherController {
         }
 
         Coupons coupon = new Coupons();
+        coupon.setCouponNo(request.getCouponNo());
         coupon.setName(request.getName());
         coupon.setCouponPoint(request.getCouponPoint());
 
