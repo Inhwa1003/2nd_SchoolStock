@@ -43,9 +43,9 @@
         </th:block>
 
         <th:block sec:authorize="hasRole('TEACHER')">
-            <a class="menu-button" th:classappend="${active == '학생목록키들어갈자리'}  ? 'active'"
-               th:href="@{/#}">학생 목록</a>
-            <a class="menu-button" th:classappend="${active == '쿠폰상점키들어갈자리'}  ? 'active'"
+            <a class="menu-button" th:classappend="${active == 'myStudentList'}  ? 'active'"
+               th:href="@{/schoolstock/t/me/teachers/my-students}">학생 목록</a>
+            <a class="menu-button" th:classappend="${active == 'coupons'}  ? 'active'"
                th:href="@{/#}">쿠폰 상점</a>
         </th:block>
     </nav>
