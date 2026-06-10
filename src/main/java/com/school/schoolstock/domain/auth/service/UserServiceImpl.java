@@ -25,6 +25,11 @@ public class UserServiceImpl implements UserService{
         if(userRepository.existsByLoginId(request.getLoginId())) {
            return false;
         }
+
+        if(studentRepository.existsClassNumber(request)) {
+            return false;
+        }
+
         userRepository.save(User.builder()
                 .loginId(request.getLoginId())
                 .password(passwordEncoder.encode(request.getPassword()))
@@ -42,6 +47,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public boolean existsByLoginId(String loginId) {
-        return userRepository.existsByLoginId(loginId);
+        return userRepository.existsByLoginId(loginId
+        );
     }
 }
