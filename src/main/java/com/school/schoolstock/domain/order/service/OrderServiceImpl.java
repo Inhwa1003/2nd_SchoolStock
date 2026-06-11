@@ -9,6 +9,8 @@ import com.school.schoolstock.domain.stock.repository.StockRepository;
 import com.school.schoolstock.domain.stock.vo.Stocks;
 import com.school.schoolstock.domain.student.repository.StudentRepository;
 import com.school.schoolstock.domain.trade.repository.TradeRepository;
+import com.school.schoolstock.global.error.BusinessException;
+import com.school.schoolstock.global.error.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,11 +55,11 @@ public class OrderServiceImpl implements OrderService {
         Map<String, Object> matchOrder;
         //1. 발행 잔량 확인 있으면 학생간 거래x 매도 요청x
         if(stockRepository.getStockPubInfo(request.getStockNo()).getPublicationBalance() > 0)
-            return "발행 잔량이 남아 매도요청 할 수 없습니다.";
+            throw new BusinessException(ErrorCode.CANNOT_SELL_ON_PUBLICATION);
 
         //2. (보유한 주식 수량 < 매도요청 수량 )체크
         if(studentRepository.getMyStockAmount(studentId, request.getStockNo()) < request.getOrderAmount())
-            return  "보유 주식량보다 많은 매도 요청은 할 수 없습니다.";
+            throw new BusinessException(ErrorCode.HOLDING_NOT_ENOUGH);
 
         //3. 매수 주문 매칭 시도 (가격 수량 다맞는 조건)
         matchOrder = orderRepository.getMatchOrder(request.getStockNo(), request.getOrderPoint(), request.getOrderAmount(), studentId,"BUY");
@@ -90,13 +92,13 @@ public class OrderServiceImpl implements OrderService {
         Map<String, Object> matchOrder;
         // 학생이 주문 요청한 가격보다 보유포인트가 적을때 실행
         if(studentRepository.getMyPoint(studentId) < (request.getOrderAmount() * request.getOrderPoint()))
-            return "보유포인트가 부족합니다.";
+            throw new BusinessException(ErrorCode.POINT_NOT_ENOUGH);
 
         Stocks pubInfo = stockRepository.getStockPubInfo(request.getStockNo());
 
     // 현재가격보다 낮은 매수 요청 차단
         if (request.getOrderPoint() < pubInfo.getPublicationPoint()) {
-            return "현재가격 이상으로만 매수 주문이 가능합니다.";
+            throw new BusinessException(ErrorCode.ORDER_PRICE_TOO_LOW);
         }
 
     // 1. 발행 개수가 남았는지 체크 있으면 실행

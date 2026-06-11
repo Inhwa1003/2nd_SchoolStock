@@ -2,7 +2,7 @@ package com.school.schoolstock.domain.teacher.repository;
 
 import com.school.schoolstock.domain.teacher.dto.response.StudentListResponse;
 import com.school.schoolstock.domain.coupon.vo.Coupons;
-import com.school.schoolstock.domain.teacher.dto.StudentListResponse;
+//import com.school.schoolstock.domain.teacher.dto.StudentListResponse;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

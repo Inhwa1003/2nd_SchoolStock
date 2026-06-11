@@ -2,13 +2,12 @@ package com.school.schoolstock.domain.coupon_purchase.controller;
 
 import com.school.schoolstock.domain.coupon_purchase.dto.CouponPurchaseRequest;
 import com.school.schoolstock.domain.coupon_purchase.service.CouponPurchaseService;
+import com.school.schoolstock.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
@@ -18,38 +17,10 @@ public class CouponPurchaseRestController {
     private final CouponPurchaseService couponPurchaseService;
 
     @PostMapping
-    public ResponseEntity<Map<String, Object>> buyCoupon(
+    public ApiResponse buyCoupon(
             @RequestBody CouponPurchaseRequest request,
-            Authentication authentication) {
-
-        if (authentication == null || !authentication.isAuthenticated()) {
-            Map<String, Object> error = new HashMap<>();
-            error.put("status", 401);
-            error.put("code", "UNAUTHORIZED");
-            error.put("message", "인증 토큰이 없거나 유효하지 않습니다.");
-            return ResponseEntity.status(401).body(error);
-        }
-
-        String studentId = authentication.getName();
-
-        boolean result = couponPurchaseService.buyCoupon(
-                studentId,
-                request.getCouponNo()
-        );
-
-        if (!result) {
-            Map<String, Object> error = new HashMap<>();
-            error.put("status", 400);
-            error.put("code", "BAD_REQUEST");
-            error.put("message", "요청 값이 올바르지 않습니다.");
-            return ResponseEntity.badRequest().body(error);
-        }
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("code", 200);
-        response.put("data", null);
-        response.put("message", "쿠폰 구매가 완료되었습니다.");
-
-        return ResponseEntity.ok(response);
+            @AuthenticationPrincipal UserDetails userDetails) {
+        couponPurchaseService.buyCoupon(userDetails.getUsername(), request.getCouponNo());
+        return ApiResponse.of(200, "쿠폰 구매가 완료되었습니다.", null);
     }
 }

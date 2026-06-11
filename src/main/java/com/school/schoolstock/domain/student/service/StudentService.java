@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface StudentService {
     //내 요청 주문 취소
-    boolean setMyOrderCancel(int orderNo);
+    void setMyOrderCancel(int orderNo);
 
     //내자산 페이지 화면 값 가져오는 서비스 비동기포함 두개로 표시해둔거 Controller에서 분기 처리로 2개 구현 하면 될듯
     MyAssetResponse getMyAsset(String studentId);
