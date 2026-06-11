@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>쿠폰 상점 관리</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="_csrf"        th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{/css/Common.css}">
+    <link rel="stylesheet" th:href="@{/css/StockDetail.css}">
+    <link rel="stylesheet" th:href="@{/css/SideBar.css}">
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script th:src="@{/js/teacher-coupon-market.js}"></script>
+</head>
+<body>
+<div class="app">
+    <div class="content">
+        <header class="hd">
+            <div class="hd-name">쿠폰 상점 관리</div>
+        </header>
+
+        <div class="main cp-grid">
+            <div class="cp-panel"
+                 th:each="coupon : ${couponList}"
+                 th:data-coupon-no="${coupon.couponNo}">
+
+                <button type="button"
+                        class="delete-cp-btn"
+                        th:data-coupon-no="${coupon.couponNo}"
+                        onclick="deleteCouponFromButton(this)">
+                    삭제
+                </button>
+
+                <input type="text"
+                       class="cp-name coupon-name-input"
+                       th:value="${coupon.name}"
+                       readonly
+                       onclick="enableCouponEdit(this)">
+
+                <input type="number"
+                       class="cp-price coupon-point-input"
+                       th:value="${coupon.couponPoint}"
+                       readonly
+                       onclick="enableCouponEdit(this)">
+
+                <div class="cp-price-text">
+                    <span th:text="${#numbers.formatInteger(coupon.couponPoint, 1, 'COMMA')} + ' P'">0 P</span>
+                </div>
+
+                <button type="button"
+                        class="save-cp-btn"
+                        onclick="updateCouponFromButton(this)">
+                    저장
+                </button>
+            </div>
+
+            <div class="empty-msg" th:if="${#lists.isEmpty(couponList)}">
+                현재 등록된 쿠폰이 없습니다.
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="~{sideBar :: sidebar('coupons')}"></div>
+</div>
+</body>
+</html>
