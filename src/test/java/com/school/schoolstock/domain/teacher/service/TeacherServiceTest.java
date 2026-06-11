@@ -4,7 +4,7 @@ import com.school.schoolstock.domain.student.repository.StudentRepository;
 import com.school.schoolstock.domain.teacher.dto.response.StudentListResponse;
 import com.school.schoolstock.domain.coupon.repository.CouponRepository;
 import com.school.schoolstock.domain.coupon.vo.Coupons;
-import com.school.schoolstock.domain.teacher.dto.StudentListResponse;
+
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

@@ -2,7 +2,6 @@ package com.school.schoolstock.domain.teacher.repository;
 
 import com.school.schoolstock.domain.teacher.dto.response.StudentListResponse;
 import com.school.schoolstock.domain.coupon.vo.Coupons;
-import com.school.schoolstock.domain.teacher.dto.StudentListResponse;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -30,4 +29,7 @@ public interface TeacherRepository {
 
     // 쿠폰 상점에 등록된 쿠폰 삭제
     int deleteCoupon(int couponNo);
+
+    // 특정 학생의 보유 쿠폰 '사용'으로 변경
+    int setStudentCouponUsed(String studentId, int couponPurchaseNo);
 }
