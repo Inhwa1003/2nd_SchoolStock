@@ -58,13 +58,13 @@ public class StudentServiceTest {
     }
 
     @Test
-    void getMyCouponTest() {
+    void getMyCouponListTest() {
         // YES
-        Assertions.assertFalse(studentService.getMyCoupon("abc").isEmpty());
-        log.info("보유 쿠폰: {}", studentService.getMyCoupon("abc"));
+        Assertions.assertFalse(studentService.getMyCouponList("abc").isEmpty());
+        log.info("보유 쿠폰: {}", studentService.getMyCouponList("abc"));
 
         // NO — 없는 아이디 → 빈 리스트
-        Assertions.assertTrue(studentService.getMyCoupon("testid1111").isEmpty());
+        Assertions.assertTrue(studentService.getMyCouponList("testid1111").isEmpty());
     }
 
     @Test

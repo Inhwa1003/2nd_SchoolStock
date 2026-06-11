@@ -1,14 +1,13 @@
 package com.school.schoolstock.domain.teacher.controller;
 
+import com.school.schoolstock.domain.student.dto.response.MyCouponResponse;
+import com.school.schoolstock.domain.student.dto.response.StudentInfoResponse;
 import com.school.schoolstock.domain.student.service.StudentService;
-import com.school.schoolstock.domain.coupon.dto.CouponDeleteRequest;
-import com.school.schoolstock.domain.coupon.dto.CouponUpdateRequest;
 import com.school.schoolstock.domain.coupon.service.CouponService;
 import com.school.schoolstock.domain.coupon.vo.Coupons;
+import com.school.schoolstock.domain.teacher.dto.response.UpdateStudentCouponUsed;
 import com.school.schoolstock.domain.teacher.service.TeacherService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -17,11 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import org.springframework.web.bind.annotation.*;
-
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 @RequiredArgsConstructor
 @Controller
@@ -68,6 +63,27 @@ public class TeacherController {
         model.addAttribute("couponList", couponList);
 
         return "teacherCouponMarket";
+    }
+
+    // 학생 보유 쿠폰 확인 화면
+    @GetMapping("/me/teachers/my-students/{studentNumber}/coupons")
+    public String getStudentCoupons(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable int studentNumber,
+            Model model
+    ){
+        String studentId = teacherService.getStudentIdInClass(
+                userDetails.getUsername(),
+                studentNumber
+        );
+
+        StudentInfoResponse studentName = studentService.getStudentInfo(studentId);
+
+        model.addAttribute("studentNumber", studentNumber);
+        model.addAttribute("studentName", studentName.getName());
+        model.addAttribute("couponList", studentService.getMyCouponList(studentId));
+
+        return "teacherStudentMyCoupon";
     }
 
 

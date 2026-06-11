@@ -95,7 +95,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<MyCouponResponse> getMyCoupon(String studentId) {
+    public List<MyCouponResponse> getMyCouponList(String studentId) {
         return studentRepository.getMyCouponList(studentId);
     }
 

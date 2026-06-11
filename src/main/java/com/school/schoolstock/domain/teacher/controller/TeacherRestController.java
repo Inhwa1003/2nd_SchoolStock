@@ -1,8 +1,8 @@
 package com.school.schoolstock.domain.teacher.controller;
 
-import com.school.schoolstock.domain.teacher.dto.request.StudentCouponUseRequest;
-import com.school.schoolstock.domain.coupon.dto.CouponDeleteRequest;
-import com.school.schoolstock.domain.coupon.dto.CouponUpdateRequest;
+import com.school.schoolstock.domain.teacher.dto.request.UpdateStudentCouponUsedRequest;
+import com.school.schoolstock.domain.coupon.dto.request.CouponDeleteRequest;
+import com.school.schoolstock.domain.coupon.dto.request.CouponUpdateRequest;
 import com.school.schoolstock.domain.coupon.vo.Coupons;
 import com.school.schoolstock.domain.student.dto.response.MyAssetResponse;
 import com.school.schoolstock.domain.student.service.StudentService;
@@ -122,7 +122,7 @@ public class TeacherRestController {
     public ResponseEntity<Map<String, Object>> updateStudentCouponUsed(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable int studentNumber,
-            @RequestBody StudentCouponUseRequest request
+            @RequestBody UpdateStudentCouponUsedRequest request
     ) {
         if (userDetails == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)

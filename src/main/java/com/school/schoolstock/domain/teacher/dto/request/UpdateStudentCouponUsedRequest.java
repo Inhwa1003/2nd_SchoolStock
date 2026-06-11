@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class StudentCouponUseRequest {
+public class UpdateStudentCouponUsedRequest {
 
     private int couponPurchaseNo;
 }
