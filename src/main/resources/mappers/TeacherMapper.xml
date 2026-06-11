@@ -47,4 +47,19 @@
         INSERT INTO get_point (student_id, point, get_point_content, get_point_date)
         VALUES (#{studentId}, #{point}, #{content}, NOW())
     </insert>
+    <!-- 쿠폰 상점에 등록된, 쿠폰명과 쿠폰 포인트 수정-->
+    <update id="setCoupon">
+        UPDATE COUPONS
+        SET
+            name = #{name},
+            coupon_point = #{couponPoint}
+        WHERE coupon_no = #{couponNo}
+    </update>
+
+    <!-- 쿠폰 삭제 -->
+    <delete id="deleteCoupon">
+        DELETE FROM COUPONS
+        WHERE coupon_no = #{couponNo}
+    </delete>
+
 </mapper>
