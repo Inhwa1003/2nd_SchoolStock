@@ -1,4 +1,4 @@
-package com.school.schoolstock.domain.teacher.dto;
+package com.school.schoolstock.domain.teacher.dto.response;
 
 import lombok.*;
 

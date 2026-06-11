@@ -3,17 +3,27 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>내 자산 관리</title>
+    <title th:text="${assetTitle} ?: '내 자산 관리'">내 자산 관리</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
     <link rel="stylesheet" th:href="@{/css/Common.css}">
     <link rel="stylesheet" th:href="@{/css/MyAssets.css}">
     <link rel="stylesheet" th:href="@{/css/SideBar.css}">
+
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
 </head>
 <body>
 <div class="app">
     <div class="content">
         <header class="hd">
-            <div class="hd-name">내 자산</div>
+            <div class="hd-name" th:text="${assetTitle} ?: '내 자산'">내 자산</div>
+            <div sec:authorize="hasRole('TEACHER')" class="point-grant"
+                 th:data-student-number="${targetStudentNumber}">
+                포인트 지급 :
+                <input type="number" id="grant-points" min="100" step="100" value="100" placeholder="포인트">
+                <input type="text" id="grant-content" placeholder="사유" maxlength="50">
+                <button type="button" id="grant-btn">지급</button>
+            </div>
         </header>
         <div class="main">
             <div class="summary-container">
@@ -43,7 +53,7 @@
             <div class="panel">
                 <div class="table-header">
                     <h3>보유 주식 상세</h3>
-                    <button type="button" class="refresh-all-btn" id="refresh-btn">🔄</button>
+                    <button type="button" class="refresh-all-btn" th:data-url="${assetsRefreshUrl}" id="refresh-btn">🔄</button>
                 </div>
 
                 <table id="stock-table">
@@ -64,6 +74,9 @@
                             <td th:text="${#numbers.formatInteger(s.purchasePoint, 1, 'COMMA')} + 'P'">0P</td>
                             <td th:classappend="${s.stockProfit ge 0} ? 'plus' : 'minus'"
                                 th:text="${(s.stockProfit gt 0 ? '+' : '') + #numbers.formatInteger(s.stockProfit, 1, 'COMMA')} + 'P'">0P</td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(myAssets.myStocks)}">   <!-- ★ 비었을 때만 -->
+                            <td colspan="6">보유한 주식이 없습니다.</td>
                         </tr>
                     </tbody>
                 </table>

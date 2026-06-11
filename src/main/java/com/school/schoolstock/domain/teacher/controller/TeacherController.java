@@ -1,10 +1,10 @@
 package com.school.schoolstock.domain.teacher.controller;
 
+import com.school.schoolstock.domain.student.service.StudentService;
 import com.school.schoolstock.domain.coupon.dto.CouponDeleteRequest;
 import com.school.schoolstock.domain.coupon.dto.CouponUpdateRequest;
 import com.school.schoolstock.domain.coupon.service.CouponService;
 import com.school.schoolstock.domain.coupon.vo.Coupons;
-import com.school.schoolstock.domain.teacher.dto.StudentListResponse;
 import com.school.schoolstock.domain.teacher.service.TeacherService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,6 +13,10 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedHashMap;
@@ -25,23 +29,37 @@ import java.util.Map;
 public class TeacherController {
 
     private final TeacherService teacherService;
+    private final StudentService studentService;
     private final CouponService couponService;
 
     // 선생님이 맡은 반 학생 목록 조회 화면
     @GetMapping("/me/teachers/my-students")
     public String getMyStudents(
             @AuthenticationPrincipal UserDetails userDetails,
-            Model model
-    ) {
-        String teacherId = userDetails.getUsername();
+            Model model) {
 
-        List<StudentListResponse> myStudentList = teacherService.getMyStudentsList(teacherId);
-
-        model.addAttribute("studentList", myStudentList);
+        model.addAttribute("studentList", teacherService.getMyStudentsList(userDetails.getUsername()));
 
         return "myStudentList";
     }
 
+    @GetMapping("/me/teachers/my-students/{studentNumber}/assets")
+    public String getMyStudentAssets(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable int studentNumber,
+            Model model) {
+
+        String studentId = teacherService.getStudentIdInClass(userDetails.getUsername(), studentNumber);
+
+        model.addAttribute("targetStudentNumber", studentNumber);
+        model.addAttribute("assetsRefreshUrl",
+                "/schoolstock/t/me/teachers/my-students/" + studentNumber + "/assets/stocks");
+        model.addAttribute("myAssets", studentService.getMyAsset(studentId));
+        model.addAttribute("assetTitle",
+                studentService.getStudentInfo(studentId).getName() + "의 자산");
+
+        return "myAssets";
+    }
     // 쿠폰 상점 조회 화면
     @GetMapping("/coupons")
     public String getCouponList(Model model){

@@ -1,7 +1,8 @@
 package com.school.schoolstock.domain.teacher.service;
 
+import com.school.schoolstock.domain.student.repository.StudentRepository;
+import com.school.schoolstock.domain.teacher.dto.response.StudentListResponse;
 import com.school.schoolstock.domain.coupon.vo.Coupons;
-import com.school.schoolstock.domain.teacher.dto.StudentListResponse;
 import com.school.schoolstock.domain.teacher.repository.TeacherRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import java.util.List;
 public class TeacherServiceImpl implements TeacherService {
 
     private final TeacherRepository teacherRepository;
+    private final StudentRepository studentRepository;
 
     // 학년과 반이 같은 학생들의 정보를 불러오기 => 담임 선생님이 맡은 반의 학생들의 정보를 조회
     @Override
@@ -28,6 +30,24 @@ public class TeacherServiceImpl implements TeacherService {
         return teacherRepository.getMyStudents(checkedTeacherId);
     }
 
+    @Override
+    public String getStudentIdInClass(String teacherId, int studentNumber) {
+        return teacherRepository.getStudentIdInClass(teacherId, studentNumber);
+    }
+
+    @Override
+    public String getTeacherName(String teacherId) {
+        return teacherRepository.getTeacherName(teacherId);
+    }
+
+    @Transactional
+    @Override
+    public boolean givePoint(String studentId, int point, String content) {
+        // 예외 처리 필요함 지급 안될경우
+        studentRepository.setStudentPointUp(studentId, point);
+        teacherRepository.setPointGive(studentId, point, content);
+        return true;
+    }
     // 쿠폰 상점의 쿠폰 정보(쿠폰명, 쿠폰 포인트) 수정
     @Transactional
     @Override

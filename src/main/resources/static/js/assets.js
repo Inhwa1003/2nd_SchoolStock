@@ -6,6 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
             location.href = couponCard.dataset.href;
         });
     }
+    const grantBtn = document.getElementById('grant-btn');
+    if (grantBtn) grantBtn.addEventListener('click', grantPoints);
 
     document.getElementById('refresh-btn').addEventListener('click', refreshAssets);
 });
@@ -13,7 +15,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function refreshAssets() {
     try {
-        const res = await fetch('/schoolstock/s/me/students/assets/stocks');
+        const url = document.getElementById('refresh-btn').dataset.url
+            || '/schoolstock/s/me/students/assets/stocks';
+        const res = await fetch(url);
         if (!res.ok) throw new Error('status ' + res.status);
         const data = await res.json();
 
@@ -24,21 +28,55 @@ async function refreshAssets() {
 
         const tbody = document.getElementById('stock-list');
         tbody.innerHTML = '';
-        data.myStocks.forEach(s => {
+        if (!data.myStocks || data.myStocks.length === 0) {
             const tr = document.createElement('tr');
-            tr.className = 'stock-row-item';
-            tr.appendChild(td(s.stockName));
-            tr.appendChild(td(s.stockAmount + '개'));
-            tr.appendChild(td(comma(s.nowPoint) + 'P', 'stock-price'));
-            tr.appendChild(td(comma(s.averagePoint) + 'P'));
-            tr.appendChild(td(comma(s.purchasePoint) + 'P'));
-            const profitTd = td('');
-            paintProfit(profitTd, s.stockProfit, 'P');
-            tr.appendChild(profitTd);
+            const cell = document.createElement('td');
+            cell.colSpan = 6;
+            cell.textContent = '보유한 주식이 없습니다.';
+            tr.appendChild(cell);
             tbody.appendChild(tr);
+        } else {
+            data.myStocks.forEach(s => {
+                const tr = document.createElement('tr');
+                tr.className = 'stock-row-item';
+                tr.appendChild(td(s.stockName));
+                tr.appendChild(td(s.stockAmount + '개'));
+                tr.appendChild(td(comma(s.nowPoint) + 'P', 'stock-price'));
+                tr.appendChild(td(comma(s.averagePoint) + 'P'));
+                tr.appendChild(td(comma(s.purchasePoint) + 'P'));
+                const profitTd = td('');
+                paintProfit(profitTd, s.stockProfit, 'P');
+                tr.appendChild(profitTd);
+                tbody.appendChild(tr);
         });
+        }
     } catch (err) {
         alert('새로고침 실패: ' + err.message);
+    }
+}
+
+async function grantPoints() {
+    const block = document.querySelector('.point-grant');
+    const studentNumber = block.dataset.studentNumber;
+    const points = Number(document.getElementById('grant-points').value);
+    const content = document.getElementById('grant-content').value.trim() || '지급';
+    if (!points || points <= 0) { alert('지급할 포인트를 입력하세요.'); return; }
+
+    const headers = { 'Content-Type': 'application/json' };
+    const token  = document.querySelector("meta[name='_csrf']")?.getAttribute('content');
+    const header = document.querySelector("meta[name='_csrf_header']")?.getAttribute('content');
+    if (token && header) headers[header] = token;
+
+    try {
+        const res = await fetch(`/schoolstock/t/me/teachers/my-students/${studentNumber}/points`, {
+            method: 'POST', headers: headers,
+            body: JSON.stringify({ points: points, content: content })
+        });
+        if (!res.ok) throw new Error('status ' + res.status);
+        alert('포인트를 지급했습니다.');
+        refreshAssets();   // 보유포인트·총자산 즉시 갱신
+    } catch (e) {
+        alert('포인트 지급 실패: ' + e.message);
     }
 }
 

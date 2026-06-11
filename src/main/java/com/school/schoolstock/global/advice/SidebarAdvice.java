@@ -10,6 +10,7 @@ import com.school.schoolstock.domain.student.controller.StudentController;
 import com.school.schoolstock.domain.student.dto.response.StudentInfoResponse;
 import com.school.schoolstock.domain.student.service.StudentService;
 import com.school.schoolstock.domain.teacher.controller.TeacherController;
+import com.school.schoolstock.domain.teacher.service.TeacherService;
 import com.school.schoolstock.global.security.SchoolUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 })
 public class SidebarAdvice {
     private final StudentService studentService;
+    private final TeacherService teacherService;
 
     @ModelAttribute("info")
     public StudentInfoResponse getStudentInfo(@AuthenticationPrincipal SchoolUserDetails userDetails) {
@@ -36,7 +38,7 @@ public class SidebarAdvice {
         }
         if(userDetails.getUser().getRole() == Role.TEACHER) {
             return StudentInfoResponse.builder()
-                    .name(userDetails.getUsername()).build();
+                    .name(teacherService.getTeacherName(userDetails.getUsername())).build();
         }
         return studentService.getStudentInfo(userDetails.getUsername());
     }
