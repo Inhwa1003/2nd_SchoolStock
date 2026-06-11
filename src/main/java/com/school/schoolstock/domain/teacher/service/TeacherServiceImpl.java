@@ -96,7 +96,7 @@ public class TeacherServiceImpl implements TeacherService {
     // 특정 학생의 보유 쿠폰 상태 '사용'으로 수정
     @Transactional
     @Override
-    public CouponUseResult useStudentCoupon(String teacherId, int studentNumber, int couponPurchaseNo) {
+    public CouponUseResult updateStudentCouponUsed(String teacherId, int studentNumber, int couponPurchaseNo) {
 
         // 1. 선생님이 맡은 반 학생인지 확인
         String studentId = teacherRepository.getStudentIdInClass(teacherId, studentNumber);
@@ -106,7 +106,7 @@ public class TeacherServiceImpl implements TeacherService {
         }
 
         // 2. 해당 학생의 보유 쿠폰 사용 처리
-        int result = teacherRepository.setStudentCouponUsed(studentId, couponPurchaseNo);
+        int result = teacherRepository.updateStudentCouponUsed(studentId, couponPurchaseNo);
 
         // 3. 수정된 행이 없으면 실패
         if (result == 0) {

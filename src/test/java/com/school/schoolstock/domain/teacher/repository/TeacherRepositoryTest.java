@@ -149,12 +149,12 @@ class TeacherRepositoryTest {
     }
 
     @Test
-    void setStudentCouponUsedTest() {
+    void updateStudentCouponUsedTest() {
         // YES
         String studentId = "111";
         int couponPurchaseNo = 20;
 
-        int result = teacherRepository.setStudentCouponUsed(studentId, couponPurchaseNo);
+        int result = teacherRepository.updateStudentCouponUsed(studentId, couponPurchaseNo);
 
         assertThat(result).isEqualTo(1);
 
@@ -164,7 +164,7 @@ class TeacherRepositoryTest {
         // NO
         // coupon_purchase_no는 존재하지만, student_id가 다르면 수정되지 않음
         String wrongStudentId = "222";
-        int wrongResult = teacherRepository.setStudentCouponUsed(wrongStudentId, couponPurchaseNo);
+        int wrongResult = teacherRepository.updateStudentCouponUsed(wrongStudentId, couponPurchaseNo);
 
         assertThat(wrongResult).isEqualTo(0);
 
@@ -173,7 +173,7 @@ class TeacherRepositoryTest {
 
         // NO
         // 이미 USED 상태가 된 쿠폰은 다시 사용 처리되지 않음
-        int alreadyUsedResult = teacherRepository.setStudentCouponUsed(studentId, couponPurchaseNo);
+        int alreadyUsedResult = teacherRepository.updateStudentCouponUsed(studentId, couponPurchaseNo);
 
         assertThat(alreadyUsedResult).isEqualTo(0);
 
@@ -184,7 +184,7 @@ class TeacherRepositoryTest {
         // 존재하지 않는 쿠폰 구매 번호는 수정되지 않음
         int notExistsCouponPurchaseNo = 99999;
 
-        int notExistsResult = teacherRepository.setStudentCouponUsed(studentId, notExistsCouponPurchaseNo);
+        int notExistsResult = teacherRepository.updateStudentCouponUsed(studentId, notExistsCouponPurchaseNo);
 
         assertThat(notExistsResult).isEqualTo(0);
 

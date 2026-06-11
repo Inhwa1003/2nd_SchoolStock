@@ -24,6 +24,7 @@ public interface TeacherRepository {
 
     // 포인트 지급
     boolean setPointGive(String studentId, int point, String content);
+
     // 쿠폰 상점에 등록된 쿠폰 정보(쿠폰명, 쿠폰 포인트) 수정
     int setCoupon(Coupons coupon);
 
@@ -31,5 +32,5 @@ public interface TeacherRepository {
     int deleteCoupon(int couponNo);
 
     // 특정 학생의 보유 쿠폰 '사용'으로 변경
-    int setStudentCouponUsed(String studentId, int couponPurchaseNo);
+    int updateStudentCouponUsed(String studentId, int couponPurchaseNo);
 }

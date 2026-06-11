@@ -25,6 +25,6 @@ public interface TeacherService {
     String deleteCoupon(int couponNo);
 
     // 특정 학생의 보유 쿠폰 사용 처리
-    CouponUseResult useStudentCoupon(String teacherId, int studentNumber, int couponPurchaseNo);
+    CouponUseResult updateStudentCouponUsed(String teacherId, int studentNumber, int couponPurchaseNo);
 
 }

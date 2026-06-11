@@ -145,7 +145,7 @@ public class TeacherServiceTest {
 
         // YES
         // 존재하는 쿠폰 번호 수정
-        int couponNo = 3;
+        int couponNo = 4;
 
         Coupons coupon = new Coupons();
         coupon.setCouponNo(couponNo);
@@ -185,7 +185,7 @@ public class TeacherServiceTest {
 
         // YES
         // 존재하는 쿠폰 번호 삭제
-        int couponNo = 4;
+        int couponNo = 3;
 
         String result = teacherService.deleteCoupon(couponNo);
 
@@ -196,7 +196,7 @@ public class TeacherServiceTest {
     }
 
     @Test
-    void useStudentCouponTest() {
+    void setStudentCouponUsedTest() {
         // given
         String teacherId = "teacher05";
 
@@ -210,7 +210,7 @@ public class TeacherServiceTest {
 
         // YES
         // 담당 학생의 미사용 쿠폰 사용 처리 성공
-        CouponUseResult result = teacherService.useStudentCoupon(
+        CouponUseResult result = teacherService.updateStudentCouponUsed(
                 teacherId,
                 studentNumber,
                 couponPurchaseNo
@@ -223,7 +223,7 @@ public class TeacherServiceTest {
 
         // NO
         // 이미 사용된 쿠폰은 다시 사용 처리 실패
-        CouponUseResult alreadyUsedResult = teacherService.useStudentCoupon(
+        CouponUseResult alreadyUsedResult = teacherService.updateStudentCouponUsed(
                 teacherId,
                 studentNumber,
                 couponPurchaseNo
@@ -236,7 +236,7 @@ public class TeacherServiceTest {
 
         // NO
         // 내 반에 없는 학생 번호
-        CouponUseResult notInClassResult = teacherService.useStudentCoupon(
+        CouponUseResult notInClassResult = teacherService.updateStudentCouponUsed(
                 teacherId,
                 99999,
                 couponPurchaseNo
@@ -251,7 +251,7 @@ public class TeacherServiceTest {
         // 존재하지 않는 쿠폰 구매 번호
         int notExistsCouponPurchaseNo = 99999;
 
-        CouponUseResult notExistsCouponResult = teacherService.useStudentCoupon(
+        CouponUseResult notExistsCouponResult = teacherService.updateStudentCouponUsed(
                 teacherId,
                 studentNumber,
                 notExistsCouponPurchaseNo

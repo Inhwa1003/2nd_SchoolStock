@@ -63,7 +63,7 @@
     </delete>
 
     <!-- 학생의 보유 쿠폰을 상태 '사용'으로 변경 -->
-    <update id="setStudentCouponUsed">
+    <update id="updateStudentCouponUsed">
         UPDATE coupon_purchase
         SET purchase_state = 'USED'
         WHERE coupon_purchase_no = #{couponPurchaseNo}
