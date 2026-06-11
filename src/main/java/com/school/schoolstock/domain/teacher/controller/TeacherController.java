@@ -1,11 +1,9 @@
 package com.school.schoolstock.domain.teacher.controller;
 
-import com.school.schoolstock.domain.student.dto.response.MyCouponResponse;
 import com.school.schoolstock.domain.student.dto.response.StudentInfoResponse;
 import com.school.schoolstock.domain.student.service.StudentService;
 import com.school.schoolstock.domain.coupon.service.CouponService;
 import com.school.schoolstock.domain.coupon.vo.Coupons;
-import com.school.schoolstock.domain.teacher.dto.response.UpdateStudentCouponUsed;
 import com.school.schoolstock.domain.teacher.service.TeacherService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

@@ -98,22 +98,25 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     public CouponUseResult updateStudentCouponUsed(String teacherId, int studentNumber, int couponPurchaseNo) {
 
-        // 1. 선생님이 맡은 반 학생인지 확인
         String studentId = teacherRepository.getStudentIdInClass(teacherId, studentNumber);
+
+        System.out.println("teacherId = " + teacherId);
+        System.out.println("studentNumber = " + studentNumber);
+        System.out.println("studentId = " + studentId);
+        System.out.println("couponPurchaseNo = " + couponPurchaseNo);
 
         if (studentId == null) {
             return CouponUseResult.STUDENT_NOT_IN_CLASS;
         }
 
-        // 2. 해당 학생의 보유 쿠폰 사용 처리
         int result = teacherRepository.updateStudentCouponUsed(studentId, couponPurchaseNo);
 
-        // 3. 수정된 행이 없으면 실패
+        System.out.println("update result = " + result);
+
         if (result == 0) {
             return CouponUseResult.COUPON_USE_FAILED;
         }
 
-        // 4. 성공
         return CouponUseResult.SUCCESS;
     }
 

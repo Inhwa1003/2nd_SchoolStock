@@ -266,7 +266,14 @@
 
     <!-- 보유 쿠폰 정보 조회 -->
     <select id="getMyCouponList" parameterType="com.school.schoolstock.domain.student.dto.response.MyCouponResponse">
-        SELECT name, purchase_point FROM coupon_purchase WHERE purchase_state = 'NOT_USED' AND student_id = #{studentId}
+        SELECT
+            coupon_purchase_no AS couponPurchaseNo,
+            name,
+            purchase_point AS purchasePoint,
+            purchase_state AS purchaseState
+        FROM coupon_purchase
+        WHERE purchase_state = 'NOT_USED'
+          AND student_id = #{studentId}
     </select>
 
     <!-- 학생 기본정보 조회 (사이드바 용) -->

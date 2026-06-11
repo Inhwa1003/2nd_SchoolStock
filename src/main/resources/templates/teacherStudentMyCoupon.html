@@ -1,46 +1,99 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>보유 쿠폰</title>
+    <title>학생 보유 쿠폰</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <!-- CSRF -->
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+
     <link rel="stylesheet" th:href="@{/css/Common.css}">
-    <link rel="stylesheet" th:href="@{/css/StockDetail.css}">
     <link rel="stylesheet" th:href="@{/css/SideBar.css}">
-
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" th:href="@{/css/MyCoupon.css}">
 </head>
+
 <body>
-<div class="app">
-    <div class="content">
-        <header class="hd">
-            <input id="backBtn" class="back-btn" type="button" value="뒤로">
-            <div class="hd-name" th:text="${studentName} + '의 보유 쿠폰'">학생의 보유 쿠폰</div>
-        </header>
 
-        <div class="main cp-grid">
+<div class="layout">
+
+    <!-- 사이드바 -->
+    <aside class="sidebar">
+        <div class="sidebar-title">SchoolStock</div>
+
+        <ul class="sidebar-menu">
+            <li>
+                <a th:href="@{/schoolstock/t/me/teachers/my-students}">
+                    학생 목록
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/schoolstock/t/coupons}">
+                    쿠폰 상점 관리
+                </a>
+            </li>
+        </ul>
+    </aside>
+
+    <!-- 메인 영역 -->
+    <main class="content">
+
+        <div class="page-header">
+            <button type="button" id="backBtn" class="btn btn-secondary btn-sm">
+                뒤로가기
+            </button>
+
+            <h2 class="page-title">
+                <span th:text="${studentName}">학생 이름</span> 보유 쿠폰
+            </h2>
+        </div>
+
+        <div class="main cp-grid"
+             id="couponContainer"
+             th:data-student-number="${studentNumber}">
+
+            <!-- 쿠폰 목록 -->
             <div class="cp-panel" th:each="coupon : ${couponList}">
-                <div class="cp-name" th:text="${coupon.name}">쿠폰명</div>
-                <div class="cp-state" th:text="${coupon.purchaseState}">NOT_USED</div>
 
-                <button type="button" class="btn btn-sm btn-primary mt-2">
-                    사용
+                <div class="cp-name" th:text="${coupon.name}">
+                    쿠폰명
+                </div>
+
+                <div class="cp-point">
+                    <span th:text="${coupon.purchasePoint}">0</span> P
+                </div>
+
+                <div class="cp-state" th:text="${coupon.purchaseState}">
+                    NOT_USED
+                </div>
+
+                <button type="button"
+                        class="btn btn-sm btn-danger mt-2 use-coupon-btn"
+                        th:data-coupon-purchase-no="${coupon.couponPurchaseNo}">
+                    삭제
                 </button>
+
             </div>
 
-            <div class="text-center" th:if="${#lists.isEmpty(couponList)}">
+            <!-- 보유 쿠폰 없을 때 -->
+            <div class="text-center w-100"
+                 th:if="${#lists.isEmpty(couponList)}">
                 보유 쿠폰이 없습니다.
             </div>
-        </div>
-    </div>
 
-    <div th:replace="~{sideBar :: sidebar('')}"></div>
+        </div>
+
+    </main>
+
 </div>
 
-<script th:src="@{/js/my-coupons.js}"></script>
+<script th:src="@{/js/teacher-student-my-coupon.js}"></script>
+
 </body>
 </html>
