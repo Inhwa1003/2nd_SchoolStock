@@ -1,5 +1,6 @@
 package com.school.schoolstock.domain.teacher.controller;
 
+import com.school.schoolstock.domain.teacher.dto.request.StudentCouponUseRequest;
 import com.school.schoolstock.domain.coupon.dto.CouponDeleteRequest;
 import com.school.schoolstock.domain.coupon.dto.CouponUpdateRequest;
 import com.school.schoolstock.domain.coupon.vo.Coupons;
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -115,42 +117,42 @@ public class TeacherRestController {
                 .body(errorResponse(400, "INVALID_COUPON_REQUEST", message));
     }
 
-//    // 학생 보유 쿠폰 상태를 '사용'으로 변경
-//    @PatchMapping("/me/teachers/my-students/{studentNumber}/coupons")
-//    public ResponseEntity<Map<String, Object>> setStudentCouponUsed(
-//            @AuthenticationPrincipal UserDetails userDetails,
-//            @PathVariable int studentNumber
-//    ) {
-//        if (userDetails == null) {
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-//                    .body(errorResponse(401, "UNAUTHORIZED", "로그인이 필요합니다."));
-//        }
-//
-//        CouponUseResult result = teacherService.setStudentCouponUsed(
-//                userDetails.getUsername(),
-//                studentNumber,
-//                couponPurchaseNo
-//        );
-//
-//        TeacherResponseCode responseCode = getTeacherResponseCode(result);
-//
-//        if (responseCode.getHttpStatus().isError()) {
-//            return ResponseEntity.status(responseCode.getHttpStatus())
-//                    .body(errorResponse(
-//                            responseCode.getHttpStatus().value(),
-//                            responseCode.getCode(),
-//                            responseCode.getMessage()
-//                    ));
-//        }
-//
-//        return ResponseEntity.status(responseCode.getHttpStatus())
-//                .body(successResponse(
-//                        responseCode.getHttpStatus().value(),
-//                        null,
-//                        responseCode.getMessage()
-//                ));
-//    }
+    // 학생 보유 쿠폰 상태를 '사용'으로 변경
+    @PatchMapping("/me/teachers/my-students/{studentNumber}/coupons")
+    public ResponseEntity<Map<String, Object>> updateStudentCouponUsed(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable int studentNumber,
+            @RequestBody StudentCouponUseRequest request
+    ) {
+        if (userDetails == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(errorResponse(401, "UNAUTHORIZED", "로그인이 필요합니다."));
+        }
 
+        CouponUseResult result = teacherService.updateStudentCouponUsed(
+                userDetails.getUsername(),
+                studentNumber,
+                request.getCouponPurchaseNo()
+        );
+
+        TeacherResponseCode responseCode = TeacherResponseCode.from(result);
+
+        if (responseCode.getHttpStatus().isError()) {
+            return ResponseEntity.status(responseCode.getHttpStatus())
+                    .body(errorResponse(
+                            responseCode.getHttpStatus().value(),
+                            responseCode.getCode(),
+                            responseCode.getMessage()
+                    ));
+        }
+
+        return ResponseEntity.status(responseCode.getHttpStatus())
+                .body(successResponse(
+                        responseCode.getHttpStatus().value(),
+                        null,
+                        responseCode.getMessage()
+                ));
+    }
 
     private Map<String, Object> successResponse(int code, Object data, String message) {
         Map<String, Object> result = new LinkedHashMap<>();

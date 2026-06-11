@@ -1,5 +1,6 @@
 package com.school.schoolstock.domain.teacher.controller;
 
+import com.school.schoolstock.domain.teacher.service.CouponUseResult;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
@@ -18,5 +19,17 @@ public enum TeacherResponseCode {
         this.httpStatus = httpStatus;
         this.code = code;
         this.message = message;
+    }
+
+    public static TeacherResponseCode from(CouponUseResult result) {
+        if (result == CouponUseResult.STUDENT_NOT_IN_CLASS) {
+            return STUDENT_NOT_IN_CLASS;
+        }
+
+        if (result == CouponUseResult.COUPON_USE_FAILED) {
+            return COUPON_USE_FAILED;
+        }
+
+        return COUPON_USE_SUCCESS;
     }
 }
