@@ -1,5 +1,6 @@
 package com.school.schoolstock.domain.coupon_purchase.service;
 
+import com.school.schoolstock.global.error.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -18,18 +19,11 @@ public class CouponPurchaseServiceTest {
     @Test
     void buyCouponTest() {
         // YES — 포인트 충분 + 보유쿠폰 < 3
-        // DB 데이터 확인!
-        boolean success = couponPurchaseService.buyCoupon("123", 1);
-
-        Assertions.assertTrue(success);
-        
+        Assertions.assertDoesNotThrow(() -> couponPurchaseService.buyCoupon("abc", 1));
         log.info("쿠폰 구매 성공 정상 처리");
         
         // NO — 없는 쿠폰 -> null
-        boolean failResponse = couponPurchaseService.buyCoupon("test01", 99999);
-
-        Assertions.assertFalse(failResponse);
-
+        Assertions.assertThrows(BusinessException.class, () -> couponPurchaseService.buyCoupon("test01", 1));
         log.info("없는 쿠폰 및 사용자 구매 실패 정상 처리");
     }
 }

@@ -6,11 +6,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 @RequiredArgsConstructor
 @Controller
-@RequestMapping("/schoolstock")
 public class UserController {
     private final UserServiceImpl userService;
 
@@ -19,25 +17,21 @@ public class UserController {
         return "redirect:/schoolstock/login-view";
     }
 
-    @GetMapping("/login-view")
+    @GetMapping("/schoolstock/login-view")
     public String loginView(){
         return "loginView";
     }
 
-    @GetMapping("/add-member-view")
+    @GetMapping("/schoolstock/add-member-view")
     public String addMemberView(){
         return "addMember";
     }
 
-    @PostMapping("/add-member")
+    @PostMapping("/schoolstock/add-member")
     public String addMember(AddMemberRequest request){
         if(userService.addMember(request)){
             return "redirect:/schoolstock/login-view";
         }
         return "redirect:/schoolstock/add-member-view";
-    }
-    @GetMapping("/t/main")
-    public String teacherMainView(){
-        return "teacherMain";
     }
 }

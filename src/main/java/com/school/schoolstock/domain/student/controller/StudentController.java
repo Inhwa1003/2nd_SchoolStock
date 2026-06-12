@@ -30,7 +30,7 @@ public class StudentController {
 
     @GetMapping("/coupons")
     public String getMyCoupons(@AuthenticationPrincipal SchoolUserDetails userDetails, Model model) {
-        model.addAttribute("studentName", userDetails.getUser().getLoginId());
+        model.addAttribute("couponTitle", "내 보유 쿠폰");
         model.addAttribute("coupons", studentService.getMyCouponList(userDetails.getUsername()));
         return "myCoupons";
     }

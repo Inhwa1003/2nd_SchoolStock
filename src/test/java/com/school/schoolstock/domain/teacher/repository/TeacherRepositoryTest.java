@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @Transactional
 @Slf4j
@@ -91,6 +90,7 @@ class TeacherRepositoryTest {
 
         log.info("get_point INSERT 결과 : " + teacherRepository.setPointGive("abc", 5000, "테스트 지급"));
     }
+    @Test
     void setCouponTest() {
         // 성공 케이스
         int couponNo = 3;

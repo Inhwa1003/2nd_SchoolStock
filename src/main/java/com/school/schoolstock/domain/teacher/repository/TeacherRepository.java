@@ -3,7 +3,6 @@ package com.school.schoolstock.domain.teacher.repository;
 import com.school.schoolstock.domain.teacher.dto.response.StudentListResponse;
 import com.school.schoolstock.domain.coupon.vo.Coupons;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -17,7 +16,7 @@ public interface TeacherRepository {
     List<StudentListResponse> getMyStudents(String teacherId);
 
     // 선생님이 맡은 반 학생 반번호로 아이디 조회
-    String getStudentIdInClass(@Param("teacherId") String teacherId, @Param("studentNumber") int studentNumber);
+    String getStudentIdInClass(String teacherId, int studentNumber);
 
     // 선생님 이름 조회(사이드바)
     String getTeacherName(String teacherId);

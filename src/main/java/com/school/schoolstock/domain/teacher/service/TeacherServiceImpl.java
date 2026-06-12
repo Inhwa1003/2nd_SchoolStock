@@ -1,9 +1,13 @@
 package com.school.schoolstock.domain.teacher.service;
 
+import com.school.schoolstock.domain.coupon.dto.request.CouponUpdateRequest;
 import com.school.schoolstock.domain.student.repository.StudentRepository;
+import com.school.schoolstock.domain.teacher.dto.request.PointGrantRequest;
 import com.school.schoolstock.domain.teacher.dto.response.StudentListResponse;
 import com.school.schoolstock.domain.coupon.vo.Coupons;
 import com.school.schoolstock.domain.teacher.repository.TeacherRepository;
+import com.school.schoolstock.global.error.BusinessException;
+import com.school.schoolstock.global.error.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,7 +36,10 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public String getStudentIdInClass(String teacherId, int studentNumber) {
-        return teacherRepository.getStudentIdInClass(teacherId, studentNumber);
+        String studentId = teacherRepository.getStudentIdInClass(teacherId, studentNumber);
+        if(studentId == null)
+            throw new BusinessException(ErrorCode.STUDENT_NOT_FOUND);
+        return studentId;
     }
 
     @Override
@@ -42,75 +49,57 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Transactional
     @Override
-    public boolean givePoint(String studentId, int point, String content) {
-        // 예외 처리 필요함 지급 안될경우
-        studentRepository.setStudentPointUp(studentId, point);
-        teacherRepository.setPointGive(studentId, point, content);
-        return true;
+    public void givePoint(String teacherId, int studentNumber, PointGrantRequest request) {
+        String studentId = getStudentIdInClass(teacherId, studentNumber);
+        studentRepository.setStudentPointUp(studentId, request.getPoints());
+        teacherRepository.setPointGive(studentId, request.getPoints(), request.getContent());
     }
     // 쿠폰 상점의 쿠폰 정보(쿠폰명, 쿠폰 포인트) 수정
     @Transactional
     @Override
-    public String setCoupon(Coupons coupon){
+    public void setCoupon(CouponUpdateRequest request){
         // 1. 쿠폰명 비어있는지 체크
-        if (coupon.getName() == null || coupon.getName().trim().isEmpty()) {
-            return "쿠폰명을 입력해주세요.";
+        if (request.getName() == null || request.getName().trim().isEmpty()) {
+            throw new BusinessException(ErrorCode.INVALID_INPUT);
         }
 
         // 2. 쿠폰 포인트가 0 이하인지 체크
-        if (coupon.getCouponPoint() <= 0) {
-            return "쿠폰 포인트는 0보다 커야 합니다.";
+        if (request.getCouponPoint() <= 0) {
+            throw new BusinessException(ErrorCode.INVALID_INPUT);
         }
-
 
         // 3. 쿠폰 수정된 행이 없으면 실패
-        if (teacherRepository.setCoupon(coupon) == 0) {
-            return "수정할 쿠폰을 찾을 수 없습니다.";
+        if (teacherRepository.setCoupon(Coupons.builder()
+                .couponNo(request.getCouponNo())
+                .name(request.getName())
+                .couponPoint(request.getCouponPoint()).build()) == 0) {
+            throw new BusinessException(ErrorCode.COUPON_NOT_FOUND);
         }
-
-        // 5. 성공
-        return "쿠폰 정보가 정상적으로 수정되었습니다.";
     }
 
     // 쿠폰 상점에 있는 쿠폰을 삭제
     @Transactional
     @Override
-    public String deleteCoupon(int couponNo) {
+    public void deleteCoupon(int couponNo) {
 
         // 쿠폰 번호 유효성 확인
-        if (couponNo <= 0) {
-            return "삭제할 쿠폰 번호가 올바르지 않습니다.";
-        }
-
-        // 쿠폰 삭제
-        int result = teacherRepository.deleteCoupon(couponNo);
+        if (couponNo <= 0)
+            throw new BusinessException(ErrorCode.INVALID_INPUT);
 
         // 삭제된 행이 없으면 쿠폰 번호가 없는 것
-        if (result == 0) {
-            return "삭제할 쿠폰을 찾을 수 없습니다.";
-        }
-
-        return "쿠폰이 정상적으로 삭제되었습니다.";
+        if(teacherRepository.deleteCoupon(couponNo) == 0)
+            throw new BusinessException(ErrorCode.COUPON_NOT_FOUND);
     }
 
     // 특정 학생의 보유 쿠폰 상태 '사용'으로 수정
     @Transactional
     @Override
-    public CouponUseResult updateStudentCouponUsed(String teacherId, int studentNumber, int couponPurchaseNo) {
+    public void updateStudentCouponUsed(String teacherId, int studentNumber, int couponPurchaseNo) {
 
         String studentId = teacherRepository.getStudentIdInClass(teacherId, studentNumber);
 
-        if (studentId == null) {
-            return CouponUseResult.STUDENT_NOT_IN_CLASS;
-        }
-
-        int result = teacherRepository.updateStudentCouponUsed(studentId, couponPurchaseNo);
-
-        if (result == 0) {
-            return CouponUseResult.COUPON_USE_FAILED;
-        }
-
-        return CouponUseResult.SUCCESS;
+        if (teacherRepository.updateStudentCouponUsed(studentId, couponPurchaseNo) == 0)
+            throw new BusinessException(ErrorCode.COUPON_USE_FAILED);
     }
 
 }

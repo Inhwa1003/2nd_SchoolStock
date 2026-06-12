@@ -87,7 +87,7 @@ function setText(id, text) { document.getElementById(id).textContent = text; }
 function td(text, cls) {
     const el = document.createElement('td');
     el.textContent = text;
-    if (cls) el.className = cls;     // 클래스 필요할 때만(예: stock-price)
+    if (cls) el.className = cls;
     return el;
 }
 

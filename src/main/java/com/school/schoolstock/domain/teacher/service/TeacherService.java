@@ -1,7 +1,8 @@
 package com.school.schoolstock.domain.teacher.service;
 
+import com.school.schoolstock.domain.coupon.dto.request.CouponUpdateRequest;
+import com.school.schoolstock.domain.teacher.dto.request.PointGrantRequest;
 import com.school.schoolstock.domain.teacher.dto.response.StudentListResponse;
-import com.school.schoolstock.domain.coupon.vo.Coupons;
 
 import java.util.List;
 
@@ -17,14 +18,14 @@ public interface TeacherService {
     String getTeacherName(String teacherId);
 
     // 포인트 지급
-    boolean givePoint(String studentId, int point, String content);
+    void givePoint(String teacherId, int studentNumber, PointGrantRequest request);
     // 쿠폰 상점 내 쿠폰명, 쿠폰 포인트 수정
-    String setCoupon(Coupons coupon);
+    void setCoupon(CouponUpdateRequest request);
 
     // 쿠폰 상점의 쿠폰을 삭제
-    String deleteCoupon(int couponNo);
+    void deleteCoupon(int couponNo);
 
     // 특정 학생의 보유 쿠폰 사용 처리
-    CouponUseResult updateStudentCouponUsed(String teacherId, int studentNumber, int couponPurchaseNo);
+    void updateStudentCouponUsed(String teacherId, int studentNumber, int couponPurchaseNo);
 
 }

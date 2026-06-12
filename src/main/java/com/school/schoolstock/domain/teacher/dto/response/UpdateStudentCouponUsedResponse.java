@@ -1,11 +1,13 @@
 package com.school.schoolstock.domain.teacher.dto.response;
 
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
+@AllArgsConstructor
+@NoArgsConstructor
 @Setter
+@Getter
+@Builder
 public class UpdateStudentCouponUsedResponse {
     private int couponPurchaseNo;
     private String name;
