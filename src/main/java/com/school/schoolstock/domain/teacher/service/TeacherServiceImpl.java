@@ -100,18 +100,11 @@ public class TeacherServiceImpl implements TeacherService {
 
         String studentId = teacherRepository.getStudentIdInClass(teacherId, studentNumber);
 
-        System.out.println("teacherId = " + teacherId);
-        System.out.println("studentNumber = " + studentNumber);
-        System.out.println("studentId = " + studentId);
-        System.out.println("couponPurchaseNo = " + couponPurchaseNo);
-
         if (studentId == null) {
             return CouponUseResult.STUDENT_NOT_IN_CLASS;
         }
 
         int result = teacherRepository.updateStudentCouponUsed(studentId, couponPurchaseNo);
-
-        System.out.println("update result = " + result);
 
         if (result == 0) {
             return CouponUseResult.COUPON_USE_FAILED;
