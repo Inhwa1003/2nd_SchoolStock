@@ -71,4 +71,9 @@
           AND purchase_state = 'NOT_USED'
     </update>
 
+    <insert id="setStocks" parameterType="com.school.schoolstock.domain.stock.vo.Stocks">
+        INSERT INTO stocks (name, stock_content, publication_balance, publication_point, prev_point)
+        VALUES (#{name}, #{stockContent}, #{publicationBalance}, #{publicationPoint}, #{prevPoint})
+    </insert>
+
 </mapper>
