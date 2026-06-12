@@ -69,8 +69,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     `;
                 }
 
-            } catch (error) {
-                console.error(error);
+            } catch {
                 alert("쿠폰 삭제 중 오류가 발생했습니다.");
             }
         });
