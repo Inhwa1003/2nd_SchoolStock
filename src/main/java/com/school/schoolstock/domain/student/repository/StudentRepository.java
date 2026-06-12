@@ -3,6 +3,7 @@ package com.school.schoolstock.domain.student.repository;
 import com.school.schoolstock.domain.student.dto.response.MyCouponResponse;
 import com.school.schoolstock.domain.student.dto.response.MyOrderResponse;
 import com.school.schoolstock.domain.student.dto.response.MyPointHistoryResponse;
+import com.school.schoolstock.domain.student.dto.response.StudentInfoResponse;
 import com.school.schoolstock.domain.student.vo.Students;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -63,4 +64,10 @@ public interface StudentRepository {
 
     // 보유 쿠폰 정보 조회
     List<MyCouponResponse> getMyCouponList(String studentId);
+
+    // 학생 기본정보 조회 (사이드바 용)
+    StudentInfoResponse getStudentInfo(String studentId);
+
+    // 학생 같은 학년 같은반 반번호 중복 체크 (회원가입)
+    boolean existsClassNumber(Students students);
 }

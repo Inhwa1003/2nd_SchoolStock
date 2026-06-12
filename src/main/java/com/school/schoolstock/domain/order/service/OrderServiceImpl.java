@@ -1,14 +1,16 @@
 package com.school.schoolstock.domain.order.service;
 
 
-import com.school.schoolstock.domain.order.dto.request.OrderRequest;
-import com.school.schoolstock.domain.order.dto.response.OrderResponse;
+import com.school.schoolstock.domain.order.dto.request.BuySellOrderRequest;
+import com.school.schoolstock.domain.order.dto.response.StockOrderResponse;
 import com.school.schoolstock.domain.order.repository.OrderRepository;
 import com.school.schoolstock.domain.order.vo.Orders;
 import com.school.schoolstock.domain.stock.repository.StockRepository;
 import com.school.schoolstock.domain.stock.vo.Stocks;
 import com.school.schoolstock.domain.student.repository.StudentRepository;
 import com.school.schoolstock.domain.trade.repository.TradeRepository;
+import com.school.schoolstock.global.error.BusinessException;
+import com.school.schoolstock.global.error.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +19,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+// 매도 기능: setSellOrder
+// 매수 기능: setBuyOrder
+// 매수, 매도 조회 기능: getStockOrders
 
 @RequiredArgsConstructor
 @Service
@@ -26,14 +31,15 @@ public class OrderServiceImpl implements OrderService {
     private final StudentRepository studentRepository;
     private final TradeRepository tradeRepository;
 
+    // 매수, 매도 주문 토글로 조회하는 기능
     @Transactional(readOnly = true)
     @Override
-    public List<OrderResponse> getStockOrders(int stockNo, String content) {
+    public List<StockOrderResponse> getStockOrders(int stockNo, String content) {
         List<Orders> orders = content.equals("BUY")? orderRepository.getTotalBuyOrder(stockNo): orderRepository.getTotalSellOrder(stockNo);
-        List<OrderResponse> result = new ArrayList<>();
+        List<StockOrderResponse> result = new ArrayList<>();
 
         for (Orders order : orders) {
-            result.add(OrderResponse.builder()
+            result.add(StockOrderResponse.builder()
                     .orderContent(order.getOrderContent())
                     .orderPoint(order.getOrderPoint())
                     .orderAmount(order.getAmount()).build());
@@ -42,17 +48,18 @@ public class OrderServiceImpl implements OrderService {
         return result;
     }
 
+    // 매도 기능
     @Transactional
     @Override
-    public String setSellOrder(String studentId, OrderRequest request) {
+    public String setSellOrder(String studentId, BuySellOrderRequest request) {
         Map<String, Object> matchOrder;
         //1. 발행 잔량 확인 있으면 학생간 거래x 매도 요청x
         if(stockRepository.getStockPubInfo(request.getStockNo()).getPublicationBalance() > 0)
-            return "발행 잔량이 남아 매도요청 할 수 없습니다.";
+            throw new BusinessException(ErrorCode.CANNOT_SELL_ON_PUBLICATION);
 
         //2. (보유한 주식 수량 < 매도요청 수량 )체크
         if(studentRepository.getMyStockAmount(studentId, request.getStockNo()) < request.getOrderAmount())
-            return  "보유 주식량보다 많은 매도 요청은 할 수 없습니다.";
+            throw new BusinessException(ErrorCode.HOLDING_NOT_ENOUGH);
 
         //3. 매수 주문 매칭 시도 (가격 수량 다맞는 조건)
         matchOrder = orderRepository.getMatchOrder(request.getStockNo(), request.getOrderPoint(), request.getOrderAmount(), studentId,"BUY");
@@ -78,33 +85,73 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
+    // 매수 기능
     @Transactional
     @Override
-    public String setBuyOrder(String studentId, OrderRequest request) {
+    public String setBuyOrder(String studentId, BuySellOrderRequest request) {
         Map<String, Object> matchOrder;
         // 학생이 주문 요청한 가격보다 보유포인트가 적을때 실행
         if(studentRepository.getMyPoint(studentId) < (request.getOrderAmount() * request.getOrderPoint()))
-            return "보유포인트가 부족합니다.";
+            throw new BusinessException(ErrorCode.POINT_NOT_ENOUGH);
 
-        // 1. 발행 개수가 남았는지 체크 있으면 실행
         Stocks pubInfo = stockRepository.getStockPubInfo(request.getStockNo());
-        if(pubInfo.getPublicationBalance() > 0){
-            // 1-1. 입력한 값이 발행가격과 같거나 높을때 실행
-            if(pubInfo.getPublicationPoint() <= request.getOrderPoint()){
-                // 1-2. 발행 개수 차감
-                // 발행개수 음수값 차단 작은값으로 거래
-                int buyFromPub = Math.min(pubInfo.getPublicationBalance(), request.getOrderAmount());
-                stockRepository.setStockPubBalance(buyFromPub, request.getStockNo());
-                // 1-3. 주문 체결로 바로 요청
-                orderRepository.setOrderRequest("BUY", request.getOrderPoint(), buyFromPub, "MATCHED", studentId, request.getStockNo());
-                // 1-4. 매수 요청한 주문번호로 주문 완료 등록
-                tradeRepository.setMatchedOrder(orderRepository.getMyOrderNo("BUY", studentId, request.getStockNo(), "MATCHED", buyFromPub, request.getOrderPoint()), null);
-                // 1-5. 보유 포인트 차감
-                studentRepository.setStudentPointDown(studentId, (buyFromPub * request.getOrderPoint()));
-                return "발행 가격 " + pubInfo.getPublicationPoint() + "P 매수가 완료 되었습니다. 남은 발행잔량은 " + (pubInfo.getPublicationBalance() - buyFromPub) + "주 입니다.";
-            }
+
+    // 현재가격보다 낮은 매수 요청 차단
+        if (request.getOrderPoint() < pubInfo.getPublicationPoint()) {
+            throw new BusinessException(ErrorCode.ORDER_PRICE_TOO_LOW);
         }
-        matchOrder = orderRepository.getMatchOrder(request.getStockNo(), request.getOrderPoint(), request.getOrderAmount(), studentId, "SELL");
+
+    // 1. 발행 개수가 남았는지 체크 있으면 실행
+        if (pubInfo.getPublicationBalance() > 0) {
+
+            // 발행개수 음수값 차단 작은값으로 거래
+            int buyFromPub = Math.min(pubInfo.getPublicationBalance(), request.getOrderAmount());
+
+            // 1-2. 발행 개수 차감
+            stockRepository.setStockPubBalance(buyFromPub, request.getStockNo());
+
+            // 1-3. 주문 체결로 바로 요청
+            orderRepository.setOrderRequest(
+                    "BUY",
+                    pubInfo.getPublicationPoint(),
+                    buyFromPub,
+                    "MATCHED",
+                    studentId,
+                    request.getStockNo()
+            );
+
+            // 1-4. 매수 요청한 주문번호로 주문 완료 등록
+            tradeRepository.setMatchedOrder(
+                    orderRepository.getMyOrderNo(
+                            "BUY",
+                            studentId,
+                            request.getStockNo(),
+                            "MATCHED",
+                            buyFromPub,
+                            pubInfo.getPublicationPoint()
+                    ),
+                    null
+            );
+
+            // 1-5. 보유 포인트 차감
+            studentRepository.setStudentPointDown(
+                    studentId,
+                    buyFromPub * pubInfo.getPublicationPoint()
+            );
+
+            return "발행 가격 " + pubInfo.getPublicationPoint()
+                    + "P 매수가 완료 되었습니다. 남은 발행잔량은 "
+                    + (pubInfo.getPublicationBalance() - buyFromPub)
+                    + "주 입니다.";
+        }
+
+        matchOrder = orderRepository.getMatchOrder(
+                request.getStockNo(),
+                request.getOrderPoint(),
+                request.getOrderAmount(),
+                studentId,
+                "SELL"
+        );
 
         // 2. 매수 요청에 따른 매도 요청이 있을경우 실행
         if(matchOrder != null && !matchOrder.isEmpty()){

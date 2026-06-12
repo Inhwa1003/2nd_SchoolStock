@@ -8,11 +8,10 @@ import lombok.*;
 @Setter
 @Getter
 @Builder
-public class OrderResponse {
-    //종류 (BUY / SELL)
+
+// 매수, 매도 주문 토글로 조회할 때, Response
+public class StockOrderResponse {
     private String orderContent;
-    //가격
     private int orderPoint;
-    //수량
     private int orderAmount;
 }

@@ -1,16 +1,13 @@
 package com.school.schoolstock.domain.student.service;
 
-import com.school.schoolstock.domain.student.dto.response.MyAssetResponse;
-import com.school.schoolstock.domain.student.dto.response.MyCouponResponse;
-import com.school.schoolstock.domain.student.dto.response.MyOrderResponse;
-import com.school.schoolstock.domain.student.dto.response.MyPointHistoryResponse;
+import com.school.schoolstock.domain.student.dto.response.*;
 
 import java.util.List;
 
 
 public interface StudentService {
     //내 요청 주문 취소
-    boolean setMyOrderCancel(int orderNo);
+    void setMyOrderCancel(int orderNo);
 
     //내자산 페이지 화면 값 가져오는 서비스 비동기포함 두개로 표시해둔거 Controller에서 분기 처리로 2개 구현 하면 될듯
     MyAssetResponse getMyAsset(String studentId);
@@ -25,5 +22,8 @@ public interface StudentService {
     List<MyOrderResponse> getMyOrder(String studentId, int stockNo);
 
     //보유 쿠폰 정보 조회
-    List<MyCouponResponse> getMyCoupon(String studentId);
+    List<MyCouponResponse> getMyCouponList(String studentId);
+
+    //학생 기본정보 조회 (사이드바 용)
+    StudentInfoResponse getStudentInfo(String studentId);
 }

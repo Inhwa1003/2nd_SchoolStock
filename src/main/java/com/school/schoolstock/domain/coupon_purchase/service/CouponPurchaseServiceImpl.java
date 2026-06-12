@@ -5,6 +5,8 @@ import com.school.schoolstock.domain.coupon.vo.Coupons;
 import com.school.schoolstock.domain.coupon_purchase.repository.CouponPurchaseRepository;
 import com.school.schoolstock.domain.coupon_purchase.vo.CouponPurchase;
 import com.school.schoolstock.domain.student.repository.StudentRepository;
+import com.school.schoolstock.global.error.BusinessException;
+import com.school.schoolstock.global.error.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,28 +21,27 @@ public class CouponPurchaseServiceImpl implements CouponPurchaseService {
 
     @Transactional
     @Override
-    public boolean buyCoupon(String studentId, int couponNo) {
+    public void buyCoupon(String studentId, int couponNo) {
         //학생 보유쿠폰 수량 초과시
         if(studentRepository.getMyCouponAmount(studentId) >= 3)
-            return false;
+            throw new BusinessException(ErrorCode.COUPON_LIMIT_EXCEEDED);
 
         //1.쿠폰 정보 조회
         Coupons coupon = couponRepository.getCoupon(couponNo);
         //없는 쿠폰
         if(coupon == null)
-            return false;
+            throw new BusinessException(ErrorCode.COUPON_NOT_FOUND);
 
         //2.포인트 충분하면 차감 + 보유쿠폰 +1 (부족하면 0행 -> false)
         if(!studentRepository.setStudentAssets(studentId, coupon.getCouponPoint()))
-            return false;
+            throw new BusinessException(ErrorCode.POINT_NOT_ENOUGH);
 
-        //3.구매내역 등록 (구매 당시 이름·가격 저장)
+        // 3. 구매내역 객체 생성
         couponPurchaseRepository.setPurchaseRecord(CouponPurchase.builder()
                 .studentId(studentId)
                 .couponNo(couponNo)
                 .purchasePoint(coupon.getCouponPoint())
                 .name(coupon.getName())
                 .purchaseState("NOT_USED").build());
-        return true;
     }
 }

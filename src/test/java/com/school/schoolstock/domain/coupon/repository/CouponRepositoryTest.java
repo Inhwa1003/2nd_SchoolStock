@@ -1,6 +1,5 @@
-package com.school.schoolstock.domain.coupon;
+package com.school.schoolstock.domain.coupon.repository;
 
-import com.school.schoolstock.domain.coupon.repository.CouponRepository;
 import com.school.schoolstock.domain.coupon.vo.Coupons;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

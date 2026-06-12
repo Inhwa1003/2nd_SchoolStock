@@ -9,20 +9,28 @@ import java.util.List;
 public interface StockRepository {
     // 주식명 조회
     String getStockName(int stockNo);
+
     // 주식명 리스트 조회
     List<Stocks> getStockNameList();
+
     // 주식 기본 정보 조회
     Stocks getStockInfo(int stockNo);
+
     // 주식 현재가격 조회
     int getStockPrice(int stockNo);
+
     // 주식 이전가 대비 가격 조회
     int getStockPriceChange(int stockNo);
+
     // 주식 등락률 조회
     double getChangeRate(int stockNo);
+
     // 주식 이전가격(전장마감가) 조회
     int getPrevPoint(int stockNo);
+
     // 발행 개수 변경
     boolean setStockPubBalance(int buyAmount, int stockNo);
+
     // 발행 정보 조회
     Stocks getStockPubInfo(int stockNo);
 }

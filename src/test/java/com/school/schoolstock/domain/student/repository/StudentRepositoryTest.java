@@ -219,4 +219,24 @@ public class StudentRepositoryTest {
         //YES
         log.info("보유 쿠폰 정보 : " + studentRepository.getMyCouponList("abc"));
     }
+
+    @Test
+    public void existsClassNumberTest(){
+        // NO
+        // 존재하지 않는 학년/반/번호 조합 (false 반환)
+        Assertions.assertFalse(studentRepository.existsClassNumber(Students.builder()
+                .grade(99).className("ZZ").studentNumber(9999).build()));
+
+        // YES
+        // 학생 등록 후 같은 학년/반/번호 조회 (true 반환)
+        studentRepository.setMember(Students.builder()
+                .studentId("testchk").name("테스트")
+                .grade(9).className("Z").studentNumber(77).build());
+
+        Assertions.assertTrue(studentRepository.existsClassNumber(Students.builder()
+                .grade(9).className("Z").studentNumber(77).build()));
+
+        log.info("반번호 중복체크 결과 : " + studentRepository.existsClassNumber(Students.builder()
+                .grade(9).className("Z").studentNumber(77).build()));
+    }
 }

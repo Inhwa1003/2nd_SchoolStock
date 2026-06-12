@@ -1,7 +1,7 @@
 package com.school.schoolstock.domain.stock.service;
 
-import com.school.schoolstock.domain.stock.dto.response.StockDetailResponse;
-import com.school.schoolstock.domain.stock.dto.response.StockListResponse;
+import com.school.schoolstock.domain.stock.dto.response.StockDetailPageResponse;
+import com.school.schoolstock.domain.stock.dto.response.StockListPageResponse;
 import com.school.schoolstock.domain.stock.dto.response.StockPriceResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
@@ -37,7 +37,7 @@ public class StockServiceTest {
     @Test
     void getStockDetailTest() {
         // YES
-        StockDetailResponse d = stockService.getStockDetail(1);
+        StockDetailPageResponse d = stockService.getStockDetail(1);
         Assertions.assertNotNull(d);
         log.info("상세 -> 이름:{}, 발행잔량:{}, 발행가:{}, 현재가:{}, 이전가:{}, 등락률:{}",
                 d.getName(), d.getPublicationBalance(), d.getPublicationPoint(),
@@ -50,7 +50,7 @@ public class StockServiceTest {
     @Test
     void getStockListTest() {
         // YES
-        List<StockListResponse> list = stockService.getStockList();
+        List<StockListPageResponse> list = stockService.getStockList();
         Assertions.assertNotNull(list);
         Assertions.assertFalse(list.isEmpty());
         log.info("주식목록: {}", list);

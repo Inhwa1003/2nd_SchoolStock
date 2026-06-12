@@ -7,21 +7,13 @@ import lombok.ToString;
 @ToString
 @Getter
 @Builder
-public class StockDetailResponse {
+public class StockListPageResponse {
     //주식번호
     private int stockNo;
     //주식이름
     private String name;
-    //주식설명
-    private String stockContent;
-    //발행잔량
-    private int publicationBalance;
-    //발행가격
-    private int publicationPoint;
     //현재가
     private int nowPoint;
-    //이전가
-    private int prevPoint;
     //(현재가 - 이전가)
     private int priceChange;
     //등락률

@@ -1,6 +1,9 @@
 package com.school.schoolstock.domain.student.service;
 
+import com.school.schoolstock.domain.order.repository.OrderRepository;
 import com.school.schoolstock.domain.student.dto.response.MyAssetResponse;
+import com.school.schoolstock.domain.order.dto.response.OrderCancelPointResponse;
+import com.school.schoolstock.global.error.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.binding.BindingException;
 import org.junit.jupiter.api.Assertions;
@@ -16,6 +19,9 @@ public class StudentServiceTest {
 
     @Autowired
     private StudentService studentService;
+
+    @Autowired
+    private OrderRepository orderRepository;
 
     @Test
     void getMyAssetTest() {
@@ -53,13 +59,13 @@ public class StudentServiceTest {
     }
 
     @Test
-    void getMyCouponTest() {
+    void getMyCouponListTest() {
         // YES
-        Assertions.assertFalse(studentService.getMyCoupon("abc").isEmpty());
-        log.info("보유 쿠폰: {}", studentService.getMyCoupon("abc"));
+        Assertions.assertFalse(studentService.getMyCouponList("abc").isEmpty());
+        log.info("보유 쿠폰: {}", studentService.getMyCouponList("abc"));
 
         // NO — 없는 아이디 → 빈 리스트
-        Assertions.assertTrue(studentService.getMyCoupon("testid1111").isEmpty());
+        Assertions.assertTrue(studentService.getMyCouponList("testid1111").isEmpty());
     }
 
     @Test
@@ -73,10 +79,33 @@ public class StudentServiceTest {
 
     @Test
     void setMyOrderCancelTest() {
-        // YES — abc의 PENDING 주문 #3 취소 (테스트 후 롤백)
-        Assertions.assertTrue(studentService.setMyOrderCancel(3));
+        // YES — PENDING 상태의 BUY 주문 취소
+        int orderNo = 3; // 실제 DB에 있는 PENDING + BUY 주문 번호로 변경
 
-        // NO — 없는 주문번호 → false
-        Assertions.assertFalse(studentService.setMyOrderCancel(999999));
+        // 취소 전 환불 정보 조회
+        OrderCancelPointResponse cancelInfo = orderRepository.getCancelOrderPointInfo(orderNo);
+
+        Assertions.assertNotNull(cancelInfo);
+
+        String studentId = cancelInfo.getStudentId();
+        int refundPoint = cancelInfo.getRefundPoint();
+
+        int beforePoint = studentService.getMyAsset(studentId).getMyPoint();
+
+        log.info("취소 전 학생 ID: {}", studentId);
+        log.info("취소 전 보유 포인트: {}", beforePoint);
+        log.info("환불 예정 포인트: {}", refundPoint);
+
+        // 주문 취소
+        studentService.setMyOrderCancel(orderNo);
+
+        int afterPoint = studentService.getMyAsset(studentId).getMyPoint();
+
+        log.info("취소 후 보유 포인트: {}", afterPoint);
+
+        Assertions.assertEquals(beforePoint + refundPoint, afterPoint);
+
+        // NO — 없는 주문번호 → false Exception 대체
+        Assertions.assertThrows(BusinessException.class, () -> studentService.setMyOrderCancel(999999));
     }
 }

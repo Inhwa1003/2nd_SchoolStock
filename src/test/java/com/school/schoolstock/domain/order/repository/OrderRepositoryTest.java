@@ -1,5 +1,6 @@
 package com.school.schoolstock.domain.order.repository;
 
+import com.school.schoolstock.domain.order.dto.response.OrderCancelPointResponse;
 import com.school.schoolstock.domain.order.vo.Orders;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -148,15 +149,22 @@ class OrderRepositoryTest {
 
     @Test
     void setOrderStateCancel_test() {
-        // given
-        int orderNo = 3;
+        {
+            // given
+            int orderNo = 8; // 실제 DB에 있는 PENDING + BUY 주문 번호로 변경
 
-        // when
-        boolean result = orderRepository.setOrderStateCancel(orderNo);
+            // when
+            OrderCancelPointResponse response =
+                    orderRepository.getCancelOrderPointInfo(orderNo);
 
-        // then
-        System.out.println("주문 상태 취소 변경 결과: " + result);
-        assertTrue(result);
+            // then
+            assertNotNull(response);
+            assertNotNull(response.getStudentId());
+            assertTrue(response.getRefundPoint() > 0);
+
+            System.out.println("studentId = " + response.getStudentId());
+            System.out.println("refundPoint = " + response.getRefundPoint());
+        }
     }
 
     @Test
@@ -184,4 +192,6 @@ class OrderRepositoryTest {
         System.out.println("존재하지 않는 주문 상태 변경 결과: " + result);
         assertFalse(result);
     }
+
+
 }

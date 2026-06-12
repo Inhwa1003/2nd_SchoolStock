@@ -1,0 +1,36 @@
+@charset "UTF-8";
+* { box-sizing: border-box; }
+
+/* 레이아웃(.app/.content/.hd/.main)·사이드바는 Common.css / SideBar.css 사용 */
+.student-list-header {
+    display: grid;
+    grid-template-columns: 1fr 2fr 2fr;
+    padding: 12px 20px;
+    font-weight: bold;
+    color: #555;
+    border-bottom: 1px solid #e5e5e5;
+    margin-bottom: 10px;
+}
+.point-header { text-align: right; }
+
+.student-item {
+    display: grid;
+    grid-template-columns: 1fr 2fr 2fr;
+    align-items: center;
+    padding: 18px 20px;
+    margin-bottom: 12px;
+    border: 1px solid #e1e1e1;
+    border-radius: 12px;
+    background-color: #fff;
+    transition: 0.2s;
+    cursor: pointer;
+}
+.student-item:hover {
+    transform: translateY(-2px);
+    border-color: #4c5af7;
+    box-shadow: 0 4px 12px rgba(76, 90, 247, 0.15);
+}
+.student-number { font-weight: bold; color: #4c5af7; }
+.student-name   { font-weight: 600; }
+.student-point  { text-align: right; font-weight: bold; color: #222; }
+.empty-message  { padding: 40px 0; text-align: center; color: #777; font-size: 16px; }
