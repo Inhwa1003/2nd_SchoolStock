@@ -31,7 +31,7 @@ public class StudentController {
     @GetMapping("/coupons")
     public String getMyCoupons(@AuthenticationPrincipal SchoolUserDetails userDetails, Model model) {
         model.addAttribute("studentName", userDetails.getUser().getLoginId());
-        model.addAttribute("coupons", studentService.getMyCoupon(userDetails.getUsername()));
+        model.addAttribute("coupons", studentService.getMyCouponList(userDetails.getUsername()));
         return "myCoupons";
     }
 }

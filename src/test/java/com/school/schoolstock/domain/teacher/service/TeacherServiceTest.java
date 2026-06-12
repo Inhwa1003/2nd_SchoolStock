@@ -4,7 +4,8 @@ import com.school.schoolstock.domain.student.repository.StudentRepository;
 import com.school.schoolstock.domain.teacher.dto.response.StudentListResponse;
 import com.school.schoolstock.domain.coupon.repository.CouponRepository;
 import com.school.schoolstock.domain.coupon.vo.Coupons;
-import com.school.schoolstock.domain.teacher.dto.StudentListResponse;
+
+import com.school.schoolstock.domain.teacher.repository.TeacherRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @Transactional
 @Slf4j
@@ -26,6 +29,9 @@ public class TeacherServiceTest {
 
     @Autowired
     private CouponRepository couponRepository;
+
+    @Autowired
+    private TeacherRepository teacherRepository;
 
     @Test
     public void getMyStudentsListTest() {
@@ -139,7 +145,7 @@ public class TeacherServiceTest {
 
         // YES
         // 존재하는 쿠폰 번호 수정
-        int couponNo = 3;
+        int couponNo = 4;
 
         Coupons coupon = new Coupons();
         coupon.setCouponNo(couponNo);
@@ -179,7 +185,7 @@ public class TeacherServiceTest {
 
         // YES
         // 존재하는 쿠폰 번호 삭제
-        int couponNo = 4;
+        int couponNo = 3;
 
         String result = teacherService.deleteCoupon(couponNo);
 
@@ -187,6 +193,73 @@ public class TeacherServiceTest {
         Assertions.assertNull(couponRepository.getCoupon(couponNo));
 
         log.info("쿠폰 삭제 결과 : {}", result);
+    }
+
+    @Test
+    void setStudentCouponUsedTest() {
+        // given
+        String teacherId = "teacher05";
+
+        // 선생님 반의 실제 학생 번호 하나 확보
+        List<StudentListResponse> students = teacherRepository.getMyStudents(teacherId);
+        Assertions.assertFalse(students.isEmpty());
+
+        int studentNumber = 63;
+
+        int couponPurchaseNo = 2;
+
+        // YES
+        // 담당 학생의 미사용 쿠폰 사용 처리 성공
+        CouponUseResult result = teacherService.updateStudentCouponUsed(
+                teacherId,
+                studentNumber,
+                couponPurchaseNo
+        );
+
+        assertThat(result).isEqualTo(CouponUseResult.SUCCESS);
+
+        log.info("쿠폰 사용 처리 결과 = {}", result);
+
+
+        // NO
+        // 이미 사용된 쿠폰은 다시 사용 처리 실패
+        CouponUseResult alreadyUsedResult = teacherService.updateStudentCouponUsed(
+                teacherId,
+                studentNumber,
+                couponPurchaseNo
+        );
+
+        assertThat(alreadyUsedResult).isEqualTo(CouponUseResult.COUPON_USE_FAILED);
+
+        log.info("이미 사용된 쿠폰 재사용 처리 결과 = {}", alreadyUsedResult);
+
+
+        // NO
+        // 내 반에 없는 학생 번호
+        CouponUseResult notInClassResult = teacherService.updateStudentCouponUsed(
+                teacherId,
+                99999,
+                couponPurchaseNo
+        );
+
+        assertThat(notInClassResult).isEqualTo(CouponUseResult.STUDENT_NOT_IN_CLASS);
+
+        log.info("담당 학생 아님 처리 결과 = {}", notInClassResult);
+
+
+        // NO
+        // 존재하지 않는 쿠폰 구매 번호
+        int notExistsCouponPurchaseNo = 99999;
+
+        CouponUseResult notExistsCouponResult = teacherService.updateStudentCouponUsed(
+                teacherId,
+                studentNumber,
+                notExistsCouponPurchaseNo
+        );
+
+        assertThat(notExistsCouponResult).isEqualTo(CouponUseResult.COUPON_USE_FAILED);
+
+        log.info("존재하지 않는 쿠폰 구매 번호 처리 결과 = {}", notExistsCouponResult);
     }
 
 }

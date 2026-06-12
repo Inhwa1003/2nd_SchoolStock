@@ -62,4 +62,13 @@
         WHERE coupon_no = #{couponNo}
     </delete>
 
+    <!-- 학생의 보유 쿠폰을 상태 '사용'으로 변경 -->
+    <update id="updateStudentCouponUsed">
+        UPDATE coupon_purchase
+        SET purchase_state = 'USED'
+        WHERE coupon_purchase_no = #{couponPurchaseNo}
+          AND student_id = #{studentId}
+          AND purchase_state = 'NOT_USED'
+    </update>
+
 </mapper>

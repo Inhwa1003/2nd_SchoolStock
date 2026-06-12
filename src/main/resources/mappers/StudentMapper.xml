@@ -22,6 +22,7 @@
         FROM students
         WHERE student_id = #{studentId}
     </select>
+
     <!-- 총 자산 조회-->
     <select id="getMyValue" parameterType="String" resultType="int">
         SELECT s.total_point + COALESCE(SUM(MY_VALUE.value), 0) AS total_asset
@@ -57,10 +58,12 @@
         WHERE s.student_id = #{studentId}
         GROUP BY s.student_id, s.total_point
     </select>
+
     <!-- 학생 가용포인트 조회-->
     <select id="getMyPoint" parameterType="String" resultType="int">
         SELECT total_point FROM students WHERE student_id = #{studentId}
     </select>
+
     <!-- 총 손익 조회 -->
     <select id="getTotalProfit" parameterType="String" resultType="int">
         SELECT COALESCE(SUM(stock_profit), 0) AS totalProfit
@@ -100,10 +103,12 @@
                  GROUP BY o.stock_no, st.publication_point
              ) AS PROFIT
     </select>
+
     <!-- 보유 쿠폰 수량 조회 -->
     <select id="getMyCouponAmount" parameterType="String" resultType="int">
         SELECT COUNT(*) AS total_coupon FROM coupon_purchase WHERE purchase_state = 'NOT_USED' AND student_id = #{studentId}
     </select>
+
     <!-- 특정 보유 주식 수량 조회 -->
     <select id="getMyStockAmount" parameterType="Map" resultType="int">
         SELECT COALESCE(
@@ -120,6 +125,7 @@
           AND stock_no = #{stockNo}
           AND order_state = 'MATCHED'
     </select>
+
     <!-- 특정 보유 주식 평균가격 조회 -->
     <select id="getAveragePoint" parameterType="Map" resultType="int">
         SELECT COALESCE((SUM(order_point * amount) / SUM(amount)), 0) AS average
@@ -129,6 +135,7 @@
           AND order_state = 'MATCHED'
           AND order_content = 'BUY'
     </select>
+
     <!-- 특정 보유 주식 총 구매 비용 조회 -->
     <select id="getPurchasePoint" parameterType="Map" resultType="int">
         SELECT COALESCE(SUM(order_point * amount), 0) AS purchasePrice
@@ -138,6 +145,7 @@
           AND order_state = 'MATCHED'
           AND order_content = 'BUY'
     </select>
+
     <!-- 학생이 구매한 주식 조회 -->
     <select id="getMyStockNos" parameterType="String" resultType="Integer">
         SELECT DISTINCT stock_no
@@ -145,6 +153,7 @@
         WHERE student_id = #{studentId}
           AND order_state = 'MATCHED'
     </select>
+
     <!-- 특정 보유 주식 수익금 조회 -->
     <select id="getStockProfit" parameterType="Map" resultType="int">
         SELECT COALESCE(
@@ -189,19 +198,23 @@
           AND o.order_state = 'MATCHED'
         GROUP BY o.stock_no
     </select>
+
     <!-- 내 주문 요청 조회 -->
     <select id="getTotalMyOrder" parameterType="Map" resultType="com.school.schoolstock.domain.student.dto.response.MyOrderResponse">
         SELECT order_no AS "orderNo", order_content AS "orderContent", order_point AS "orderPoint", amount AS "amount", order_date AS "orderDate", order_state AS "orderState" FROM orders
         WHERE student_id = #{studentId} AND stock_no = #{stockNo} AND order_state ='PENDING' ORDER BY order_date ASC
     </select>
+
     <!-- 보유 포인트 증가 -->
     <update id="setStudentPointUp" parameterType="Map">
         UPDATE students SET total_point = total_point + #{totalPoint} WHERE student_id = #{studentId}
     </update>
+
     <!-- 보유 포인트 차감 -->
     <update id="setStudentPointDown" parameterType="Map">
         UPDATE students SET total_point = total_point - #{totalPoint} WHERE student_id = #{studentId}
     </update>
+
     <!-- 내 포인트 내역 정보 조회(쿠폰, 지급, 주식) -->
     <select id="getMyPointHistoryList" parameterType="String" resultType="com.school.schoolstock.domain.student.dto.response.MyPointHistoryResponse">
         SELECT cp.purchase_date          AS history_date,
@@ -244,21 +257,32 @@
 
         ORDER BY history_date DESC
     </select>
+
     <!-- 학생 포인트 차감 및 보유쿠폰 수량 증가 -->
     <update id="setStudentAssets" parameterType="Map">
         UPDATE students SET total_point = total_point - #{point}, total_coupon = total_coupon + 1
         WHERE student_id = #{studentId} AND total_point >= #{point}
     </update>
+
     <!-- 보유 쿠폰 정보 조회 -->
     <select id="getMyCouponList" parameterType="com.school.schoolstock.domain.student.dto.response.MyCouponResponse">
-        SELECT name, purchase_point FROM coupon_purchase WHERE purchase_state = 'NOT_USED' AND student_id = #{studentId}
+        SELECT
+            coupon_purchase_no AS couponPurchaseNo,
+            name,
+            purchase_point AS purchasePoint,
+            purchase_state AS purchaseState
+        FROM coupon_purchase
+        WHERE purchase_state = 'NOT_USED'
+          AND student_id = #{studentId}
     </select>
+
     <!-- 학생 기본정보 조회 (사이드바 용) -->
     <select id="getStudentInfo" parameterType="String" resultType="com.school.schoolstock.domain.student.dto.response.StudentInfoResponse">
         SELECT name, grade, class_name, student_number, total_point
         FROM students
         WHERE student_id = #{studentId}
     </select>
+
     <!-- 같은 학년 같은 반 반번호 중복조회 (회원가입) -->
     <select id="existsClassNumber" parameterType="com.school.schoolstock.domain.student.vo.Students" resultType="boolean">
         SELECT COUNT(*) > 0

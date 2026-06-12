@@ -93,4 +93,24 @@ public class TeacherServiceImpl implements TeacherService {
         return "쿠폰이 정상적으로 삭제되었습니다.";
     }
 
+    // 특정 학생의 보유 쿠폰 상태 '사용'으로 수정
+    @Transactional
+    @Override
+    public CouponUseResult updateStudentCouponUsed(String teacherId, int studentNumber, int couponPurchaseNo) {
+
+        String studentId = teacherRepository.getStudentIdInClass(teacherId, studentNumber);
+
+        if (studentId == null) {
+            return CouponUseResult.STUDENT_NOT_IN_CLASS;
+        }
+
+        int result = teacherRepository.updateStudentCouponUsed(studentId, couponPurchaseNo);
+
+        if (result == 0) {
+            return CouponUseResult.COUPON_USE_FAILED;
+        }
+
+        return CouponUseResult.SUCCESS;
+    }
+
 }

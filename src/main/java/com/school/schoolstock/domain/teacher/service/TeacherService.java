@@ -24,4 +24,7 @@ public interface TeacherService {
     // 쿠폰 상점의 쿠폰을 삭제
     String deleteCoupon(int couponNo);
 
+    // 특정 학생의 보유 쿠폰 사용 처리
+    CouponUseResult updateStudentCouponUsed(String teacherId, int studentNumber, int couponPurchaseNo);
+
 }

@@ -3,7 +3,6 @@ package com.school.schoolstock.domain.teacher.repository;
 import com.school.schoolstock.domain.teacher.dto.response.StudentListResponse;
 import com.school.schoolstock.domain.coupon.repository.CouponRepository;
 import com.school.schoolstock.domain.coupon.vo.Coupons;
-import com.school.schoolstock.domain.teacher.dto.StudentListResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -147,6 +146,49 @@ class TeacherRepositoryTest {
 
         assertThat(result).isEqualTo(1);
         assertThat(couponRepository.getCoupon(couponNo)).isNull();
+    }
+
+    @Test
+    void updateStudentCouponUsedTest() {
+        // YES
+        String studentId = "111";
+        int couponPurchaseNo = 20;
+
+        int result = teacherRepository.updateStudentCouponUsed(studentId, couponPurchaseNo);
+
+        assertThat(result).isEqualTo(1);
+
+        log.info("쿠폰 사용 처리 결과 = {}", result);
+
+
+        // NO
+        // coupon_purchase_no는 존재하지만, student_id가 다르면 수정되지 않음
+        String wrongStudentId = "222";
+        int wrongResult = teacherRepository.updateStudentCouponUsed(wrongStudentId, couponPurchaseNo);
+
+        assertThat(wrongResult).isEqualTo(0);
+
+        log.info("다른 학생 아이디로 쿠폰 사용 처리 결과 = {}", wrongResult);
+
+
+        // NO
+        // 이미 USED 상태가 된 쿠폰은 다시 사용 처리되지 않음
+        int alreadyUsedResult = teacherRepository.updateStudentCouponUsed(studentId, couponPurchaseNo);
+
+        assertThat(alreadyUsedResult).isEqualTo(0);
+
+        log.info("이미 사용된 쿠폰 재사용 처리 결과 = {}", alreadyUsedResult);
+
+
+        // NO
+        // 존재하지 않는 쿠폰 구매 번호는 수정되지 않음
+        int notExistsCouponPurchaseNo = 99999;
+
+        int notExistsResult = teacherRepository.updateStudentCouponUsed(studentId, notExistsCouponPurchaseNo);
+
+        assertThat(notExistsResult).isEqualTo(0);
+
+        log.info("존재하지 않는 쿠폰 구매 번호 사용 처리 결과 = {}", notExistsResult);
     }
     
 }

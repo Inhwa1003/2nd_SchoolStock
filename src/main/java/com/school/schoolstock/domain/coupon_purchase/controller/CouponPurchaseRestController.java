@@ -1,6 +1,6 @@
 package com.school.schoolstock.domain.coupon_purchase.controller;
 
-import com.school.schoolstock.domain.coupon_purchase.dto.CouponPurchaseRequest;
+import com.school.schoolstock.domain.coupon_purchase.dto.request.UpdateCouponStateRequest;
 import com.school.schoolstock.domain.coupon_purchase.service.CouponPurchaseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +19,7 @@ public class CouponPurchaseRestController {
 
     @PostMapping
     public ResponseEntity<Map<String, Object>> buyCoupon(
-            @RequestBody CouponPurchaseRequest request,
+            @RequestBody UpdateCouponStateRequest request,
             Authentication authentication) {
 
         if (authentication == null || !authentication.isAuthenticated()) {

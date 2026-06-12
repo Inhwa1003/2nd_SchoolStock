@@ -62,8 +62,7 @@ async function updateCouponFromButton(button) {
             button.style.display = "none";
         }
 
-    } catch (error) {
-        console.error(error);
+    } catch {
         alert("쿠폰 수정 중 오류가 발생했습니다.");
     }
 }
@@ -102,7 +101,6 @@ async function deleteCouponFromButton(button) {
         }
 
     } catch (error) {
-        console.error(error);
         alert("쿠폰 삭제 중 오류가 발생했습니다.");
     }
 }

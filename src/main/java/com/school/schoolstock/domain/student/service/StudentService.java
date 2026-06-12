@@ -22,7 +22,7 @@ public interface StudentService {
     List<MyOrderResponse> getMyOrder(String studentId, int stockNo);
 
     //보유 쿠폰 정보 조회
-    List<MyCouponResponse> getMyCoupon(String studentId);
+    List<MyCouponResponse> getMyCouponList(String studentId);
 
     //학생 기본정보 조회 (사이드바 용)
     StudentInfoResponse getStudentInfo(String studentId);
