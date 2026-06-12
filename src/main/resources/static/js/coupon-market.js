@@ -17,7 +17,7 @@ async function buyCoupon(couponNo, couponName, couponPrice) {
 
         const result = await response.json();
         alert(result.message);
-        if (response.ok) location.reload();   // 성공 → 새로고침 → 사이드바 포인트도 갱신
+        if (response.ok) location.reload();   // 성공 -> 새로고침 -> 사이드바 포인트도 갱신
     } catch (error) {
         alert("쿠폰 구매 요청 중 오류가 발생했습니다.");
     }

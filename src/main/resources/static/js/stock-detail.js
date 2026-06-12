@@ -54,9 +54,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const myOrderBody = document.getElementById("myOrderListBody");
     if (myOrderBody) {
         myOrderBody.addEventListener("click", function (e) {
-            const btn = e.target.closest(".cancel-btn");  // 취소버튼(또는 그 안쪽) 클릭인지
-            if (!btn) return;                              // 아니면 무시
-            cancelMyOrder(btn.dataset.orderNo);            // data-order-no 값 넘김
+            const btn = e.target.closest(".cancel-btn");
+            if (!btn) return;
+            cancelMyOrder(btn.dataset.orderNo);
         });
     }
 
@@ -65,7 +65,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 /**
  * 매수/매도 주문 목록 조회
- * @param orderType buy 또는 sell
  */
 async function loadOrderList(orderType) {
     const orderListBody = document.getElementById("orderListBody");
@@ -257,7 +256,7 @@ async function refreshPrice() {
 }
 
 /**
- * 내 요청 주문 조회 → #myOrderListBody 채우기
+ * 내 요청 주문 조회
  */
 async function loadMyOrderList() {
     const body = document.getElementById("myOrderListBody");
@@ -337,7 +336,7 @@ function stopPricePolling() {
     priceTimer = null;
 }
 
-// 탭 보임/숨김에 따라 폴링 on/off
+// 탭 보임/숨김에 따라 on/off
 document.addEventListener("visibilitychange", function () {
     if (document.hidden) {
         stopPricePolling();                          // 숨겨지면 멈춤
