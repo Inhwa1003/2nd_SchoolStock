@@ -44,6 +44,8 @@ public class TeacherController {
 
         String studentId = teacherService.getStudentIdInClass(userDetails.getUsername(), studentNumber);
 
+        model.addAttribute("couponHref",
+                "/schoolstock/t/me/teachers/my-students/" + studentNumber + "/coupons");
         model.addAttribute("targetStudentNumber", studentNumber);
         model.addAttribute("assetsRefreshUrl",
                 "/schoolstock/t/me/teachers/my-students/" + studentNumber + "/assets/stocks");
@@ -59,7 +61,7 @@ public class TeacherController {
         List<Coupons> couponList = couponService.getCouponList();
         model.addAttribute("couponList", couponList);
 
-        return "teacherCouponMarket";
+        return "couponMarket";
     }
 
     // 학생 보유 쿠폰 확인 화면
@@ -67,8 +69,8 @@ public class TeacherController {
     public String getStudentCoupons(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable int studentNumber,
-            Model model
-    ){
+            Model model){
+
         String studentId = teacherService.getStudentIdInClass(
                 userDetails.getUsername(),
                 studentNumber
@@ -76,11 +78,11 @@ public class TeacherController {
 
         StudentInfoResponse studentName = studentService.getStudentInfo(studentId);
 
-        model.addAttribute("studentNumber", studentNumber);
-        model.addAttribute("studentName", studentName.getName());
-        model.addAttribute("couponList", studentService.getMyCouponList(studentId));
+        model.addAttribute("coupons", studentService.getMyCouponList(studentId));
+        model.addAttribute("couponTitle", studentName.getName() + "의 보유 쿠폰");
+        model.addAttribute("targetStudentNumber", studentNumber);
 
-        return "teacherStudentMyCoupon";
+        return "myCoupons";
     }
 
 
