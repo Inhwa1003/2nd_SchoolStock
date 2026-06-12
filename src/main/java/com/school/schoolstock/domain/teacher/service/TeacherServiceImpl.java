@@ -1,6 +1,8 @@
 package com.school.schoolstock.domain.teacher.service;
 
+import com.school.schoolstock.domain.coupon.dto.CouponUpdateRequest;
 import com.school.schoolstock.domain.student.repository.StudentRepository;
+import com.school.schoolstock.domain.teacher.dto.request.PointGrantRequest;
 import com.school.schoolstock.domain.teacher.dto.response.StudentListResponse;
 import com.school.schoolstock.domain.coupon.vo.Coupons;
 import com.school.schoolstock.domain.teacher.repository.TeacherRepository;
@@ -34,7 +36,10 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public String getStudentIdInClass(String teacherId, int studentNumber) {
-        return teacherRepository.getStudentIdInClass(teacherId, studentNumber);
+        String studentId = teacherRepository.getStudentIdInClass(teacherId, studentNumber);
+        if(studentId == null)
+            throw new BusinessException(ErrorCode.STUDENT_NOT_FOUND);
+        return studentId;
     }
 
     @Override
@@ -44,28 +49,30 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Transactional
     @Override
-    public boolean givePoint(String studentId, int point, String content) {
-        // 예외 처리 필요함 지급 안될경우
-        studentRepository.setStudentPointUp(studentId, point);
-        teacherRepository.setPointGive(studentId, point, content);
-        return true;
+    public void givePoint(String teacherId, int studentNumber, PointGrantRequest request) {
+        String studentId = getStudentIdInClass(teacherId, studentNumber);
+        studentRepository.setStudentPointUp(studentId, request.getPoints());
+        teacherRepository.setPointGive(studentId, request.getPoints(), request.getContent());
     }
     // 쿠폰 상점의 쿠폰 정보(쿠폰명, 쿠폰 포인트) 수정
     @Transactional
     @Override
-    public void setCoupon(Coupons coupon){
+    public void setCoupon(CouponUpdateRequest request){
         // 1. 쿠폰명 비어있는지 체크
-        if (coupon.getName() == null || coupon.getName().trim().isEmpty()) {
+        if (request.getName() == null || request.getName().trim().isEmpty()) {
             throw new BusinessException(ErrorCode.INVALID_INPUT);
         }
 
         // 2. 쿠폰 포인트가 0 이하인지 체크
-        if (coupon.getCouponPoint() <= 0) {
+        if (request.getCouponPoint() <= 0) {
             throw new BusinessException(ErrorCode.INVALID_INPUT);
         }
 
         // 3. 쿠폰 수정된 행이 없으면 실패
-        if (teacherRepository.setCoupon(coupon) == 0) {
+        if (teacherRepository.setCoupon(Coupons.builder()
+                .couponNo(request.getCouponNo())
+                .name(request.getName())
+                .couponPoint(request.getCouponPoint()).build()) == 0) {
             throw new BusinessException(ErrorCode.COUPON_NOT_FOUND);
         }
     }
