@@ -16,6 +16,17 @@
         ORDER BY stock_no;
     </select>
 
+    <select id="getStockManageList" resultType="com.school.schoolstock.domain.stock.vo.Stocks">
+        SELECT
+            stock_no            AS stockNo,
+            name                AS name,
+            stock_content       AS stockContent,
+            publication_balance AS publicationBalance,
+            publication_point   AS publicationPoint
+        FROM stocks
+        ORDER BY stock_no;
+    </select>
+
     <select id="getStockInfo" parameterType="int" resultType="com.school.schoolstock.domain.stock.vo.Stocks">
         SELECT
             name AS name,

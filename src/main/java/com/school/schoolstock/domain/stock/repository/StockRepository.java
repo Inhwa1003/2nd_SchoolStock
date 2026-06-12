@@ -33,4 +33,7 @@ public interface StockRepository {
 
     // 발행 정보 조회
     Stocks getStockPubInfo(int stockNo);
+
+    // 선생님 주식 관리 목록(발행정보 포함)
+    List<Stocks> getStockManageList();
 }

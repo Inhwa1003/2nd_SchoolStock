@@ -2,6 +2,8 @@ package com.school.schoolstock.domain.teacher.controller;
 
 import com.school.schoolstock.domain.coupon.dto.request.CouponDeleteRequest;
 import com.school.schoolstock.domain.coupon.dto.request.CouponUpdateRequest;
+import com.school.schoolstock.domain.stock.dto.response.StockManageResponse;
+import com.school.schoolstock.domain.stock.service.StockService;
 import com.school.schoolstock.domain.student.dto.response.MyAssetResponse;
 import com.school.schoolstock.domain.student.service.StudentService;
 import com.school.schoolstock.domain.teacher.dto.request.PointGrantRequest;
@@ -14,6 +16,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 
 
 @RequiredArgsConstructor
@@ -22,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 public class TeacherRestController {
     private final TeacherService teacherService;
     private final StudentService studentService;
+    private final StockService stockService;
 
     @GetMapping("/me/teachers/my-students/{studentNumber}/assets/stocks")
     public MyAssetResponse getMyStudentAssets(
@@ -73,4 +77,9 @@ public class TeacherRestController {
         teacherService.setStock(request);
         return ApiResponse.of(200, "주식이 등록되었습니다.", null);
     }
-}
+
+    // 선생님 주식 목록 실시간 시세 Interval
+    @GetMapping("/stocks/prices")
+    public List<StockManageResponse> getStockPrices() {
+        return stockService.getManageStockList();
+    }}

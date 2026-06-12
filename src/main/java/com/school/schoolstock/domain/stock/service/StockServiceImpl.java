@@ -2,6 +2,7 @@ package com.school.schoolstock.domain.stock.service;
 
 import com.school.schoolstock.domain.stock.dto.response.StockDetailPageResponse;
 import com.school.schoolstock.domain.stock.dto.response.StockListPageResponse;
+import com.school.schoolstock.domain.stock.dto.response.StockManageResponse;
 import com.school.schoolstock.domain.stock.dto.response.StockPriceResponse;
 import com.school.schoolstock.domain.stock.repository.StockRepository;
 import com.school.schoolstock.domain.stock.vo.Stocks;
@@ -83,6 +84,24 @@ public class StockServiceImpl implements StockService {
                 .prevPoint(stockRepository.getPrevPoint(stockNo))
                 .priceChange(price.getPriceChange())
                 .changeRate(price.getChangeRate()).build();
+    }
+    @Transactional(readOnly = true)
+    @Override
+    public List<StockManageResponse> getManageStockList() {
+        List<StockManageResponse> result = new ArrayList<>();
+        for (Stocks stock : stockRepository.getStockManageList()) {
+            StockPriceResponse price = getStockPriceInfo(stock.getStockNo());
+            result.add(StockManageResponse.builder()
+                    .stockNo(stock.getStockNo())
+                    .name(stock.getName())
+                    .nowPoint(price.getNowPoint())
+                    .priceChange(price.getPriceChange())
+                    .changeRate(price.getChangeRate())
+                    .stockContent(stock.getStockContent())
+                    .publicationBalance(stock.getPublicationBalance())
+                    .publicationPoint(stock.getPublicationPoint()).build());
+        }
+        return result;
     }
 
 }

@@ -91,7 +91,7 @@ TeacherController {
     // 선생님이 주식 목록 + 등록 폼 화면 보기
     @GetMapping("/stocks")
     public String getStockList(Model model){
-        model.addAttribute("stockList", stockService.getStockList());
+        model.addAttribute("stockList", stockService.getManageStockList());
         return "stockList";
     }
 
