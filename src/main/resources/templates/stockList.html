@@ -1,12 +1,14 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
   <meta charset="UTF-8">
   <title>주식 목록</title>
 
+  <meta name="_csrf"        th:content="${_csrf.token}">
+  <meta name="_csrf_header" th:content="${_csrf.headerName}">
+
   <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
-
   <link rel="stylesheet" th:href="@{/css/Common.css}">
   <link rel="stylesheet" th:href="@{/css/StockList.css}">
   <link rel="stylesheet" th:href="@{/css/SideBar.css}">
@@ -22,8 +24,16 @@
     </header>
 
     <div class="main">
-      <div class="panel">
+      <div class="panel" sec:authorize="hasRole('TEACHER')" style="margin-bottom:16px;">
+        <h3>새 주식 등록</h3>
+        <input type="text"   id="stockName"        placeholder="주식명">
+        <input type="text"   id="stockContent"     placeholder="주식 설명">
+        <input type="number" id="publicationBalance" placeholder="발행 수량">
+        <input type="number" id="publicationPoint"   placeholder="발행가(P)">
+        <button type="button" onclick="addStock()">등록</button>
+      </div>
 
+      <div class="panel">
         <table class="stock-table">
           <thead>
           <tr>
@@ -77,5 +87,6 @@
 </div>
 
 <script th:src="@{/js/stock-list.js}"></script>
+<script th:src="@{/js/stock-teacher.js}"></script>
 </body>
 </html>
