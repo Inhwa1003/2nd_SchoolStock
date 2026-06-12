@@ -34,8 +34,4 @@ public class UserController {
         }
         return "redirect:/schoolstock/add-member-view";
     }
-    @GetMapping("/schoolstock/t/main")
-    public String teacherMainView(){
-        return "teacherMain";
-    }
 }
