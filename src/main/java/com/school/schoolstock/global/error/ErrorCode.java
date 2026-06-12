@@ -16,7 +16,11 @@ public enum ErrorCode {
     ORDER_NOT_CANCELABLE(HttpStatus.CONFLICT, "취소할 수 없는 주문입니다."),
     COUPON_LIMIT_EXCEEDED(HttpStatus.CONFLICT, "보유 쿠폰 한도(3개)를 초과했습니다."),
     COUPON_NOT_FOUND(HttpStatus.NOT_FOUND, "쿠폰을 찾을 수 없습니다."),
-    STUDENT_NOT_FOUND(HttpStatus.NOT_FOUND, "학생을 찾을 수 없습니다.");
+    STUDENT_NOT_FOUND(HttpStatus.NOT_FOUND, "학생을 찾을 수 없습니다."),
+    COUPON_USE_FAILED(HttpStatus.BAD_REQUEST, "쿠폰 사용 처리에 실패했습니다."),
+
+    COUPON_USE_SUCCESS(HttpStatus.OK, "쿠폰이 사용 처리되었습니다."),
+    STUDENT_NOT_IN_CLASS(HttpStatus.FORBIDDEN, "담당 학생의 쿠폰만 사용할 수 있습니다.");
 
     private final HttpStatus status;
     private final String message;
