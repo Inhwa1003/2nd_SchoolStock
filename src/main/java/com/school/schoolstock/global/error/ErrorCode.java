@@ -15,7 +15,8 @@ public enum ErrorCode {
     ORDER_PRICE_TOO_LOW(HttpStatus.CONFLICT, "현재가격 이상으로만 매수 주문이 가능합니다."),
     ORDER_NOT_CANCELABLE(HttpStatus.CONFLICT, "취소할 수 없는 주문입니다."),
     COUPON_LIMIT_EXCEEDED(HttpStatus.CONFLICT, "보유 쿠폰 한도(3개)를 초과했습니다."),
-    COUPON_NOT_FOUND(HttpStatus.NOT_FOUND, "쿠폰을 찾을 수 없습니다.");
+    COUPON_NOT_FOUND(HttpStatus.NOT_FOUND, "쿠폰을 찾을 수 없습니다."),
+    STUDENT_NOT_FOUND(HttpStatus.NOT_FOUND, "학생을 찾을 수 없습니다.");
 
     private final HttpStatus status;
     private final String message;
