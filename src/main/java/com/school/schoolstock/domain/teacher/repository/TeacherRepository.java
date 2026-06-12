@@ -1,5 +1,6 @@
 package com.school.schoolstock.domain.teacher.repository;
 
+import com.school.schoolstock.domain.stock.vo.Stocks;
 import com.school.schoolstock.domain.teacher.dto.response.StudentListResponse;
 import com.school.schoolstock.domain.coupon.vo.Coupons;
 import org.apache.ibatis.annotations.Mapper;
@@ -32,4 +33,7 @@ public interface TeacherRepository {
 
     // 특정 학생의 보유 쿠폰 '사용'으로 변경
     int updateStudentCouponUsed(String studentId, int couponPurchaseNo);
+
+    // 선생님이 새 주식 등록
+    int setStocks(Stocks stock);
 }
