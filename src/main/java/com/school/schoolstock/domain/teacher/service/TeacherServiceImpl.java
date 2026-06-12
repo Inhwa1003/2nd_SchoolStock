@@ -1,8 +1,9 @@
 package com.school.schoolstock.domain.teacher.service;
 
-import com.school.schoolstock.domain.coupon.dto.CouponUpdateRequest;
+import com.school.schoolstock.domain.coupon.dto.request.CouponUpdateRequest;
 import com.school.schoolstock.domain.student.repository.StudentRepository;
 import com.school.schoolstock.domain.teacher.dto.request.PointGrantRequest;
+import com.school.schoolstock.domain.teacher.dto.request.UpdateStudentCouponUsedRequest;
 import com.school.schoolstock.domain.teacher.dto.response.StudentListResponse;
 import com.school.schoolstock.domain.coupon.vo.Coupons;
 import com.school.schoolstock.domain.teacher.repository.TeacherRepository;
@@ -87,8 +88,28 @@ public class TeacherServiceImpl implements TeacherService {
             throw new BusinessException(ErrorCode.INVALID_INPUT);
 
         // 삭제된 행이 없으면 쿠폰 번호가 없는 것
-        if(teacherRepository.deleteCoupon(couponNo) == 0);
+        if(teacherRepository.deleteCoupon(couponNo) == 0)
             throw new BusinessException(ErrorCode.COUPON_NOT_FOUND);
+    }
+
+    // 특정 학생의 보유 쿠폰 상태 '사용'으로 수정
+    @Transactional
+    @Override
+    public CouponUseResult updateStudentCouponUsed(String teacherId, int studentNumber, int couponPurchaseNo) {
+
+        String studentId = teacherRepository.getStudentIdInClass(teacherId, studentNumber);
+
+        if (studentId == null) {
+            return CouponUseResult.STUDENT_NOT_IN_CLASS;
+        }
+
+        int result = teacherRepository.updateStudentCouponUsed(studentId, couponPurchaseNo);
+
+        if (result == 0) {
+            return CouponUseResult.COUPON_USE_FAILED;
+        }
+
+        return CouponUseResult.SUCCESS;
     }
 
 }

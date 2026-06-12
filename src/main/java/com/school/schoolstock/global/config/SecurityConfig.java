@@ -24,6 +24,9 @@ public class SecurityConfig {
 //        http.csrf(csrf -> csrf
 //                .ignoringRequestMatchers("/schoolstock/s/me/coupon-purchases")
 //        );
+//        http.csrf(csrf -> csrf
+//                .ignoringRequestMatchers("/schoolstock/t/me/teachers/my-students/*/coupons")
+//        );
 
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers(

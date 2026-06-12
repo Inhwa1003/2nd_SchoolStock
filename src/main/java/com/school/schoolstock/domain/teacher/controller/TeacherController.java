@@ -1,5 +1,6 @@
 package com.school.schoolstock.domain.teacher.controller;
 
+import com.school.schoolstock.domain.student.dto.response.StudentInfoResponse;
 import com.school.schoolstock.domain.student.service.StudentService;
 import com.school.schoolstock.domain.coupon.service.CouponService;
 import com.school.schoolstock.domain.coupon.vo.Coupons;
@@ -60,4 +61,27 @@ public class TeacherController {
 
         return "teacherCouponMarket";
     }
+
+    // 학생 보유 쿠폰 확인 화면
+    @GetMapping("/me/teachers/my-students/{studentNumber}/coupons")
+    public String getStudentCoupons(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable int studentNumber,
+            Model model
+    ){
+        String studentId = teacherService.getStudentIdInClass(
+                userDetails.getUsername(),
+                studentNumber
+        );
+
+        StudentInfoResponse studentName = studentService.getStudentInfo(studentId);
+
+        model.addAttribute("studentNumber", studentNumber);
+        model.addAttribute("studentName", studentName.getName());
+        model.addAttribute("couponList", studentService.getMyCouponList(studentId));
+
+        return "teacherStudentMyCoupon";
+    }
+
+
 }

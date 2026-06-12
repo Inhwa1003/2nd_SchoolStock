@@ -1,4 +1,4 @@
-package com.school.schoolstock.domain.coupon.dto;
+package com.school.schoolstock.domain.coupon.dto.response;
 
 import lombok.*;
 
