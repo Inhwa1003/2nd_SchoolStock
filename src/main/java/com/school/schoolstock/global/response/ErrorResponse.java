@@ -1,4 +1,4 @@
-package com.school.schoolstock.global.error;
+package com.school.schoolstock.global.response;
 
 import lombok.Builder;
 import lombok.Getter;
