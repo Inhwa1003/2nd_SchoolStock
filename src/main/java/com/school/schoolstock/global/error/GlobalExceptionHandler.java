@@ -1,5 +1,6 @@
 package com.school.schoolstock.global.error;
 
+import com.school.schoolstock.global.response.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
