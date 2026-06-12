@@ -1,3 +1,19 @@
+document.addEventListener("DOMContentLoaded", function () {
+    // 등록 버튼
+    const addBtn = document.getElementById("addStockBtn");
+    if (addBtn) addBtn.addEventListener("click", addStock);
+
+    // 음수 방지
+    ["publicationBalance", "publicationPoint"].forEach(function (id) {
+        const input = document.getElementById(id);
+        if (input) {
+            input.addEventListener("input", function () {
+                this.value = this.value.replace(/[^0-9]/g, "");
+            });
+        }
+    });
+});
+
 async function addStock() {
     const name    = document.getElementById("stockName").value;
     const content = document.getElementById("stockContent").value;

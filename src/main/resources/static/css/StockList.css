@@ -38,4 +38,15 @@
     background-color: #fafafa;
 }
 
+.stock-table th:nth-child(8),
+.stock-table td:nth-child(8) {
+    width: 400px;
+    min-width: 400px;
+    white-space: normal;     /* 줄바꿈 허용 */
+    word-break: keep-all;    /* 한국어를 음절이 아닌 '단어' 단위로 줄바꿈 */
+    text-align: center;
+    vertical-align: middle;
+    padding: 12px 20px;
+}
+
 /* 등락률 색상은 Common.css의 .up, .down 사용 */

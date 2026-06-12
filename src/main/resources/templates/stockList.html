@@ -24,13 +24,13 @@
     </header>
 
     <div class="main">
-      <div class="panel" sec:authorize="hasRole('TEACHER')" style="margin-bottom:16px;">
+      <div class="panel stock-register" sec:authorize="hasRole('TEACHER')">
         <h3>새 주식 등록</h3>
-        <input type="text"   id="stockName"        placeholder="주식명">
-        <input type="text"   id="stockContent"     placeholder="주식 설명">
-        <input type="number" id="publicationBalance" placeholder="발행 수량">
-        <input type="number" id="publicationPoint"   placeholder="발행가(P)">
-        <button type="button" onclick="addStock()">등록</button>
+        <input type="text"   id="stockName"          placeholder="주식명">
+        <input type="text"   id="stockContent"       placeholder="주식 설명">
+        <input type="number" id="publicationBalance" placeholder="발행 수량" min="1">
+        <input type="number" id="publicationPoint"   placeholder="발행가(P)" min="100">
+        <button type="button" id="addStockBtn">등록</button>
       </div>
 
       <div class="panel">
@@ -42,13 +42,16 @@
             <th>이전가격</th>
             <th>(현재가격-이전가격)</th>
             <th>등락률(%)</th>
+            <th sec:authorize="hasRole('TEACHER')">발행가</th>
+            <th sec:authorize="hasRole('TEACHER')">발행 수량</th>
+            <th sec:authorize="hasRole('TEACHER')">설명</th>
           </tr>
           </thead>
 
           <tbody>
           <!-- 주식 목록이 비어 있을 때 -->
           <tr th:if="${#lists.isEmpty(stockList)}">
-            <td colspan="5">등록된 주식이 없습니다.</td>
+            <td colspan="8">등록된 주식이 없습니다.</td>
           </tr>
 
           <!-- 주식 목록 출력 -->
@@ -64,17 +67,26 @@
             <td class="prev-price"
                 th:text="${(stock.nowPoint - stock.priceChange) + 'P'}">이전가격</td>
 
-            <td th:classappend="${stock.priceChange >= 0} ? ' up' : ' down'"
+            <td th:classappend="${stock.priceChange > 0 ? ' up' : (stock.priceChange < 0 ? ' down' : ' flat')}"
                 class="price-change"
-                th:text="${stock.priceChange >= 0 ? '+' + stock.priceChange + 'P' : stock.priceChange + 'P'}">
+                th:text="${stock.priceChange > 0 ? '+' + stock.priceChange + 'P' : stock.priceChange + 'P'}">
               가격변동
             </td>
 
-            <td th:classappend="${stock.changeRate >= 0} ? ' up' : ' down'"
+            <td th:classappend="${stock.changeRate > 0 ? ' up' : (stock.changeRate < 0 ? ' down' : ' flat')}"
                 class="change-rate"
-                th:text="${stock.changeRate >= 0 ? '+' + #numbers.formatDecimal(stock.changeRate, 1, 2) + '%' : #numbers.formatDecimal(stock.changeRate, 1, 2) + '%'}">
+                th:text="${stock.changeRate > 0
+            ? '+' + #numbers.formatDecimal(stock.changeRate, 1, 2) + '%'
+            : (stock.changeRate < 0
+                ? #numbers.formatDecimal(stock.changeRate, 1, 2) + '%'
+                : '0%')}">
               등락률
             </td>
+
+            <!-- 선생님 전용 발행 정보 -->
+            <td sec:authorize="hasRole('TEACHER')" th:text="${stock.publicationPoint + 'P'}">발행가</td>
+            <td sec:authorize="hasRole('TEACHER')" th:text="${stock.publicationBalance}">발행수량</td>
+            <td sec:authorize="hasRole('TEACHER')" th:text="${stock.stockContent}">설명</td>
           </tr>
           </tbody>
         </table>
