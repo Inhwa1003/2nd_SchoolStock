@@ -3,6 +3,7 @@ package com.school.schoolstock.domain.student.service;
 import com.school.schoolstock.domain.order.repository.OrderRepository;
 import com.school.schoolstock.domain.student.dto.response.MyAssetResponse;
 import com.school.schoolstock.domain.order.dto.response.OrderCancelPointResponse;
+import com.school.schoolstock.global.error.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.binding.BindingException;
 import org.junit.jupiter.api.Assertions;
@@ -96,17 +97,15 @@ public class StudentServiceTest {
         log.info("환불 예정 포인트: {}", refundPoint);
 
         // 주문 취소
-        boolean result = studentService.setMyOrderCancel(orderNo);
+        studentService.setMyOrderCancel(orderNo);
 
         int afterPoint = studentService.getMyAsset(studentId).getMyPoint();
 
-        log.info("취소 결과: {}", result);
         log.info("취소 후 보유 포인트: {}", afterPoint);
 
-        Assertions.assertTrue(result);
         Assertions.assertEquals(beforePoint + refundPoint, afterPoint);
 
-        // NO — 없는 주문번호 → false
-        Assertions.assertFalse(studentService.setMyOrderCancel(999999));
+        // NO — 없는 주문번호 → false Exception 대체
+        Assertions.assertThrows(BusinessException.class, () -> studentService.setMyOrderCancel(999999));
     }
 }
