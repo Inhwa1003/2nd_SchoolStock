@@ -3,7 +3,6 @@ package com.school.schoolstock.domain.teacher.repository;
 import com.school.schoolstock.domain.teacher.dto.response.StudentListResponse;
 import com.school.schoolstock.domain.coupon.repository.CouponRepository;
 import com.school.schoolstock.domain.coupon.vo.Coupons;
-import com.school.schoolstock.domain.teacher.dto.StudentListResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -14,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @Transactional
 @Slf4j
@@ -92,6 +90,7 @@ class TeacherRepositoryTest {
 
         log.info("get_point INSERT 결과 : " + teacherRepository.setPointGive("abc", 5000, "테스트 지급"));
     }
+    @Test
     void setCouponTest() {
         // 성공 케이스
         int couponNo = 3;
