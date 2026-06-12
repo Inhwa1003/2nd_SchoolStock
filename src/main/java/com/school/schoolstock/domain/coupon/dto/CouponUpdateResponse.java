@@ -1,10 +1,12 @@
 package com.school.schoolstock.domain.coupon.dto;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Getter
+@AllArgsConstructor
 @NoArgsConstructor
+@Setter
+@Getter
+@Builder
 public class CouponUpdateResponse {
 
     private int couponNo;
