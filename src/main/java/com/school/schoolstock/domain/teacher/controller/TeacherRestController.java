@@ -5,6 +5,7 @@ import com.school.schoolstock.domain.coupon.dto.request.CouponUpdateRequest;
 import com.school.schoolstock.domain.student.dto.response.MyAssetResponse;
 import com.school.schoolstock.domain.student.service.StudentService;
 import com.school.schoolstock.domain.teacher.dto.request.PointGrantRequest;
+import com.school.schoolstock.domain.teacher.dto.request.StockCreateRequest;
 import com.school.schoolstock.domain.teacher.dto.request.UpdateStudentCouponUsedRequest;
 import com.school.schoolstock.domain.teacher.service.TeacherService;
 import com.school.schoolstock.global.response.ApiResponse;
@@ -64,5 +65,12 @@ public class TeacherRestController {
 
         teacherService.updateStudentCouponUsed(userDetails.getUsername(), studentNumber, request.getCouponPurchaseNo());
         return ApiResponse.of(200, "쿠폰이 사용 처리되었습니다.", null);
+    }
+
+    // 선생님이 새 주식 등록
+    @PostMapping("/stocks")
+    public ApiResponse addStock(@RequestBody StockCreateRequest request) {
+        teacherService.setStock(request);
+        return ApiResponse.of(200, "주식이 등록되었습니다.", null);
     }
 }
