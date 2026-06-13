@@ -17,7 +17,7 @@
         <h2 class="user-name" id="studentName" th:text="${info.name}">이름</h2>
 
         <th:block sec:authorize="hasRole('STUDENT')">
-            <p id="studentClassInfo" id="studentClassInfo">
+            <p id="studentClassInfo">
                 <span th:text="${info.grade}">1</span>학년
                 <span th:text="${info.className}">A</span>반
                 <span th:text="${info.studentNumber}">1</span>번
@@ -41,16 +41,16 @@
         <th:block sec:authorize="hasRole('STUDENT')">
             <a class="menu-button" th:classappend="${active == 'assets'}  ? 'active'"
                th:href="@{/schoolstock/s/me/students/assets}">
-                <span class = "menu-icon">◔</span>
+                <span class = "menu-icon">💰</span>
                 <span class = "menu-text">내 자산</span>
-                <span class="menu-arrow"></span>
+                <span class="menu-arrow">›</span>
             </a>
 
             <a class="menu-button" th:classappend="${active == 'stocks'}  ? 'active'"
                th:href="@{/schoolstock/s/stocks}">
                 <span class = "menu-icon">📈</span>
                 <span class = "menu-text">주식 목록</span>
-                <span class="menu-arrow"></span>
+                <span class="menu-arrow">›</span>
             </a>
 
             <a class="menu-button" th:classappend="${active == 'news'}    ? 'active'"
