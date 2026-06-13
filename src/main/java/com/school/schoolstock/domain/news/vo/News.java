@@ -1,15 +1,12 @@
 package com.school.schoolstock.domain.news.vo;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
-@Getter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @ToString
-
+@Setter
+@Getter
 public class News {
     private int newsNo;
     private String newsContext;
