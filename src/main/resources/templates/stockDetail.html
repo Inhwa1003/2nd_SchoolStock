@@ -31,17 +31,22 @@
     <div class="content">
 
         <header class="hd stock-detail-header">
-            <input id="backBtn"
-                   class="back-btn"
-                   type="button"
-                   value="← 뒤로"/>
         </header>
 
         <section class="stock stock-summary-card">
 
             <div class="stock-info">
+                <div class="stock-title-row">
+                    <input id="backBtn"
+                           class="back-btn"
+                           type="button"
+                           value="← 뒤로"/>
+                <div class="stock-text-group">
                 <h2 th:text="${stockDetail.name}">주식명</h2>
-                <p th:text="${stockDetail.stockContent}">주식 설명</p>
+                    <p th:text="${stockDetail.stockContent}">주식 설명</p>
+                </div>
+
+            </div>
             </div>
 
             <div class="stock-price"

@@ -14,39 +14,59 @@
 
 <body>
 <div class="app">
+
     <div class="content">
 
         <header class="hd">
             <div class="hd-name">오늘의 뉴스</div>
         </header>
 
-        <div class="main">
-            <div class="news-grid-container" id="newsGrid">
+        <main class="main news-main">
 
-                <div class="news-card-item"
-                     th:each="news, status : ${newsList}">
+            <section class="news-section">
 
-                    <div class="card-side-deco"
-                         th:classappend="' color-' + (${status.index} % 5)">
+                <div class="news-grid-container" id="newsGrid">
+
+                    <article class="news-card-item"
+                             th:each="news, status : ${newsList}">
+
+                        <div class="card-side-deco"
+                             th:classappend="' color-' + (${status.index} % 5)">
+                        </div>
+
+                        <div class="news-icon-box">
+                            <span th:if="${status.index % 2 == 0}">📰</span>
+                            <span th:if="${status.index % 2 != 0}">📢</span>
+                        </div>
+
+                        <div class="card-body-content">
+                            <p class="news-text-main"
+                               th:text="${news}">
+                                뉴스 내용
+                            </p>
+                        </div>
+
+                    </article>
+
+                    <div class="empty-news-message"
+                         th:if="${newsList == null or #lists.isEmpty(newsList)}">
+
+                        <div class="empty-news-icon">📰</div>
+                        <p>현재 등록된 새로운 소식이 없습니다.</p>
+                        <span>새로운 뉴스가 등록되면 이곳에 표시됩니다.</span>
+
                     </div>
 
-                    <div class="card-body-content">
-                        <p class="news-text-main"
-                           th:text="${news}">
-                            뉴스 내용
-                        </p>
-                    </div>
                 </div>
 
-                <p class="empty-news-message"
-                   th:if="${newsList == null or #lists.isEmpty(newsList)}">
-                    현재 등록된 새로운 소식이 없습니다.
-                </p>
+            </section>
 
-            </div>
-        </div>
+        </main>
+
     </div>
+
     <div th:replace="~{sideBar :: sidebar('news')}"></div>
+
 </div>
 
 <script th:src="@{/js/news.js}"></script>

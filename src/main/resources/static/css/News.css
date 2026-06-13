@@ -1,58 +1,311 @@
-@CHARSET "UTF-8";
+@charset "UTF-8";
+
 /* ========================================
-   NewsStyle.css - 뉴스 화면 전용
-   공통 스타일은 Common.css, 사이드바는 SideBar.css에서 가져옴
+   News.css - 오늘의 뉴스 화면
+   기준 디자인: 내 자산 / 주식 목록 / 쿠폰 / 사이드바 톤
 ======================================== */
 
-/* ---------- 뉴스 그리드 ---------- */
+/* 전체 콘텐츠 */
+.content {
+    min-height: 100vh;
+    box-sizing: border-box;
+    padding: 0;
+
+    background: linear-gradient(180deg, #f8fbff 0%, #f4f7fb 100%);
+}
+
+/* 상단 헤더 */
+.hd {
+    width: 100%;
+    height: 78px;
+
+    display: flex;
+    align-items: center;
+
+    padding: 0 32px;
+    box-sizing: border-box;
+
+    background: #ffffff;
+    border-bottom: 1px solid #dfe3ea;
+
+    margin: 0;
+}
+
+.hd-name {
+    margin: 0;
+
+    font-size: 34px;
+    font-weight: 850;
+    color: #111827;
+    letter-spacing: -1px;
+    line-height: 1;
+}
+
+/* 메인 */
+.main {
+    padding: 34px 36px 36px;
+    box-sizing: border-box;
+}
+
+/* 뉴스 영역 */
+.news-section {
+    width: 100%;
+}
+
 .news-grid-container {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 18px;
 }
 
-/* ---------- 가로형 뉴스 카드 ---------- */
+/* ========================================
+   뉴스 카드
+======================================== */
+
 .news-card-item {
+    position: relative;
+
     width: 100%;
+    min-height: 132px;
+    box-sizing: border-box;
+
     display: flex;
+    align-items: center;
+    gap: 24px;
+
+    padding: 24px 34px;
+
+    border: 1px solid #edf1f6;
+    border-radius: 24px;
+
     background: #ffffff;
-    border-radius: 10px;
+    box-shadow: 0 14px 32px rgba(30, 55, 90, 0.07);
+
     overflow: hidden;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-    border: 1px solid #ccc;
-    transition: all 0.2s ease;
+
+    transition: all 0.22s ease;
 }
 
 .news-card-item:hover {
-    transform: translateX(5px);
-    border-color: #4c5af7;
+    transform: translateY(-3px);
+    border-color: #cfdcff;
+    box-shadow: 0 20px 42px rgba(30, 55, 90, 0.11);
 }
 
-/* ---------- 카드 왼쪽 색상 바 ---------- */
+/* 왼쪽 포인트 라인 */
 .card-side-deco {
-    width: 10px;
-    flex-shrink: 0;
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+
+    width: 7px;
+
+    background: linear-gradient(180deg, #5078ff, #315eea);
 }
 
-.color-0 { background-color: #ffadad; }
-.color-1 { background-color: #ffd6a5; }
-.color-2 { background-color: #fdffb6; }
-.color-3 { background-color: #caffbf; }
-.color-4 { background-color: #9bf6ff; }
+.card-side-deco.color-0 {
+    background: linear-gradient(180deg, #5078ff, #315eea);
+}
 
-/* ---------- 카드 내부 본문 ---------- */
-.card-body-content {
-    padding: 32px;
+.card-side-deco.color-1 {
+    background: linear-gradient(180deg, #35d3ad, #16b890);
+}
+
+.card-side-deco.color-2 {
+    background: linear-gradient(180deg, #8b7cff, #6857f0);
+}
+
+.card-side-deco.color-3 {
+    background: linear-gradient(180deg, #38bdf8, #2563eb);
+}
+
+.card-side-deco.color-4 {
+    background: linear-gradient(180deg, #94a3b8, #64748b);
+}
+
+/* 아이콘 박스 */
+.news-icon-box {
+    flex: 0 0 72px;
+
+    width: 72px;
+    height: 72px;
+
     display: flex;
     align-items: center;
-    gap: 16px;
-    width: 100%;
+    justify-content: center;
+
+    border-radius: 22px;
+
+    background: linear-gradient(145deg, #eef5ff, #f8fbff);
+    color: #315eea;
+
+    font-size: 34px;
+
+    box-shadow: 0 10px 24px rgba(63, 109, 246, 0.12);
+}
+
+/* 본문 */
+.card-body-content {
+    flex: 1;
+    min-width: 0;
 }
 
 .news-text-main {
-    font-size: 18px;
-    color: #2c3e50;
-    font-weight: 500;
-    margin: 0;
+    margin: 0 0 12px;
+
+    color: #111827;
+
+    font-size: 22px;
+    font-weight: 850;
+    letter-spacing: -0.5px;
+    line-height: 1.35;
+
     word-break: keep-all;
+}
+
+/* 메타 */
+.news-meta {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+
+    color: #7b8494;
+
+    font-size: 15px;
+    font-weight: 650;
+}
+
+.news-meta-icon {
+    font-size: 14px;
+}
+
+/* 오른쪽 화살표 */
+.news-arrow {
+    flex: 0 0 auto;
+
+    color: #9aa5b5;
+
+    font-size: 36px;
+    font-weight: 300;
+
+    transition: all 0.2s ease;
+}
+
+.news-card-item:hover .news-arrow {
+    transform: translateX(4px);
+    color: #315eea;
+}
+
+/* ========================================
+   빈 상태
+======================================== */
+
+.empty-news-message {
+    min-height: 360px;
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    margin: 0;
+    padding: 50px 24px;
+
+    border: 1px solid #edf1f6;
+    border-radius: 28px;
+
+    background: #ffffff;
+    box-shadow: 0 16px 36px rgba(30, 55, 90, 0.08);
+
+    text-align: center;
+}
+
+.empty-news-icon {
+    width: 82px;
+    height: 82px;
+    margin-bottom: 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 26px;
+    background: #eef5ff;
+
+    font-size: 40px;
+    box-shadow: 0 12px 24px rgba(63, 109, 246, 0.10);
+}
+
+.empty-news-message p {
+    margin: 0 0 8px;
+
+    font-size: 22px;
+    font-weight: 850;
+    color: #111827;
+}
+
+.empty-news-message span {
+    font-size: 15px;
+    font-weight: 600;
+    color: #7b8494;
+}
+
+/* ========================================
+   반응형
+======================================== */
+
+@media (max-width: 992px) {
+    .news-card-item {
+        padding: 22px 26px;
+        gap: 20px;
+    }
+
+    .news-text-main {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .hd {
+        height: 70px;
+        padding: 0 22px;
+    }
+
+    .hd-name {
+        font-size: 30px;
+    }
+
+    .main {
+        padding: 26px 18px 30px;
+    }
+
+    .news-card-item {
+        min-height: auto;
+        padding: 22px 22px 22px 26px;
+        align-items: flex-start;
+        gap: 16px;
+        border-radius: 22px;
+    }
+
+    .news-icon-box {
+        width: 58px;
+        height: 58px;
+        flex-basis: 58px;
+        border-radius: 18px;
+        font-size: 28px;
+    }
+
+    .news-text-main {
+        font-size: 18px;
+    }
+
+    .news-meta {
+        font-size: 14px;
+    }
+
+    .news-arrow {
+        font-size: 28px;
+    }
 }
