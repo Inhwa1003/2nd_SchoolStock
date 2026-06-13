@@ -10,7 +10,7 @@
             <button type="submit" class="logout-btn">로그아웃</button>
         </form>
 
-        <div class = "profile-avatar">
+        <div class="profile-avatar">
             <span>👤</span>
         </div>
 
@@ -22,9 +22,11 @@
                 <span th:text="${info.className}">A</span>반
                 <span th:text="${info.studentNumber}">1</span>번
             </p>
+
             <p class="point-info" id="studentPoints">
-                보유 포인트 : <span id="sidebarPoint"
-                    th:text="${#numbers.formatInteger(info.totalPoint, 1, 'COMMA')}">0</span>P
+                보유 포인트 :
+                <span id="sidebarPoint"
+                      th:text="${#numbers.formatInteger(info.totalPoint, 1, 'COMMA')}">0</span>P
             </p>
         </th:block>
 
@@ -38,60 +40,92 @@
     </section>
 
     <nav class="sidebar-menu">
+
         <th:block sec:authorize="hasRole('STUDENT')">
-            <a class="menu-button" th:classappend="${active == 'assets'}  ? 'active'"
+
+            <a class="menu-button"
+               th:classappend="${active == 'assets'} ? 'active'"
                th:href="@{/schoolstock/s/me/students/assets}">
-                <span class = "menu-icon">💰</span>
-                <span class = "menu-text">내 자산</span>
+                <span class="menu-icon">💰</span>
+                <span class="menu-text">내 자산</span>
                 <span class="menu-arrow">›</span>
             </a>
 
-            <a class="menu-button" th:classappend="${active == 'stocks'}  ? 'active'"
+            <a class="menu-button"
+               th:classappend="${active == 'stocks'} ? 'active'"
                th:href="@{/schoolstock/s/stocks}">
-                <span class = "menu-icon">📈</span>
-                <span class = "menu-text">주식 목록</span>
+                <span class="menu-icon">📈</span>
+                <span class="menu-text">주식 목록</span>
                 <span class="menu-arrow">›</span>
             </a>
 
-            <a class="menu-button" th:classappend="${active == 'news'}    ? 'active'"
+            <a class="menu-button"
+               th:classappend="${active == 'news'} ? 'active'"
                th:href="@{/schoolstock/s/news}">
                 <span class="menu-icon">📰</span>
                 <span class="menu-text">뉴스 목록</span>
                 <span class="menu-arrow">›</span>
             </a>
 
-            <a class="menu-button" th:classappend="${active == 'history'} ? 'active'"
+            <a class="menu-button"
+               th:classappend="${active == 'history'} ? 'active'"
                th:href="@{/schoolstock/s/me/students/history}">
                 <span class="menu-icon">🧾</span>
                 <span class="menu-text">내 포인트 내역</span>
                 <span class="menu-arrow">›</span>
             </a>
 
-            <a class="menu-button" th:classappend="${active == 'coupons'} ? 'active'"
+            <a class="menu-button"
+               th:classappend="${active == 'coupons'} ? 'active'"
                th:href="@{/schoolstock/s/coupons}">
                 <span class="menu-icon">🎟</span>
                 <span class="menu-text">쿠폰 상점</span>
                 <span class="menu-arrow">›</span>
             </a>
+
         </th:block>
 
         <th:block sec:authorize="hasRole('TEACHER')">
-            <a class="menu-button" th:classappend="${active == 'myStudentList'}  ? 'active'"
+
+            <a class="menu-button"
+               th:classappend="${active == 'myStudentList'} ? 'active'"
                th:href="@{/schoolstock/t/me/teachers/my-students}">
                 <span class="menu-icon">👥</span>
                 <span class="menu-text">학생 목록</span>
                 <span class="menu-arrow">›</span>
             </a>
 
-            <a class="menu-button" th:classappend="${active == 'coupons'}  ? 'active'"
+            <a class="menu-button"
+               th:classappend="${active == 'stocks'} ? 'active'"
+               th:href="@{/schoolstock/t/stocks}">
+                <span class="menu-icon">📈</span>
+                <span class="menu-text">주식 목록</span>
+                <span class="menu-arrow">›</span>
+            </a>
+
+            <a class="menu-button"
+               th:classappend="${active == 'news'} ? 'active'"
+               th:href="@{/schoolstock/t/news}">
+                <span class="menu-icon">📰</span>
+                <span class="menu-text">뉴스 목록</span>
+                <span class="menu-arrow">›</span>
+            </a>
+
+            <a class="menu-button"
+               th:classappend="${active == 'coupons'} ? 'active'"
                th:href="@{/schoolstock/t/coupons}">
                 <span class="menu-icon">🎟</span>
                 <span class="menu-text">쿠폰 상점</span>
                 <span class="menu-arrow">›</span>
             </a>
+
         </th:block>
+
     </nav>
+
     <script th:src="@{/js/side-bar.js}"></script>
+
 </aside>
+
 </body>
 </html>

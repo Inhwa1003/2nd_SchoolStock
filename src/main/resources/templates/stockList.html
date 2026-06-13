@@ -57,13 +57,6 @@
             <td>
               <div class="stock-name-cell">
 
-                <div class="stock-icon"
-                     th:text="${stock.stockNo == 1 ? '🍜' :
-                                (stock.stockNo == 2 ? '🎮' :
-                                (stock.stockNo == 3 ? '🎤' : '📈'))}">
-                  📈
-                </div>
-
                 <span class="stock-name-text"
                       th:text="${stock.name}">
                     주식명

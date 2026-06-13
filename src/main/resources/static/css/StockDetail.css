@@ -16,11 +16,11 @@
 
 /* 뒤로가기 버튼 */
 .back-btn {
-    height: 42px;
+    height: 46px;
     padding: 0 18px;
 
     border: 1px solid #dfe7f4;
-    border-radius: 14px;
+    border-radius: 15px;
 
     background: #ffffff;
     color: #315eea;
@@ -29,7 +29,7 @@
     font-weight: 800;
 
     cursor: pointer;
-    box-shadow: 0 8px 18px rgba(30, 55, 90, 0.06);
+    box-shadow: 0 10px 22px rgba(30, 55, 90, 0.07);
     transition: all 0.22s ease;
 }
 
@@ -37,7 +37,7 @@
     transform: translateY(-2px);
     border-color: #bcd0ff;
     background: #f4f8ff;
-    box-shadow: 0 12px 24px rgba(63, 109, 246, 0.13);
+    box-shadow: 0 14px 28px rgba(63, 109, 246, 0.13);
 }
 
 /* ========================================
