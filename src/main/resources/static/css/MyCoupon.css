@@ -1,8 +1,8 @@
 @charset "UTF-8";
 
 /* ========================================
-   CouponMarket.css - 쿠폰 상점 화면
-   기준 디자인: 내 자산 / 보유 쿠폰 / 사이드바 톤
+   MyCoupon.css - 보유 쿠폰 화면 전용 스타일
+   내 자산 화면 디자인 기준
 ======================================== */
 
 /* 전체 콘텐츠 영역 */
@@ -17,11 +17,38 @@
 .hd {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    gap: 16px;
 
     margin-bottom: 26px;
 }
 
+/* 뒤로가기 버튼 */
+.back-btn {
+    height: 46px;
+    padding: 0 18px;
+
+    border: 1px solid #dfe7f4;
+    border-radius: 15px;
+
+    background: #ffffff;
+    color: #315eea;
+
+    font-size: 15px;
+    font-weight: 800;
+
+    cursor: pointer;
+    box-shadow: 0 10px 22px rgba(30, 55, 90, 0.07);
+    transition: all 0.22s ease;
+}
+
+.back-btn:hover {
+    transform: translateY(-2px);
+    border-color: #bcd0ff;
+    background: #f4f8ff;
+    box-shadow: 0 14px 28px rgba(63, 109, 246, 0.13);
+}
+
+/* 페이지 제목 */
 .hd-name {
     width: fit-content;
 
@@ -38,72 +65,21 @@
     line-height: 1.15;
 }
 
-/* main에 cp-grid가 붙어 있어도 세로 배치 유지 */
-.main.cp-grid {
+/* 메인 영역 */
+.main {
     display: flex;
     flex-direction: column;
     gap: 24px;
 }
 
 /* ========================================
-   안내 박스 / TIP 박스
+   쿠폰 전체 섹션
 ======================================== */
 
-.coupon-guide-box,
-.coupon-tip-box {
-    padding: 22px 24px;
+.coupon-section {
+    width: 100%;
+    box-sizing: border-box;
 
-    display: flex;
-    align-items: center;
-    gap: 18px;
-
-    border: 1px solid #edf1f6;
-    border-radius: 26px;
-
-    background: #ffffff;
-    box-shadow: 0 14px 32px rgba(30, 55, 90, 0.07);
-}
-
-.guide-icon,
-.tip-icon {
-    flex: 0 0 58px;
-
-    width: 58px;
-    height: 58px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    border-radius: 18px;
-    background: #eef5ff;
-
-    font-size: 28px;
-    box-shadow: 0 10px 22px rgba(30, 55, 90, 0.08);
-}
-
-.guide-text p,
-.tip-text p {
-    margin: 0 0 5px;
-
-    font-size: 19px;
-    font-weight: 850;
-    color: #111827;
-    letter-spacing: -0.4px;
-}
-
-.guide-text span,
-.tip-text span {
-    font-size: 14px;
-    font-weight: 600;
-    color: #7b8494;
-}
-
-/* ========================================
-   쿠폰 상점 섹션
-======================================== */
-
-.coupon-shop-section {
     padding: 26px;
 
     border: 1px solid #edf1f6;
@@ -113,7 +89,8 @@
     box-shadow: 0 16px 36px rgba(30, 55, 90, 0.08);
 }
 
-.coupon-shop-title {
+/* 섹션 제목 */
+.coupon-section-title {
     display: flex;
     align-items: center;
     gap: 12px;
@@ -121,7 +98,7 @@
     margin-bottom: 22px;
 }
 
-.coupon-shop-title h3 {
+.coupon-section-title h3 {
     margin: 0;
 
     font-size: 25px;
@@ -147,27 +124,27 @@
     font-weight: 850;
 }
 
-/* ========================================
-   쿠폰 카드 그리드
-======================================== */
-
-.coupon-shop-grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 18px;
-}
-
-/* 쿠폰 카드 */
-.coupon-shop-grid .cp-panel {
-    position: relative;
-
-    min-height: 285px;
-    box-sizing: border-box;
-    padding: 22px;
-
+/* 쿠폰 리스트 */
+.coupon-list {
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 16px;
+}
+
+/* ========================================
+   쿠폰 카드
+======================================== */
+
+.cp-panel {
+    position: relative;
+
+    min-height: 150px;
+    box-sizing: border-box;
+    padding: 22px 24px;
+
+    display: flex;
+    align-items: center;
+    gap: 22px;
 
     border: 1px solid #edf1f6;
     border-radius: 26px;
@@ -179,14 +156,14 @@
     transition: all 0.22s ease;
 }
 
-.coupon-shop-grid .cp-panel:hover {
+.cp-panel:hover {
     transform: translateY(-3px);
     border-color: #dbe5ff;
     box-shadow: 0 18px 38px rgba(30, 55, 90, 0.11);
 }
 
-/* 카드 왼쪽 파란 포인트 라인 */
-.coupon-shop-grid .cp-panel::before {
+/* 쿠폰 카드 왼쪽 포인트 라인 */
+.cp-panel::before {
     content: "";
     position: absolute;
     left: 0;
@@ -199,15 +176,7 @@
     background: #5078ff;
 }
 
-/* 카드 상단 */
-.coupon-card-top {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 12px;
-}
-
-/* 쿠폰 이모지 영역 */
+/* 기본 쿠폰 아이콘 영역 */
 .coupon-visual {
     flex: 0 0 92px;
 
@@ -221,9 +190,8 @@
     border-radius: 26px;
     background: #eef5ff;
 
-    box-shadow:
-            inset 0 0 0 3px #ffffff,
-            0 12px 24px rgba(63, 109, 246, 0.12);
+    box-shadow: inset 0 0 0 3px #ffffff,
+    0 12px 24px rgba(63, 109, 246, 0.12);
 }
 
 .coupon-visual-icon {
@@ -231,58 +199,55 @@
     line-height: 1;
 }
 
-/* ========================================
-   카드 본문
-======================================== */
-
-.coupon-card-body {
-    display: flex;
-    flex-direction: column;
+/* 쿠폰 정보 */
+.coupon-info {
     flex: 1;
+    min-width: 0;
 }
 
+/* 쿠폰명 */
 .cp-name {
-    width: 100%;
-    margin: 0;
+    margin-bottom: 8px;
 
-    color: #111827;
     font-size: 24px;
     font-weight: 850;
-    letter-spacing: -0.7px;
+    color: #111827;
+    letter-spacing: -0.6px;
 
-    border: none;
-    outline: none;
-    background: transparent;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
-.coupon-desc {
-    margin: 8px 0 0;
+/* 보유중 배지 */
+.coupon-state-badge {
+    width: fit-content;
 
-    color: #7b8494;
-    font-size: 14px;
-    font-weight: 600;
-    line-height: 1.5;
+    display: inline-flex;
+    align-items: center;
+
+    padding: 7px 13px;
+    border-radius: 999px;
+
+    background: #eafaf1;
+    color: #16a34a;
+
+    font-size: 13px;
+    font-weight: 850;
 }
 
-.coupon-divider {
-    width: 100%;
-    height: 1px;
-    margin: 18px 0;
-
-    background: #edf1f6;
-}
-
+/* 가격 영역 */
 .coupon-price-area {
-    margin-top: auto;
+    margin-top: 18px;
 }
 
 .coupon-price-label {
     display: block;
-    margin-bottom: 9px;
+    margin-bottom: 8px;
 
-    color: #7b8494;
     font-size: 13px;
     font-weight: 800;
+    color: #7b8494;
 }
 
 .coupon-price-row {
@@ -291,6 +256,7 @@
     gap: 9px;
 }
 
+/* P 원형 배지 */
 .point-circle {
     width: 28px;
     height: 28px;
@@ -307,26 +273,28 @@
     font-weight: 850;
 }
 
+/* 쿠폰 가격 */
 .cp-price {
-    color: #315eea;
+    color: #5078ff;
 
     font-size: 23px;
     font-weight: 850;
     letter-spacing: -0.5px;
-
-    border: none;
-    outline: none;
-    background: transparent;
 }
 
-/* ========================================
-   버튼
-======================================== */
+/* 오른쪽 영역 */
+.coupon-action-area {
+    flex: 0 0 auto;
 
-.buy-cp-btn,
-.save-cp-btn {
-    height: 40px;
-    padding: 0 17px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+/* 선생님 사용 처리 버튼 */
+.use-coupon-btn {
+    height: 42px;
+    padding: 0 18px;
 
     border: none;
     border-radius: 14px;
@@ -342,84 +310,25 @@
     transition: all 0.22s ease;
 }
 
-.buy-cp-btn:hover,
-.save-cp-btn:hover {
+.use-coupon-btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 14px 28px rgba(63, 109, 246, 0.26);
 }
 
-/* 삭제 버튼 */
-.delete-cp-btn {
-    height: 40px;
-    padding: 0 17px;
-
-    border: 1px solid #ffd0d0;
-    border-radius: 14px;
-
-    background: #fff5f5;
-    color: #e05252;
-
-    font-size: 14px;
-    font-weight: 850;
-
-    cursor: pointer;
-    transition: all 0.22s ease;
-}
-
-.delete-cp-btn:hover {
-    transform: translateY(-2px);
-    background: #ffecec;
-    box-shadow: 0 12px 24px rgba(224, 82, 82, 0.13);
-}
-
-/* 선생님 저장 버튼 */
-.save-cp-btn {
-    width: 100%;
-    margin-top: 18px;
-}
-
-/* ========================================
-   선생님 수정 input
-======================================== */
-
-.coupon-name-input {
-    cursor: pointer;
-}
-
-.coupon-point-input {
-    width: 120px;
-    cursor: pointer;
-}
-
-.coupon-name-input[readonly],
-.coupon-point-input[readonly] {
-    color: #111827;
-}
-
-.coupon-name-input:not([readonly]),
-.coupon-point-input:not([readonly]) {
-    padding: 8px 10px;
-
-    border: 1px solid #7da0ff;
-    border-radius: 12px;
-
-    background: #ffffff;
-    box-shadow: 0 0 0 4px rgba(83, 127, 255, 0.12);
-}
-
-/* number input 기본 화살표가 너무 튀는 것 완화 */
-.coupon-point-input::-webkit-inner-spin-button,
-.coupon-point-input::-webkit-outer-spin-button {
-    opacity: 0.4;
+/* 오른쪽 화살표 */
+.coupon-arrow {
+    color: #a0a8b5;
+    font-size: 34px;
+    font-weight: 300;
+    line-height: 1;
 }
 
 /* ========================================
    빈 쿠폰 상태
 ======================================== */
 
-.empty-msg {
+.empty-coupon-state {
     min-height: 320px;
-    margin-top: 18px;
 
     display: flex;
     flex-direction: column;
@@ -431,6 +340,10 @@
     border: 1px dashed #dbe3ef;
     border-radius: 26px;
     background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+}
+
+.coupon-list:empty + .empty-coupon-state {
+    margin-top: 0;
 }
 
 .empty-coupon-icon {
@@ -449,7 +362,7 @@
     box-shadow: 0 12px 24px rgba(63, 109, 246, 0.10);
 }
 
-.empty-msg p {
+.empty-coupon-state p {
     margin: 0 0 8px;
 
     font-size: 22px;
@@ -457,7 +370,7 @@
     color: #111827;
 }
 
-.empty-msg span {
+.empty-coupon-state span {
     font-size: 15px;
     font-weight: 600;
     color: #7b8494;
@@ -467,9 +380,13 @@
    반응형
 ======================================== */
 
-@media (max-width: 1200px) {
-    .coupon-shop-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+@media (max-width: 992px) {
+    .cp-panel {
+        align-items: flex-start;
+    }
+
+    .coupon-action-area {
+        align-self: center;
     }
 }
 
@@ -478,44 +395,30 @@
         padding: 24px 18px;
     }
 
+    .hd {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 14px;
+    }
+
     .hd-name {
         font-size: 30px;
     }
 
-    .coupon-guide-box,
-    .coupon-tip-box {
-        align-items: flex-start;
-        padding: 20px;
-    }
-
-    .guide-icon,
-    .tip-icon {
-        width: 52px;
-        height: 52px;
-        flex-basis: 52px;
-        font-size: 25px;
-    }
-
-    .guide-text p,
-    .tip-text p {
-        font-size: 17px;
-    }
-
-    .coupon-shop-section {
+    .coupon-section {
         padding: 22px 18px;
         border-radius: 24px;
     }
 
-    .coupon-shop-title h3 {
+    .coupon-section-title h3 {
         font-size: 23px;
     }
 
-    .coupon-shop-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .coupon-shop-grid .cp-panel {
-        min-height: auto;
+    .cp-panel {
+        padding: 20px;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 18px;
     }
 
     .coupon-visual {
@@ -533,7 +436,12 @@
         font-size: 22px;
     }
 
-    .cp-price {
-        font-size: 21px;
+    .coupon-action-area {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .use-coupon-btn {
+        flex: 1;
     }
 }

@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <title>오늘의 뉴스</title>
 
-    <meta name="_csrf"        th:content="${_csrf.token}">
+    <meta name="_csrf" th:content="${_csrf.token}">
     <meta name="_csrf_header" th:content="${_csrf.headerName}">
 
     <link rel="stylesheet"
@@ -18,44 +18,110 @@
 
 <body>
 <div class="app">
+
     <div class="content">
 
         <header class="hd">
             <div class="hd-name">오늘의 뉴스</div>
         </header>
 
-        <div class="main">
-            <div class="news-grid-container" id="newsGrid" sec:authorize="hasRole('STUDENT')">
-                <div class="news-card-item" th:each="news, status : ${newsList}">
-                    <div class="card-side-deco" th:classappend="' color-' + (${status.index} % 5)"></div>
-                    <div class="card-body-content">
-                        <p class="news-text-main" th:text="${news}">뉴스 내용</p>
-                    </div>
-                </div>
-                <p class="empty-news-message" th:if="${newsList == null or #lists.isEmpty(newsList)}">
-                    현재 등록된 새로운 소식이 없습니다.
-                </p>
-            </div>
+        <main class="main news-main">
 
-            <div class="news-admin" sec:authorize="hasRole('TEACHER')">
+            <!-- 학생 뉴스 조회 영역 -->
+            <section class="news-section"
+                     sec:authorize="hasRole('STUDENT')">
+
+                <div class="news-grid-container" id="newsGrid">
+
+                    <article class="news-card-item"
+                             th:each="news, status : ${newsList}">
+
+                        <div class="card-side-deco"
+                             th:classappend="' color-' + (${status.index} % 5)">
+                        </div>
+
+                        <div class="news-icon-box">
+                            📰
+                        </div>
+
+                        <div class="card-body-content">
+                            <p class="news-text-main"
+                               th:text="${news}">
+                                뉴스 내용
+                            </p>
+                        </div>
+
+                    </article>
+
+                    <div class="empty-news-message"
+                         th:if="${newsList == null or #lists.isEmpty(newsList)}">
+
+                        <div class="empty-news-icon">📰</div>
+                        <p>현재 등록된 새로운 소식이 없습니다.</p>
+                        <span>새로운 뉴스가 등록되면 이곳에 표시됩니다.</span>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- 선생님 뉴스 관리 영역 -->
+            <section class="news-admin"
+                     sec:authorize="hasRole('TEACHER')">
+
                 <h2 class="news-add-title">새 뉴스 등록</h2>
+
                 <div class="news-add">
-                    <input type="text" id="newNewsContent" maxlength="100" placeholder="새 뉴스 내용을 입력하세요">
-                    <button type="button" id="addNewsBtn">등록</button>
+                    <input type="text"
+                           id="newNewsContent"
+                           maxlength="100"
+                           placeholder="새 뉴스 내용을 입력하세요">
+
+                    <button type="button"
+                            id="addNewsBtn">
+                        등록
+                    </button>
                 </div>
 
                 <div id="newsAdminList">
-                    <div class="news-admin-item" th:each="n : ${newsList}" th:data-news-no="${n.newsNo}">
-                        <input type="text" class="news-edit-content" maxlength="100" th:value="${n.newsContent}">
-                        <button type="button" class="news-update-btn">수정</button>
-                        <button type="button" class="news-delete-btn">삭제</button>
+
+                    <div class="news-admin-item"
+                         th:each="n : ${newsList}"
+                         th:data-news-no="${n.newsNo}">
+
+                        <input type="text"
+                               class="news-edit-content"
+                               maxlength="100"
+                               th:value="${n.newsContent}">
+
+                        <button type="button"
+                                class="news-update-btn">
+                            수정
+                        </button>
+
+                        <button type="button"
+                                class="news-delete-btn">
+                            삭제
+                        </button>
+
                     </div>
-                    <p class="empty-news-message" th:if="${#lists.isEmpty(newsList)}">등록된 뉴스가 없습니다.</p>
+
+                    <p class="empty-news-message"
+                       th:if="${newsList == null or #lists.isEmpty(newsList)}">
+                        등록된 뉴스가 없습니다.
+                    </p>
+
                 </div>
-            </div>
-        </div>
+
+            </section>
+
+        </main>
+
     </div>
+
     <div th:replace="~{sideBar :: sidebar('news')}"></div>
+
 </div>
 
 <script th:src="@{/js/news.js}"></script>

@@ -1,48 +1,330 @@
-@CHARSET "UTF-8";
+@charset "UTF-8";
+
 /* ========================================
-   MyPointHistory.css - 내 포인트 내역 화면 전용
-   공통 스타일은 Common.css, 사이드바는 SideBar.css에서 가져옴
+   MyPointHistory.css - 내 포인트 내역 화면
+   기준 디자인: 내 자산 / 주식 목록 / 쿠폰 / 사이드바 톤
 ======================================== */
-/* ---------- 패널 스크롤 (이 화면 전용) ---------- */
-.main > .panel {
-    max-height: calc(100vh - 100px);
-    overflow-y: auto;
+
+/* 전체 콘텐츠 */
+.content {
+    min-height: 100vh;
+    box-sizing: border-box;
+    padding: 0;
+
+    background: linear-gradient(180deg, #f8fbff 0%, #f4f7fb 100%);
 }
 
-/* ---------- 포인트 내역 테이블 ---------- */
+/* 상단 헤더 */
+.hd {
+    width: 100%;
+    height: 78px;
+
+    display: flex;
+    align-items: center;
+
+    padding: 0 32px;
+    box-sizing: border-box;
+
+    background: #ffffff;
+    border-bottom: 1px solid #dfe3ea;
+
+    margin: 0;
+}
+
+.hd-name {
+    margin: 0;
+
+    font-size: 34px;
+    font-weight: 850;
+    color: #111827;
+    letter-spacing: -1px;
+    line-height: 1;
+}
+
+/* 메인 */
+.main {
+    padding: 34px 36px 36px;
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* ========================================
+   패널
+======================================== */
+
+.point-history-panel {
+    overflow: hidden;
+
+    border: 1px solid #edf1f6;
+    border-radius: 28px;
+
+    background: #ffffff;
+    box-shadow: 0 16px 36px rgba(30, 55, 90, 0.08);
+}
+
+/* 패널 제목 */
+.history-panel-title {
+    padding: 24px 26px;
+
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    border-bottom: 1px solid #edf1f6;
+    background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+}
+
+.history-title-icon {
+    width: 52px;
+    height: 52px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 17px;
+    background: #eef5ff;
+
+    font-size: 26px;
+    box-shadow: 0 10px 22px rgba(63, 109, 246, 0.12);
+}
+
+.history-panel-title h3 {
+    margin: 0;
+
+    font-size: 25px;
+    font-weight: 850;
+    color: #111827;
+    letter-spacing: -0.7px;
+}
+
+/* ========================================
+   테이블
+======================================== */
+
+.history-table-wrap {
+    width: 100%;
+    padding: 26px;
+    box-sizing: border-box;
+
+    overflow-x: auto;
+}
+
 .history-table {
     width: 100%;
-    border-collapse: collapse;
-    font-size: 18px;
+    min-width: 760px;
+
+    border-collapse: separate;
+    border-spacing: 0;
+
+    overflow: hidden;
+    border: 1px solid #e7edf5;
+    border-radius: 22px;
+
+    background: #ffffff;
 }
 
-.history-table th {
-    background-color: #f5f5f5;
-    border-bottom: 1px solid #ccc;
-    padding: 14px;
+/* 테이블 헤더 */
+.history-table thead th {
+    padding: 20px 18px;
+
+    background: #f6f8fc;
+    color: #111827;
+
+    font-size: 16px;
+    font-weight: 850;
     text-align: center;
-    font-weight: 600;
+    white-space: nowrap;
+
+    border-bottom: 1px solid #e7edf5;
+    border-right: 1px solid #e7edf5;
+}
+
+.history-table thead th:last-child {
+    border-right: none;
+}
+
+/* 테이블 본문 */
+.history-table tbody td {
+    padding: 22px 18px;
+
+    color: #1f2937;
+    font-size: 16px;
+    font-weight: 650;
+    text-align: center;
+    white-space: nowrap;
+
+    border-bottom: 1px solid #edf1f6;
+    border-right: 1px solid #edf1f6;
+}
+
+.history-table tbody td:last-child {
+    border-right: none;
+}
+
+.history-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* 행 hover */
+.history-row {
+    transition: all 0.18s ease;
+}
+
+.history-row:hover {
+    background: #f8fbff;
+}
+
+/* 날짜 */
+.date {
+    color: #6b7280 !important;
+    font-weight: 750 !important;
+}
+
+/* 유형 배지 */
+.history-type {
+    min-width: 76px;
+    height: 36px;
+    padding: 0 14px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 999px;
+
+    background: #eef5ff;
+    color: #315eea;
+
+    font-size: 14px;
+    font-weight: 850;
+}
+
+/* 내용 */
+.history-content {
+    color: #111827 !important;
+    font-weight: 750 !important;
+}
+
+/* 포인트 변화 */
+.point-change {
     font-size: 17px;
+    font-weight: 850;
+    letter-spacing: -0.2px;
 }
 
-.history-table td {
-    padding: 14px;
-    border-bottom: 1px solid #eee;
+/* 기존 프로젝트 기준에 맞춰 +는 빨강, -는 파랑 */
+.point-change.plus {
+    color: #ef4444;
+}
+
+.point-change.minus {
+    color: #2563eb;
+}
+
+/* ========================================
+   빈 상태
+======================================== */
+
+.empty-history-row td {
+    padding: 0 !important;
+}
+
+.empty-history-state {
+    min-height: 320px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
     text-align: center;
-    font-size: 18px;
+
+    background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
 }
 
-.history-table tbody tr:hover {
-    background-color: #fafafa;
+.empty-history-icon {
+    width: 76px;
+    height: 76px;
+    margin-bottom: 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 24px;
+    background: #eef5ff;
+
+    font-size: 36px;
+    box-shadow: 0 12px 24px rgba(63, 109, 246, 0.10);
 }
 
-/* 포인트 변화 색상 */
-.history-table .plus {
-    color: #e05c5c;
+.empty-history-state p {
+    margin: 0 0 8px;
+
+    font-size: 22px;
+    font-weight: 850;
+    color: #111827;
+}
+
+.empty-history-state span {
+    font-size: 15px;
     font-weight: 600;
+    color: #7b8494;
 }
 
-.history-table .minus {
-    color: #5c5ce0;
-    font-weight: 600;
+/* ========================================
+   반응형
+======================================== */
+
+@media (max-width: 992px) {
+    .history-table-wrap {
+        padding: 22px 18px;
+    }
+
+    .history-table thead th,
+    .history-table tbody td {
+        padding: 18px 16px;
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 768px) {
+    .hd {
+        height: 70px;
+        padding: 0 22px;
+    }
+
+    .hd-name {
+        font-size: 30px;
+    }
+
+    .main {
+        padding: 26px 18px 30px;
+    }
+
+    .point-history-panel {
+        border-radius: 24px;
+    }
+
+    .history-panel-title {
+        padding: 22px 20px;
+    }
+
+    .history-title-icon {
+        width: 48px;
+        height: 48px;
+        font-size: 24px;
+    }
+
+    .history-panel-title h3 {
+        font-size: 23px;
+    }
+
+    .history-table {
+        min-width: 720px;
+    }
 }

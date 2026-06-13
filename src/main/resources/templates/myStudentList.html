@@ -3,49 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <title>학생 목록 조회</title>
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
     <link rel="stylesheet" th:href="@{/css/Common.css}">
     <link rel="stylesheet" th:href="@{/css/MyStudentList.css}">
     <link rel="stylesheet" th:href="@{/css/SideBar.css}">
 </head>
+
 <body>
 <div class="app">
+
     <div class="content">
+
         <header class="hd">
             <div class="hd-name">학생 목록</div>
         </header>
 
-        <div class="main">
-            <div class="panel">
+        <main class="main">
+
+            <section class="panel student-list-panel">
+
                 <div class="student-list-header">
-                    <div>번호</div>
-                    <div>이름</div>
-                    <div class="point-header">보유 포인트</div>
+                    <div class="student-col-number">학급 번호</div>
+                    <div class="student-col-name">이름</div>
+                    <div class="student-col-point">보유 포인트</div>
                 </div>
 
                 <!-- 학생 있을 때 -->
-                <div th:if="${studentList != null and !studentList.isEmpty()}">
+                <div class="student-list-body"
+                     th:if="${studentList != null and !studentList.isEmpty()}">
+
                     <div class="student-item"
                          th:each="student : ${studentList}"
                          th:data-student-number="${student.studentNumber}">
-                        <div class="student-number" th:text="${student.studentNumber}">9</div>
-                        <div class="student-name"   th:text="${student.name}">박소영</div>
-                        <div class="student-point">
-                            <span th:text="${#numbers.formatInteger(student.totalPoint, 3, 'COMMA')}">5000</span><span>P</span>
+
+                        <div class="student-number"
+                             th:text="${student.studentNumber}">
+                            9
                         </div>
+
+                        <div class="student-name"
+                             th:text="${student.name}">
+                            박소영
+                        </div>
+
+                        <div class="student-point">
+                            <span th:text="${#numbers.formatInteger(student.totalPoint, 3, 'COMMA')}">
+                                5000
+                            </span><span>P</span>
+                        </div>
+
                     </div>
+
                 </div>
 
-                <!-- 없을 때 -->
-                <div class="empty-message" th:if="${studentList == null or studentList.isEmpty()}">
+                <!-- 학생 없을 때 -->
+                <div class="empty-message"
+                     th:if="${studentList == null or studentList.isEmpty()}">
                     담당 반 학생 정보가 없습니다.
                 </div>
-            </div>
-        </div>
+
+            </section>
+
+        </main>
+
     </div>
 
-    <!-- ★ 공용 오른쪽 사이드바 (선생님 정보 + 메뉴) -->
+    <!-- 기존 공용 오른쪽 사이드바 그대로 유지 -->
     <div th:replace="~{sideBar :: sidebar('myStudentList')}"></div>
+
 </div>
 
 <script th:src="@{/js/my-student-list.js}"></script>
