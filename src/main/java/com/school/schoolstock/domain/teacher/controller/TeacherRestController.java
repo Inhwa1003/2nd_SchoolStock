@@ -2,9 +2,14 @@ package com.school.schoolstock.domain.teacher.controller;
 
 import com.school.schoolstock.domain.coupon.dto.request.CouponDeleteRequest;
 import com.school.schoolstock.domain.coupon.dto.request.CouponUpdateRequest;
+import com.school.schoolstock.domain.stock.dto.request.StockUpdateRequest;
+import com.school.schoolstock.domain.stock.dto.response.StockListPageResponse;
+import com.school.schoolstock.domain.stock.dto.response.StockManageResponse;
+import com.school.schoolstock.domain.stock.service.StockService;
 import com.school.schoolstock.domain.student.dto.response.MyAssetResponse;
 import com.school.schoolstock.domain.student.service.StudentService;
 import com.school.schoolstock.domain.teacher.dto.request.PointGrantRequest;
+import com.school.schoolstock.domain.teacher.dto.request.StockCreateRequest;
 import com.school.schoolstock.domain.teacher.dto.request.UpdateStudentCouponUsedRequest;
 import com.school.schoolstock.domain.teacher.service.TeacherService;
 import com.school.schoolstock.global.response.ApiResponse;
@@ -13,6 +18,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 
 
 @RequiredArgsConstructor
@@ -21,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 public class TeacherRestController {
     private final TeacherService teacherService;
     private final StudentService studentService;
+    private final StockService stockService;
 
     @GetMapping("/me/teachers/my-students/{studentNumber}/assets/stocks")
     public MyAssetResponse getMyStudentAssets(
@@ -64,5 +71,24 @@ public class TeacherRestController {
 
         teacherService.updateStudentCouponUsed(userDetails.getUsername(), studentNumber, request.getCouponPurchaseNo());
         return ApiResponse.of(200, "쿠폰이 사용 처리되었습니다.", null);
+    }
+
+    // 선생님이 새 주식 등록
+    @PostMapping("/stocks")
+    public ApiResponse addStock(@RequestBody StockCreateRequest request) {
+        teacherService.setStock(request);
+        return ApiResponse.of(200, "주식이 등록되었습니다.", null);
+    }
+
+    // 선생님 주식 목록 실시간 시세 Interval
+    @GetMapping("/stocks/prices")
+    public List<StockListPageResponse> getStockPrices() {
+        return stockService.getStockList();
+    }
+
+    @PostMapping("/stocks/edit")
+    public ApiResponse updateStock(@RequestBody StockUpdateRequest request) {
+        teacherService.updateStock(request);
+        return ApiResponse.of(200, "주식 정보가 수정되었습니다.", null);
     }
 }
