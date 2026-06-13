@@ -49,4 +49,6 @@
     padding: 12px 20px;
 }
 
+.stock-table input.st-edit { width: 100%; box-sizing: border-box; }
+
 /* 등락률 색상은 Common.css의 .up, .down 사용 */
