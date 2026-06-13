@@ -19,9 +19,7 @@ public enum ErrorCode {
     STUDENT_NOT_FOUND(HttpStatus.NOT_FOUND, "학생을 찾을 수 없습니다."),
     COUPON_USE_FAILED(HttpStatus.BAD_REQUEST, "쿠폰 사용 처리에 실패했습니다."),
     STOCK_NOT_FOUND(HttpStatus.NOT_FOUND, "주식을 찾을 수 없습니다."),
-
-    COUPON_USE_SUCCESS(HttpStatus.OK, "쿠폰이 사용 처리되었습니다."),
-    STUDENT_NOT_IN_CLASS(HttpStatus.FORBIDDEN, "담당 학생의 쿠폰만 사용할 수 있습니다.");
+    NEWS_NOT_FOUND(HttpStatus.NOT_FOUND, "뉴스를 찾을 수 없습니다.");
 
     private final HttpStatus status;
     private final String message;
