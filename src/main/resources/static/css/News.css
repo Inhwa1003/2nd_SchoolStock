@@ -252,7 +252,10 @@
     color: #7b8494;
 }
 
-з/* ---------- 선생님 뉴스 관리 영역 ---------- */
+/* ========================================
+   선생님 뉴스 관리 영역
+======================================== */
+
 .news-admin {
     width: 100%;
     max-width: 900px;
@@ -390,29 +393,22 @@
     background: #ffdede;
 }
 
-/* ---------- 반응형 ---------- */
-@media (max-width: 768px) {
-    .news-admin {
-        padding: 20px;
-    }
+/* 관리자 영역 빈 상태 */
+.news-admin p.empty-news-message {
+    min-height: auto;
+    padding: 22px;
 
-    .news-add {
-        flex-direction: column;
-    }
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-    .news-add button {
-        width: 100%;
-    }
+    border-radius: 14px;
+    box-shadow: none;
 
-    .news-admin-item {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .news-update-btn,
-    .news-delete-btn {
-        width: 100%;
-    }
+    font-size: 15px;
+    font-weight: 700;
+    color: #7b8494;
+    background: #f8fbff;
 }
 
 /* ========================================
@@ -470,5 +466,27 @@
 
     .news-arrow {
         font-size: 28px;
+    }
+
+    .news-admin {
+        padding: 20px;
+    }
+
+    .news-add {
+        flex-direction: column;
+    }
+
+    .news-add button {
+        width: 100%;
+    }
+
+    .news-admin-item {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .news-update-btn,
+    .news-delete-btn {
+        width: 100%;
     }
 }

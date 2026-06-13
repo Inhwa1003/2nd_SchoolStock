@@ -4,10 +4,30 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.school.schoolstock.domain.news.repository.NewsRepository">
-
+    <!-- 학생용 뉴스조회 -->
     <select id="getNewsList" resultType="String">
         SELECT news_content FROM news
     </select>
+
+    <!-- 선생용 뉴스조회(관리용) -->
+    <select id="getNewsManageList" resultType="com.school.schoolstock.domain.news.vo.News">
+        SELECT news_no, news_content FROM news
+    </select>
+
+    <!-- 뉴스 등록 -->
+    <insert id="setNews">
+        INSERT INTO news (news_content) VALUES (#{newsContent})
+    </insert>
+
+    <!-- 뉴스 수정 -->
+    <update id="setUpdateNews">
+        UPDATE news SET news_content = #{newsContent} WHERE news_no = #{newsNo}
+    </update>
+
+    <!-- 뉴스 삭제 -->
+    <delete id="setDeleteNews">
+        DELETE FROM news WHERE news_no = #{newsNo}
+    </delete>
 
 </mapper>
 

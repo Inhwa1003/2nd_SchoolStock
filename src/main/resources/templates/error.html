@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>오류</title>
+    <link rel="stylesheet" th:href="@{/css/Common.css}">
+    <link rel="stylesheet" th:href="@{/css/Error.css}">
+</head>
+<body>
+<div class="error-page">
+    <div class="error-card">
+        <h1 class="error-status" th:text="${status}">500</h1>
+
+        <p class="error-message"
+           th:text="${status == 404} ? '잘못된 경로입니다.'
+                      : (${status >= 500} ? '서버 오류가 발생했습니다.' : '잘못된 요청입니다.')">
+            오류가 발생했습니다.
+        </p>
+
+        <a class="error-home" th:href="@{/}">홈으로 돌아가기</a>
+    </div>
+</div>
+</body>
+</html>

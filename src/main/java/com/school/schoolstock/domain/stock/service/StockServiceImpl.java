@@ -2,6 +2,7 @@ package com.school.schoolstock.domain.stock.service;
 
 import com.school.schoolstock.domain.stock.dto.response.StockDetailPageResponse;
 import com.school.schoolstock.domain.stock.dto.response.StockListPageResponse;
+import com.school.schoolstock.domain.stock.dto.response.StockManageResponse;
 import com.school.schoolstock.domain.stock.dto.response.StockPriceResponse;
 import com.school.schoolstock.domain.stock.repository.StockRepository;
 import com.school.schoolstock.domain.stock.vo.Stocks;
@@ -25,7 +26,9 @@ public class StockServiceImpl implements StockService {
         Stocks stock = stockRepository.getStockPubInfo(stockNo);
         if (stock.getPublicationBalance() > 0)
             return stock.getPublicationPoint();
-        return stockRepository.getStockPrice(stockNo);
+
+        Integer last = stockRepository.getStockPrice(stockNo);   // null 가능
+        return (last != null) ? last : stock.getPublicationPoint();  // 체결 없으면
     }
 
     // 현재 포인트
@@ -83,6 +86,31 @@ public class StockServiceImpl implements StockService {
                 .prevPoint(stockRepository.getPrevPoint(stockNo))
                 .priceChange(price.getPriceChange())
                 .changeRate(price.getChangeRate()).build();
+    }
+    @Transactional(readOnly = true)
+    @Override
+    public List<StockManageResponse> getManageStockList() {
+        List<StockManageResponse> result = new ArrayList<>();
+        for (Stocks stock : stockRepository.getStockManageList()) {
+            StockPriceResponse price = getStockPriceInfo(stock.getStockNo());
+            result.add(StockManageResponse.builder()
+                    .stockNo(stock.getStockNo())
+                    .name(stock.getName())
+                    .nowPoint(price.getNowPoint())
+                    .priceChange(price.getPriceChange())
+                    .changeRate(price.getChangeRate())
+                    .stockContent(stock.getStockContent())
+                    .publicationBalance(stock.getPublicationBalance())
+                    .publicationPoint(stock.getPublicationPoint())
+                    .tradeStarted(getHasTrade(stock.getStockNo())).build());
+        }
+        return result;
+    }
+    @Transactional(readOnly = true)
+    @Override
+    public boolean getHasTrade(int stockNo) {
+        // 마지막 체결가 있으면 거래 발생함 (null = 거래 없음)
+        return stockRepository.getStockPrice(stockNo) != null;
     }
 
 }

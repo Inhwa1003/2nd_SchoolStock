@@ -1,12 +1,14 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
   <meta charset="UTF-8">
   <title>주식 목록</title>
 
+  <meta name="_csrf"        th:content="${_csrf.token}">
+  <meta name="_csrf_header" th:content="${_csrf.headerName}">
+
   <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
-
   <link rel="stylesheet" th:href="@{/css/Common.css}">
   <link rel="stylesheet" th:href="@{/css/StockList.css}">
   <link rel="stylesheet" th:href="@{/css/SideBar.css}">
@@ -22,8 +24,16 @@
     </header>
 
     <div class="main">
-      <div class="panel">
+      <div class="panel stock-register" sec:authorize="hasRole('TEACHER')">
+        <h3>새 주식 등록</h3>
+        <input type="text"   id="stockName"          placeholder="주식명">
+        <input type="text"   id="stockContent"       placeholder="주식 설명">
+        <input type="number" id="publicationBalance" placeholder="발행 수량" min="1">
+        <input type="number" id="publicationPoint"   placeholder="발행가(P)" min="100">
+        <button type="button" id="addStockBtn">등록</button>
+      </div>
 
+      <div class="panel">
         <table class="stock-table">
           <thead>
           <tr>
@@ -32,6 +42,10 @@
             <th>이전가격</th>
             <th>(현재가격-이전가격)</th>
             <th>등락률(%)</th>
+            <th sec:authorize="hasRole('TEACHER')">발행가</th>
+            <th sec:authorize="hasRole('TEACHER')">발행 수량</th>
+            <th sec:authorize="hasRole('TEACHER')">설명</th>
+            <th sec:authorize="hasRole('TEACHER')">관리</th>
           </tr>
           </thead>
 
@@ -72,16 +86,41 @@
                 th:text="${(stock.nowPoint - stock.priceChange) + 'P'}">이전가격
             </td>
 
-            <td th:classappend="${stock.priceChange >= 0} ? ' up' : ' down'"
+            <td th:classappend="${stock.priceChange > 0 ? ' up' : (stock.priceChange < 0 ? ' down' : ' flat')}"
                 class="price-change"
-                th:text="${stock.priceChange >= 0 ? '+' + stock.priceChange + 'P' : stock.priceChange + 'P'}">
+                th:text="${stock.priceChange > 0 ? '+' + stock.priceChange + 'P' : stock.priceChange + 'P'}">
               가격변동
             </td>
 
-            <td th:classappend="${stock.changeRate >= 0} ? ' up' : ' down'"
+            <td th:classappend="${stock.changeRate > 0 ? ' up' : (stock.changeRate < 0 ? ' down' : ' flat')}"
                 class="change-rate"
-                th:text="${stock.changeRate >= 0 ? '+' + #numbers.formatDecimal(stock.changeRate, 1, 2) + '%' : #numbers.formatDecimal(stock.changeRate, 1, 2) + '%'}">
+                th:text="${stock.changeRate > 0
+            ? '+' + #numbers.formatDecimal(stock.changeRate, 1, 2) + '%'
+            : (stock.changeRate < 0
+                ? #numbers.formatDecimal(stock.changeRate, 1, 2) + '%'
+                : '0%')}">
               등락률
+            </td>
+
+            <!-- 선생님 전용 발행 정보 -->
+            <td sec:authorize="hasRole('TEACHER')">
+              <input class="st-edit st-point" type="number" min="1"
+                     th:value="${stock.publicationPoint}"
+                     th:attr="disabled=${stock.tradeStarted} ? 'disabled' : null">
+            </td>
+            <td sec:authorize="hasRole('TEACHER')">
+              <input class="st-edit st-balance" type="number" min="0"
+                     th:value="${stock.publicationBalance}"
+                     th:attr="disabled=${stock.tradeStarted} ? 'disabled' : null">
+            </td>
+            <td sec:authorize="hasRole('TEACHER')">
+              <input class="st-edit st-content" type="text" th:value="${stock.stockContent}">
+            </td>
+            <td sec:authorize="hasRole('TEACHER')">
+              <button type="button" class="st-save">저장</button>
+              <div th:if="${stock.tradeStarted}" style="color:#888; font-size:11px; margin-top:4px;">
+                거래 시작됨<br>발행정보 잠금
+              </div>
             </td>
           </tr>
           </tbody>
@@ -95,5 +134,6 @@
 </div>
 
 <script th:src="@{/js/stock-list.js}"></script>
+<script th:src="@{/js/stock-teacher.js}"></script>
 </body>
 </html>
