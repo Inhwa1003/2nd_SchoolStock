@@ -37,22 +37,47 @@
 
           <tbody>
           <!-- 주식 목록이 비어 있을 때 -->
-          <tr th:if="${#lists.isEmpty(stockList)}">
-            <td colspan="5">등록된 주식이 없습니다.</td>
+          <tr th:if="${#lists.isEmpty(stockList)}"
+              class="empty-stock-row">
+            <td colspan="5">
+            <div class="empty-stock-state">
+              <div class="empty-stock-icon">📈</div>
+              <p>등록된 주식이 없습니다.</p>
+              <span>등록된 주식이 생기면 이곳에 표시됩니다.</span>
+            </div>
+            </td>
           </tr>
 
           <!-- 주식 목록 출력 -->
           <tr th:each="stock : ${stockList}"
+              class="stock-row"
               th:data-stock-no="${stock.stockNo}"
               th:data-stock-name="${stock.name}">
 
-            <td th:text="${stock.name}">주식명</td>
+            <td>
+              <div class="stock-name-cell">
+
+                <div class="stock-icon"
+                     th:text="${stock.stockNo == 1 ? '🍜' :
+                                (stock.stockNo == 2 ? '🎮' :
+                                (stock.stockNo == 3 ? '🎤' : '📈'))}">
+                  📈
+                </div>
+
+                <span class="stock-name-text"
+                      th:text="${stock.name}">
+                    주식명
+                  </span>
+              </div>
+            </td>
 
             <td class="current-price"
-                th:text="${stock.nowPoint + 'P'}">현재가격</td>
+                th:text="${stock.nowPoint + 'P'}">현재가격
+            </td>
 
             <td class="prev-price"
-                th:text="${(stock.nowPoint - stock.priceChange) + 'P'}">이전가격</td>
+                th:text="${(stock.nowPoint - stock.priceChange) + 'P'}">이전가격
+            </td>
 
             <td th:classappend="${stock.priceChange >= 0} ? ' up' : ' down'"
                 class="price-change"

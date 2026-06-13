@@ -9,7 +9,7 @@
 .content {
     min-height: 100vh;
     box-sizing: border-box;
-    padding: 34px 36px;
+    padding: 0;
     background: linear-gradient(180deg, #f8fbff 0%, #f4f7fb 100%);
 }
 
@@ -23,9 +23,15 @@
 }
 
 .hd-name {
-    margin: 0;
+    width: fit-content;
 
-    font-size: 34px;
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+
+    padding: 16px 22px;
+
+    font-size: 32px;
     font-weight: 850;
     color: #111827;
     letter-spacing: -1px;

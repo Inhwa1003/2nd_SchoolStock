@@ -9,7 +9,7 @@
 .content {
     min-height: 100vh;
     box-sizing: border-box;
-    padding: 34px 36px;
+    padding: 0;
     background: linear-gradient(180deg, #f8fbff 0%, #f4f7fb 100%);
 }
 
@@ -50,7 +50,15 @@
 
 /* 페이지 제목 */
 .hd-name {
-    font-size: 34px;
+    width: fit-content;
+
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+
+    padding: 16px 22px;
+
+    font-size: 32px;
     font-weight: 850;
     color: #111827;
     letter-spacing: -1px;
