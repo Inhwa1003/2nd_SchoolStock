@@ -16,6 +16,8 @@ public interface StockService {
     List<StockListPageResponse> getStockList();
     //주식상세 페이지
     StockDetailPageResponse getStockDetail(int stockNo);
-    // 선생님 주식 관리 목록
+    //선생님 주식 관리 목록
     List<StockManageResponse> getManageStockList();
+    //거래유무 조회
+    boolean getHasTrade(int stockNo);
 }

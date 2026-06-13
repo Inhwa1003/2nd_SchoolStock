@@ -26,7 +26,9 @@ public class StockServiceImpl implements StockService {
         Stocks stock = stockRepository.getStockPubInfo(stockNo);
         if (stock.getPublicationBalance() > 0)
             return stock.getPublicationPoint();
-        return stockRepository.getStockPrice(stockNo);
+
+        Integer last = stockRepository.getStockPrice(stockNo);   // null 가능
+        return (last != null) ? last : stock.getPublicationPoint();  // 체결 없으면
     }
 
     // 현재 포인트
@@ -99,9 +101,16 @@ public class StockServiceImpl implements StockService {
                     .changeRate(price.getChangeRate())
                     .stockContent(stock.getStockContent())
                     .publicationBalance(stock.getPublicationBalance())
-                    .publicationPoint(stock.getPublicationPoint()).build());
+                    .publicationPoint(stock.getPublicationPoint())
+                    .tradeStarted(getHasTrade(stock.getStockNo())).build());
         }
         return result;
+    }
+    @Transactional(readOnly = true)
+    @Override
+    public boolean getHasTrade(int stockNo) {
+        // 마지막 체결가 있으면 거래 발생함 (null = 거래 없음)
+        return stockRepository.getStockPrice(stockNo) != null;
     }
 
 }

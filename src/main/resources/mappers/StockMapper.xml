@@ -88,4 +88,5 @@
     <select id="getStockPubInfo" parameterType="int" resultType="com.school.schoolstock.domain.stock.vo.Stocks">
         SELECT publication_balance AS "publicationBalance", publication_point AS "publicationPoint" FROM stocks WHERE stock_no = #{stockNo};
     </select>
+
 </mapper>

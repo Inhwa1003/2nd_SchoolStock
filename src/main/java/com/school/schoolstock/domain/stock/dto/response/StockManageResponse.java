@@ -16,4 +16,5 @@ public class StockManageResponse {
     private String stockContent;       // 설명
     private int publicationBalance;    // 발행 잔량
     private int publicationPoint;      // 발행가
+    private boolean tradeStarted;
 }

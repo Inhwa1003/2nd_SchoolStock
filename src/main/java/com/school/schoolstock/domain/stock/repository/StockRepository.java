@@ -17,7 +17,7 @@ public interface StockRepository {
     Stocks getStockInfo(int stockNo);
 
     // 주식 현재가격 조회
-    int getStockPrice(int stockNo);
+    Integer getStockPrice(int stockNo);
 
     // 주식 이전가 대비 가격 조회
     int getStockPriceChange(int stockNo);
