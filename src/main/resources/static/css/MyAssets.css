@@ -402,9 +402,11 @@
     }
 
     .hd {
-        align-items: flex-start;
-        flex-direction: column;
-        gap: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        margin-bottom: 26px;
     }
 
     .hd-name {

@@ -30,9 +30,18 @@ async function refreshAssets() {
         tbody.innerHTML = '';
         if (!data.myStocks || data.myStocks.length === 0) {
             const tr = document.createElement('tr');
+            tr.className = 'empty-stock-row';
             const cell = document.createElement('td');
             cell.colSpan = 6;
-            cell.textContent = '보유한 주식이 없습니다.';
+
+            cell.innerHTML = `
+                <div class="empty-stock-state">
+                <div class="empty-stock-icon">📦</div>
+                <p>보유한 주식이 없습니다.</p>
+                <span>주식 목록에서 원하는 주식을 확인해보세요.</span>
+                </div>
+            `;
+
             tr.appendChild(cell);
             tbody.appendChild(tr);
         } else {
