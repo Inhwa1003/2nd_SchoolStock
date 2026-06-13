@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 @Slf4j
 @RestControllerAdvice
@@ -30,14 +31,5 @@ public class GlobalExceptionHandler {
                         .status(400)
                         .code("INVALID_INPUT")
                         .message(msg).build());
-    }
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleEtc(Exception e) {
-        log.error("Unhandled exception", e);
-        return ResponseEntity.internalServerError()
-                .body(ErrorResponse.builder()
-                        .status(500)
-                        .code("INTERNAL_ERROR")
-                        .message("서버 내부 오류가 발생했습니다.").build());
     }
 }
