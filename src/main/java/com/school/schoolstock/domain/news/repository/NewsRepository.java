@@ -13,4 +13,13 @@ public interface NewsRepository {
     //선생님 관리용 목록(번호포함)
     List<News> getNewsManageList();
 
+    //뉴스 등록
+    void setNews(String newsContent);
+
+    //뉴스 수정
+    int setUpdateNews(int newsNo, String newsContent);
+
+    //뉴스 삭제
+    int setDeleteNews(int newsNo);
+
 }

@@ -9,5 +9,5 @@ import lombok.*;
 @Getter
 public class News {
     private int newsNo;
-    private String newsContext;
+    private String newsContent;
 }

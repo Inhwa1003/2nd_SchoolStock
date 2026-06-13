@@ -1,7 +1,12 @@
 package com.school.schoolstock.domain.teacher.controller;
 
+import com.school.schoolstock.domain.auth.service.UserService;
 import com.school.schoolstock.domain.coupon.dto.request.CouponDeleteRequest;
 import com.school.schoolstock.domain.coupon.dto.request.CouponUpdateRequest;
+import com.school.schoolstock.domain.news.dto.request.NewsCreateRequest;
+import com.school.schoolstock.domain.news.dto.request.NewsDeleteRequest;
+import com.school.schoolstock.domain.news.dto.request.NewsUpdateRequest;
+import com.school.schoolstock.domain.news.service.NewsService;
 import com.school.schoolstock.domain.stock.dto.request.StockUpdateRequest;
 import com.school.schoolstock.domain.stock.dto.response.StockListPageResponse;
 import com.school.schoolstock.domain.stock.dto.response.StockManageResponse;
@@ -28,6 +33,7 @@ public class TeacherRestController {
     private final TeacherService teacherService;
     private final StudentService studentService;
     private final StockService stockService;
+    private final NewsService newsService;
 
     @GetMapping("/me/teachers/my-students/{studentNumber}/assets/stocks")
     public MyAssetResponse getMyStudentAssets(
@@ -45,7 +51,7 @@ public class TeacherRestController {
         teacherService.givePoint(userDetails.getUsername(), studentNumber, request);
         return ApiResponse.of(200, "포인트가 지급되었습니다.", null);
     }
-    // 쿠폰 정보(쿠폰명, 쿠폰 포인트) 수정
+    //쿠폰 정보(쿠폰명, 쿠폰 포인트) 수정
     @PostMapping("/coupons")
     @ResponseBody
     public ApiResponse setCoupon(@RequestBody CouponUpdateRequest request) {
@@ -53,7 +59,7 @@ public class TeacherRestController {
         return ApiResponse.of(200, "쿠폰 정보가 수정되었습니다.", null);
     }
 
-    // 쿠폰 상점에 있는 쿠폰 삭제
+    //쿠폰 상점에 있는 쿠폰 삭제
     @DeleteMapping("/coupons")
     @ResponseBody
     public ApiResponse deleteCoupon(@RequestBody CouponDeleteRequest request) {
@@ -62,7 +68,7 @@ public class TeacherRestController {
     }
 
 
-    // 학생 보유 쿠폰 상태를 '사용'으로 변경
+    //학생 보유 쿠폰 상태를 '사용'으로 변경
     @PostMapping("/me/teachers/my-students/{studentNumber}/coupons")
     public ApiResponse updateStudentCouponUsed(
             @AuthenticationPrincipal UserDetails userDetails,
@@ -73,22 +79,44 @@ public class TeacherRestController {
         return ApiResponse.of(200, "쿠폰이 사용 처리되었습니다.", null);
     }
 
-    // 선생님이 새 주식 등록
+    //선생님이 새 주식 등록
     @PostMapping("/stocks")
     public ApiResponse addStock(@RequestBody StockCreateRequest request) {
         teacherService.setStock(request);
         return ApiResponse.of(200, "주식이 등록되었습니다.", null);
     }
 
-    // 선생님 주식 목록 실시간 시세 Interval
+    //선생님 주식 목록 실시간 시세 Interval
     @GetMapping("/stocks/prices")
     public List<StockListPageResponse> getStockPrices() {
         return stockService.getStockList();
     }
 
+    //주식 정보 수정
     @PostMapping("/stocks/edit")
     public ApiResponse updateStock(@RequestBody StockUpdateRequest request) {
         teacherService.updateStock(request);
         return ApiResponse.of(200, "주식 정보가 수정되었습니다.", null);
+    }
+
+    //뉴스 추가
+    @PostMapping("/news")
+    public ApiResponse addNews(@RequestBody NewsCreateRequest request) {
+        newsService.setNews(request);
+        return ApiResponse.of(200, "뉴스가 등록되었습니다.", null);
+    }
+
+    //뉴스 수정
+    @PostMapping("/news/edit")
+    public ApiResponse updateNews(@RequestBody NewsUpdateRequest request) {
+        newsService.setUpdateNews(request);
+        return ApiResponse.of(200, "뉴스가 수정되었습니다.", null);
+    }
+
+    //뉴스 삭제
+    @DeleteMapping("/news")
+    public ApiResponse deleteNews(@RequestBody NewsDeleteRequest request) {
+        newsService.setDeleteNews(request);
+        return ApiResponse.of(200, "뉴스가 삭제되었습니다.", null);
     }
 }

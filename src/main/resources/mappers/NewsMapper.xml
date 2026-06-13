@@ -14,5 +14,20 @@
         SELECT news_no, news_content FROM news
     </select>
 
+    <!-- 뉴스 등록 -->
+    <insert id="setNews">
+        INSERT INTO news (news_content) VALUES (#{newsContent})
+    </insert>
+
+    <!-- 뉴스 수정 -->
+    <update id="setUpdateNews">
+        UPDATE news SET news_content = #{newsContent} WHERE news_no = #{newsNo}
+    </update>
+
+    <!-- 뉴스 삭제 -->
+    <delete id="setDeleteNews">
+        DELETE FROM news WHERE news_no = #{newsNo}
+    </delete>
+
 </mapper>
 
