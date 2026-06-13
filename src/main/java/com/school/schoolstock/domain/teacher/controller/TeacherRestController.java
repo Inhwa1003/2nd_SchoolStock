@@ -2,6 +2,8 @@ package com.school.schoolstock.domain.teacher.controller;
 
 import com.school.schoolstock.domain.coupon.dto.request.CouponDeleteRequest;
 import com.school.schoolstock.domain.coupon.dto.request.CouponUpdateRequest;
+import com.school.schoolstock.domain.stock.dto.request.StockUpdateRequest;
+import com.school.schoolstock.domain.stock.dto.response.StockListPageResponse;
 import com.school.schoolstock.domain.stock.dto.response.StockManageResponse;
 import com.school.schoolstock.domain.stock.service.StockService;
 import com.school.schoolstock.domain.student.dto.response.MyAssetResponse;
@@ -80,6 +82,13 @@ public class TeacherRestController {
 
     // 선생님 주식 목록 실시간 시세 Interval
     @GetMapping("/stocks/prices")
-    public List<StockManageResponse> getStockPrices() {
-        return stockService.getManageStockList();
-    }}
+    public List<StockListPageResponse> getStockPrices() {
+        return stockService.getStockList();
+    }
+
+    @PostMapping("/stocks/edit")
+    public ApiResponse updateStock(@RequestBody StockUpdateRequest request) {
+        teacherService.updateStock(request);
+        return ApiResponse.of(200, "주식 정보가 수정되었습니다.", null);
+    }
+}

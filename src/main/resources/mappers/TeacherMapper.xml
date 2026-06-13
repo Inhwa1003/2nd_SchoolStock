@@ -76,4 +76,19 @@
         VALUES (#{name}, #{stockContent}, #{publicationBalance}, #{publicationPoint}, #{prevPoint})
     </insert>
 
+    <update id="updateStock">
+        UPDATE stocks
+        SET name = #{name},
+            stock_content = #{stockContent},
+            publication_balance = #{publicationBalance},
+            publication_point = #{publicationPoint},
+            prev_point = #{publicationPoint}
+        WHERE stock_no = #{stockNo}
+    </update>
+
+    <update id="setUpdateStockInfo">
+        UPDATE stocks SET name = #{name}, stock_content = #{stockContent}
+        WHERE stock_no = #{stockNo}
+    </update>
+
 </mapper>

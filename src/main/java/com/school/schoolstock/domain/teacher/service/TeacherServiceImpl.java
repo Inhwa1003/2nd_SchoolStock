@@ -1,6 +1,8 @@
 package com.school.schoolstock.domain.teacher.service;
 
 import com.school.schoolstock.domain.coupon.dto.request.CouponUpdateRequest;
+import com.school.schoolstock.domain.stock.dto.request.StockUpdateRequest;
+import com.school.schoolstock.domain.stock.service.StockService;
 import com.school.schoolstock.domain.stock.vo.Stocks;
 import com.school.schoolstock.domain.student.repository.StudentRepository;
 import com.school.schoolstock.domain.teacher.dto.request.PointGrantRequest;
@@ -23,7 +25,7 @@ public class TeacherServiceImpl implements TeacherService {
 
     private final TeacherRepository teacherRepository;
     private final StudentRepository studentRepository;
-
+    private final StockService stockService;
     // 학년과 반이 같은 학생들의 정보를 불러오기 => 담임 선생님이 맡은 반의 학생들의 정보를 조회
     @Override
     public List<StudentListResponse> getMyStudentsList(String teacherId) {
@@ -123,6 +125,38 @@ public class TeacherServiceImpl implements TeacherService {
                 .publicationBalance(request.getPublicationBalance())
                 .publicationPoint(request.getPublicationPoint())
                 .prevPoint(request.getPublicationPoint()).build());
+    }
+
+    // 선생님 주식 수정
+    @Transactional
+    @Override
+    public void updateStock(StockUpdateRequest request) {
+        if (request.getName() == null || request.getName().trim().isEmpty())
+            throw new BusinessException(ErrorCode.INVALID_INPUT);
+
+        int stockNo = request.getStockNo();
+
+        // 거래 시작된 주식 -> 이름,설명만 수정 (발행수량,발행가,이전가 보존)
+        if (stockService.getHasTrade(stockNo)) {
+            if (teacherRepository.setUpdateStockInfo(stockNo, request.getName(), request.getStockContent()) == 0)
+                throw new BusinessException(ErrorCode.STOCK_NOT_FOUND);
+            return;
+        }
+
+        // 거래 전 -> 발행수량,발행가 까지 + 이전가 = 발행가 동기화(등락 0)
+        if (request.getPublicationBalance() < 0)
+            throw new BusinessException(ErrorCode.INVALID_INPUT);
+        if (request.getPublicationPoint() <= 0)
+            throw new BusinessException(ErrorCode.INVALID_INPUT);
+
+        if (teacherRepository.updateStock(Stocks.builder()
+                .stockNo(stockNo)
+                .name(request.getName())
+                .stockContent(request.getStockContent())
+                .publicationBalance(request.getPublicationBalance())
+                .publicationPoint(request.getPublicationPoint())
+                .build()) == 0)
+            throw new BusinessException(ErrorCode.STOCK_NOT_FOUND);
     }
 
 }

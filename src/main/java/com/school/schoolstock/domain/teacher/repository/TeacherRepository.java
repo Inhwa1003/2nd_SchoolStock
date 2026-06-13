@@ -36,4 +36,10 @@ public interface TeacherRepository {
 
     // 선생님이 새 주식 등록
     int setStocks(Stocks stock);
+
+    // 선생님 주식 수정
+    int updateStock(Stocks stock);
+
+    // 거래 시작된 주식 -> 이름·설명만 수정
+    int setUpdateStockInfo(int stockNo, String name, String stockContent);
 }

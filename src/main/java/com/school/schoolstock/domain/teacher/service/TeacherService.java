@@ -1,6 +1,7 @@
 package com.school.schoolstock.domain.teacher.service;
 
 import com.school.schoolstock.domain.coupon.dto.request.CouponUpdateRequest;
+import com.school.schoolstock.domain.stock.dto.request.StockUpdateRequest;
 import com.school.schoolstock.domain.teacher.dto.request.PointGrantRequest;
 import com.school.schoolstock.domain.teacher.dto.request.StockCreateRequest;
 import com.school.schoolstock.domain.teacher.dto.response.StudentListResponse;
@@ -32,4 +33,6 @@ public interface TeacherService {
     // 선생님이 새 주식 등록
     void setStock(StockCreateRequest request);
 
+    // 선생님 주식 수정
+    void updateStock(StockUpdateRequest request);
 }
