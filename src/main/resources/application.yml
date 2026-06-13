@@ -2,11 +2,6 @@ spring:
   application:
     name: 2nd_SchoolStock
 
-  security:
-    user:
-      name: admin
-      password: 1234
-
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
     url: jdbc:mariadb://127.0.0.1:3306/schoolstock

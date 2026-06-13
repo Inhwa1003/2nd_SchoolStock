@@ -1,0 +1,58 @@
+@CHARSET "UTF-8";
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.error-page {
+    flex: 1;
+    background-color: #F5F5F5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.error-card {
+    width: 100%;
+    max-width: 460px;
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    padding: 48px 56px;
+    text-align: center;
+}
+
+.error-status {
+    font-size: 72px;
+    font-weight: 700;
+    color: #5c5ce0;
+    line-height: 1;
+    margin: 0;
+}
+
+.error-message {
+    font-size: 17px;
+    font-weight: 500;
+    color: #555;
+    margin: 18px 0 28px;
+}
+
+.error-home {
+    display: inline-block;
+    border: 1px solid #ccc;
+    background-color: #f5f5f5;
+    color: #444;
+    font-size: 14px;
+    text-decoration: none;
+    padding: 8px 18px;
+    border-radius: 6px;
+}
+
+.error-home:hover {
+    background-color: #eaeaea;
+    color: #000;
+    text-decoration: none;
+}
