@@ -1,94 +1,462 @@
-@CHARSET "UTF-8";
+@charset "UTF-8";
+
 /* ========================================
-   MyAssets.css - 내 자산 화면 전용
-   공통 스타일은 Common.css, 사이드바는 SideBar.css에서 가져옴
+   MyAssets.css - 내 자산 화면 전용 스타일
+   사이드바 디자인과 맞춘 모던 카드형 UI
 ======================================== */
 
-/* ---------- 상단 요약 카드 영역 ---------- */
-.summary-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 10px;
-    margin-bottom: 12px;
+/* 전체 콘텐츠 영역 */
+.content {
+    min-height: 100vh;
+    box-sizing: border-box;
+    padding: 0;
+    background: linear-gradient(180deg, #f8fbff 0%, #f4f7fb 100%);
 }
 
-.card {
-    background: #fff;
-    padding: 24px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    text-align: center;
+/* 상단 헤더 */
+.hd {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 26px;
+}
+
+.hd-name {
+    width: fit-content;
+
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+
+    padding: 16px 22px;
+
+    font-size: 32px;
+    font-weight: 850;
+    color: #111827;
+    letter-spacing: -1px;
+    line-height: 1.15;
+}
+
+/* 선생님 포인트 지급 영역 */
+.point-grant {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 12px 14px;
+    border: 1px solid #e6ebf3;
+    border-radius: 18px;
+
+    background: #ffffff;
+    box-shadow: 0 10px 24px rgba(30, 55, 90, 0.06);
+}
+
+.grant-label {
+    font-size: 14px;
+    font-weight: 700;
+    color: #4b5563;
+    white-space: nowrap;
+}
+
+.point-grant input {
+    height: 38px;
+    padding: 0 12px;
+
+    border: 1px solid #dbe3ef;
+    border-radius: 12px;
+    outline: none;
+
+    background: #f9fbff;
+    color: #1f2937;
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.point-grant input:focus {
+    border-color: #7da0ff;
+    background: #ffffff;
+    box-shadow: 0 0 0 4px rgba(83, 127, 255, 0.12);
+}
+
+#grant-points {
+    width: 100px;
+}
+
+#grant-content {
+    width: 170px;
+}
+
+#grant-btn {
+    height: 38px;
+    padding: 0 18px;
+
+    border: none;
+    border-radius: 12px;
+
+    background: linear-gradient(145deg, #5078ff, #315eea);
+    color: #ffffff;
+
+    font-size: 14px;
+    font-weight: 800;
+
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+#grant-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 20px rgba(63, 109, 246, 0.22);
+}
+
+/* 메인 영역 */
+.main {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* ========================================
+   요약 카드 영역
+======================================== */
+
+.summary-container {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.summary-container .card {
+    min-height: 138px;
+    box-sizing: border-box;
+    padding: 24px 22px;
+
+    display: flex;
+    align-items: center;
+    gap: 18px;
+
+    border: 1px solid #edf1f6;
+    border-radius: 24px;
+
+    background: #ffffff;
+    box-shadow: 0 14px 32px rgba(30, 55, 90, 0.07);
+
+    transition: all 0.22s ease;
+}
+
+.summary-container .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 18px 38px rgba(30, 55, 90, 0.11);
+}
+
+/* 쿠폰 카드는 클릭 가능하니까 살짝 더 표시 */
+#coupon-card:hover {
+    border-color: #bcd0ff;
+    background: #f9fbff;
+}
+
+/* 카드 아이콘 */
+.summary-icon {
+    flex: 0 0 58px;
+
+    width: 58px;
+    height: 58px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 18px;
+
+    font-size: 28px;
+    box-shadow: 0 10px 22px rgba(30, 55, 90, 0.08);
+}
+
+.summary-icon.purple {
+    background: #f2efff;
+}
+
+.summary-icon.yellow {
+    background: #fff7df;
+}
+
+.summary-icon.blue {
+    background: #eef5ff;
+}
+
+.summary-icon.green {
+    background: #eafaf1;
+}
+
+.summary-text {
+    min-width: 0;
 }
 
 .label {
     display: block;
-    color: #666;
-    font-size: 16px;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
+
+    font-size: 15px;
+    font-weight: 700;
+    color: #6b7280;
 }
 
 .value {
-    font-size: 26px;
-    font-weight: 600;
-    color: #333;
+    font-size: 28px;
+    font-weight: 850;
+    color: #111827;
+    letter-spacing: -0.7px;
+    line-height: 1.15;
 }
 
-/* ---------- 보유 주식 상세 영역 ---------- */
+/* 손익 색상 */
+.plus {
+    color: #e05252 !important;
+}
+
+.minus {
+    color: #2563eb !important;
+}
+
+/* ========================================
+   보유 주식 상세 패널
+======================================== */
+
+.panel {
+    overflow: hidden;
+
+    border: 1px solid #edf1f6;
+    border-radius: 26px;
+
+    background: #ffffff;
+    box-shadow: 0 16px 36px rgba(30, 55, 90, 0.08);
+}
+
+/* 패널 헤더 */
 .table-header {
+    padding: 24px 26px;
+
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    margin-bottom: 8px;
+    justify-content: space-between;
+
+    border-bottom: 1px solid #edf1f6;
+    background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
 }
 
 .table-header h3 {
-    font-size: 16px;
-    font-weight: 600;
     margin: 0;
+
+    font-size: 24px;
+    font-weight: 850;
+    color: #111827;
+    letter-spacing: -0.7px;
 }
 
+/* 새로고침 버튼 */
 .refresh-all-btn {
-    border: 1px solid #ccc;
-    background: #f8f9fa;
-    border-radius: 4px;
-    padding: 4px 8px;
-    font-size: 14px;
-    cursor: pointer;
-}
+    width: 48px;
+    height: 48px;
 
-/* ---------- 자산 테이블 ---------- */
-#stock-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 18px;
-}
-
-#stock-table th {
-    background-color: #f5f5f5;
-    border-bottom: 1px solid #ccc;
-    padding: 14px;
-    text-align: center;
-    font-weight: 600;
-    font-size: 17px;
-}
-
-#stock-table td {
-    padding: 14px;
-    border-bottom: 1px solid #eee;
-    text-align: center;
-    font-size: 18px
-}
-
-#stock-table tbody tr:hover {
-    background-color: #fafafa;
-}
-
-.point-grant {
-    margin-left: auto;
-    margin-right: 20px;
     display: flex;
     align-items: center;
-    gap: 8px;                
+    justify-content: center;
+
+    border: 1px solid #dfe7f4;
+    border-radius: 16px;
+
+    background: #ffffff;
+    color: #2f66e8;
+
+    font-size: 21px;
+    cursor: pointer;
+
+    box-shadow: 0 8px 18px rgba(30, 55, 90, 0.07);
+    transition: all 0.22s ease;
 }
 
-/* 등락 색상은 Common.css의 .plus, .minus 사용 */
+.refresh-all-btn:hover {
+    transform: translateY(-2px) rotate(8deg);
+    border-color: #bcd0ff;
+    background: #f4f8ff;
+    box-shadow: 0 12px 24px rgba(63, 109, 246, 0.15);
+}
+
+/* 테이블 감싸는 영역 */
+.stock-table-wrap {
+    width: 100%;
+    overflow-x: auto;
+}
+
+/* 테이블 */
+#stock-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+
+    background: #ffffff;
+}
+
+#stock-table thead th {
+    padding: 16px 18px;
+
+    background: #f6f8fc;
+    color: #5b6472;
+
+    font-size: 14px;
+    font-weight: 800;
+    text-align: center;
+    white-space: nowrap;
+
+    border-bottom: 1px solid #e7edf5;
+}
+
+#stock-table tbody td {
+    padding: 20px 18px;
+
+    color: #1f2937;
+    font-size: 15px;
+    font-weight: 650;
+    text-align: center;
+    white-space: nowrap;
+
+    border-bottom: 1px solid #edf1f6;
+}
+
+#stock-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.stock-row-item {
+    transition: all 0.18s ease;
+}
+
+.stock-row-item:hover {
+    background: #f8fbff;
+}
+
+.stock-row-item td:first-child {
+    font-weight: 800;
+    color: #111827;
+}
+
+.stock-price {
+    color: #2f66e8;
+    font-weight: 850 !important;
+}
+
+/* ========================================
+   빈 주식 상태
+======================================== */
+
+.empty-stock-row td {
+    padding: 0 !important;
+}
+
+.empty-stock-state {
+    min-height: 250px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+    background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+}
+
+.empty-stock-icon {
+    width: 72px;
+    height: 72px;
+    margin-bottom: 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 24px;
+    background: #f0f5ff;
+
+    font-size: 34px;
+}
+
+.empty-stock-state p {
+    margin: 0 0 8px;
+
+    font-size: 22px;
+    font-weight: 850;
+    color: #111827;
+}
+
+.empty-stock-state span {
+    font-size: 15px;
+    font-weight: 600;
+    color: #7b8494;
+}
+
+/* ========================================
+   반응형
+======================================== */
+
+@media (max-width: 1200px) {
+    .summary-container {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .content {
+        padding: 24px 18px;
+    }
+
+    .hd {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        margin-bottom: 26px;
+    }
+
+    .hd-name {
+        font-size: 30px;
+    }
+
+    .point-grant {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+
+    #grant-points,
+    #grant-content {
+        flex: 1;
+        min-width: 120px;
+    }
+
+    #grant-btn {
+        flex: 0 0 80px;
+    }
+
+    .summary-container {
+        grid-template-columns: 1fr;
+    }
+
+    .summary-container .card {
+        min-height: 118px;
+        padding: 20px;
+    }
+
+    .value {
+        font-size: 25px;
+    }
+
+    .table-header {
+        padding: 22px 20px;
+    }
+
+    #stock-table thead th,
+    #stock-table tbody td {
+        padding: 15px 14px;
+        font-size: 14px;
+    }
+}

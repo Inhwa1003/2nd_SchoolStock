@@ -2,6 +2,7 @@ package com.school.schoolstock.domain.stock.service;
 
 import com.school.schoolstock.domain.stock.dto.response.StockDetailPageResponse;
 import com.school.schoolstock.domain.stock.dto.response.StockListPageResponse;
+import com.school.schoolstock.domain.stock.dto.response.StockManageResponse;
 import com.school.schoolstock.domain.stock.dto.response.StockPriceResponse;
 
 import java.util.List;
@@ -15,4 +16,8 @@ public interface StockService {
     List<StockListPageResponse> getStockList();
     //주식상세 페이지
     StockDetailPageResponse getStockDetail(int stockNo);
+    //선생님 주식 관리 목록
+    List<StockManageResponse> getManageStockList();
+    //거래유무 조회
+    boolean getHasTrade(int stockNo);
 }

@@ -3,46 +3,93 @@
 <head>
     <meta charset="UTF-8" />
     <title>내 포인트 내역</title>
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
     <link rel="stylesheet" th:href="@{/css/Common.css}" />
     <link rel="stylesheet" th:href="@{/css/MyPointHistory.css}" />
     <link rel="stylesheet" th:href="@{/css/SideBar.css}">
 </head>
+
 <body>
 <div class="app">
+
     <div class="content">
 
         <header class="hd">
             <div class="hd-name">내 포인트 내역</div>
         </header>
 
-        <div class="main">
-            <div class="panel">
-                <table class="history-table">
-                    <thead>
-                    <tr>
-                        <th>날짜</th><th>유형</th><th>내용</th><th>포인트 변화</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:if="${#lists.isEmpty(pointHistory)}">
-                        <td colspan="4">포인트 내역이 없습니다.</td>
-                    </tr>
+        <main class="main">
 
-                    <tr th:each="h : ${pointHistory}">
-                        <td class="date" th:text="${#temporals.format(h.historyDate, 'yyyy-MM-dd')}">2026-06-08</td>
-                        <td th:text="${h.historyType}">유형</td>
-                        <td th:text="${h.historyContent}">내용</td>
-                        <td th:classappend="${h.pointChange ge 0} ? 'plus' : 'minus'"
-                            th:text="${(h.pointChange ge 0 ? '+' : '') + #numbers.formatInteger(h.pointChange, 1, 'COMMA')} + 'P'">+0P</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+            <section class="panel point-history-panel">
+
+                <div class="history-panel-title">
+                    <div class="history-title-icon">🧾</div>
+                    <h3>포인트 내역</h3>
+                </div>
+
+                <div class="history-table-wrap">
+                    <table class="history-table">
+                        <thead>
+                        <tr>
+                            <th>날짜</th>
+                            <th>유형</th>
+                            <th>내용</th>
+                            <th>포인트 변화</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <tr th:if="${#lists.isEmpty(pointHistory)}"
+                            class="empty-history-row">
+                            <td colspan="4">
+                                <div class="empty-history-state">
+                                    <div class="empty-history-icon">📋</div>
+                                    <p>포인트 내역이 없습니다.</p>
+                                    <span>포인트 변동이 생기면 이곳에 표시됩니다.</span>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr th:each="h : ${pointHistory}"
+                            class="history-row">
+                            <td class="date"
+                                th:text="${#temporals.format(h.historyDate, 'yyyy-MM-dd')}">
+                                2026-06-08
+                            </td>
+
+                            <td>
+                                <span class="history-type"
+                                      th:text="${h.historyType}">
+                                    유형
+                                </span>
+                            </td>
+
+                            <td class="history-content"
+                                th:text="${h.historyContent}">
+                                내용
+                            </td>
+
+                            <td>
+                                <span class="point-change"
+                                      th:classappend="${h.pointChange ge 0} ? ' plus' : ' minus'"
+                                      th:text="${(h.pointChange ge 0 ? '+' : '') + #numbers.formatInteger(h.pointChange, 1, 'COMMA')} + 'P'">
+                                    +0P
+                                </span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </section>
+
+        </main>
 
     </div>
+
     <div th:replace="~{sideBar :: sidebar('history')}"></div>
+
 </div>
 </body>
 </html>

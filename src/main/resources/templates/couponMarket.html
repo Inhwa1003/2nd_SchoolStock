@@ -12,7 +12,7 @@
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
   <link rel="stylesheet" th:href="@{/css/Common.css}">
-  <link rel="stylesheet" th:href="@{/css/StockDetail.css}">
+  <link rel="stylesheet" th:href="@{/css/CouponMarket.css}">
   <link rel="stylesheet" th:href="@{/css/SideBar.css}">
 
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
@@ -20,6 +20,7 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
   <script th:src="@{/js/coupon-market.js}"></script>
 </head>
+
 <body>
 <div class="app">
   <div class="content">
@@ -27,36 +28,137 @@
       <div class="hd-name">쿠폰 상점</div>
     </header>
 
-    <div class="main cp-grid">
-      <div class="cp-panel" th:each="coupon : ${couponList}"
-           th:data-coupon-no="${coupon.couponNo}">
+    <main class="main cp-grid">
+      <section class="coupon-tip-box">
+        <div class="tip-icon">💡</div>
 
-        <!-- 학생: 구매 -->
+        <div class="tip-text">
+          <p>TIP: 포인트를 모아 더 다양한 쿠폰을 이용해 보세요!</p>
+          <span>쿠폰은 구매 후 보유 쿠폰에서 확인할 수 있습니다.</span>
+        </div>
+      </section>
+
+      <section class="coupon-shop-section">
+
+        <div class="coupon-shop-title">
+          <h3>구매 가능 쿠폰</h3>
+          <span class="coupon-count-badge"
+                th:text="${#lists.size(couponList)}">
+            0
+          </span>
+        </div>
+
+        <div class="cp-grid coupon-shop-grid">
+
+      <article class="cp-panel"
+               th:each="coupon : ${couponList}"
+               th:data-coupon-no="${coupon.couponNo}">
+
+        <div class="coupon-card-top">
+          <div class="coupon-visual">
+            <div class="coupon-visual-icon"
+                 th:text="${coupon.couponNo == 1 ? '🍪' :
+                              (coupon.couponNo == 2 ? '🧹' :
+                              (coupon.couponNo == 3 ? '♻️' : '🎟'))}">
+              🎟
+            </div>
+          </div>
+
+      <!-- 학생: 구매 -->
         <th:block sec:authorize="hasRole('STUDENT')">
-          <button type="button" class="buy-cp-btn"
+          <button type="button"
+                  class="buy-cp-btn"
                   th:data-coupon-no="${coupon.couponNo}"
                   th:data-coupon-name="${coupon.name}"
                   th:data-coupon-point="${coupon.couponPoint}"
-                  onclick="buyCouponFromButton(this)">구매</button>
-          <div class="cp-name"  th:text="${coupon.name}">쿠폰명</div>
-          <div class="cp-price" th:text="${#numbers.formatInteger(coupon.couponPoint,1,'COMMA')} + ' P'">0 P</div>
+                  onclick="buyCouponFromButton(this)">구매
+          </button>
         </th:block>
 
-        <!-- 선생: 수정/삭제 -->
+        <!-- 선생님: 삭제 -->
         <th:block sec:authorize="hasRole('TEACHER')">
-          <button type="button" class="delete-cp-btn"
+          <button type="button"
+                  class="delete-cp-btn"
                   th:data-coupon-no="${coupon.couponNo}"
-                  onclick="deleteCouponFromButton(this)">삭제</button>
-          <input type="text" class="cp-name coupon-name-input"
-                 th:value="${coupon.name}" readonly onclick="enableCouponEdit(this)">
-          <input type="number" class="cp-price coupon-point-input"
-                 th:value="${coupon.couponPoint}" readonly onclick="enableCouponEdit(this)">
-          <button type="button" class="save-cp-btn"
-                  onclick="updateCouponFromButton(this)">저장</button>
+                  onclick="deleteCouponFromButton(this)">삭제
+          </button>
         </th:block>
+
+        </div>
+
+        <div class="coupon-card-body">
+
+          <!-- 학생 화면 -->
+          <th:block sec:authorize="hasRole('STUDENT')">
+            <div class="cp-name"
+                 th:text="${coupon.name}">
+              쿠폰명
+            </div>
+
+            <p class="coupon-desc">
+              학교생활에서 사용할 수 있는 쿠폰입니다.
+            </p>
+
+            <div class="coupon-divider"></div>
+
+            <div class="coupon-price-area">
+              <span class="coupon-price-label">필요 포인트</span>
+
+              <div class="coupon-price-row">
+                <span class="point-circle">P</span>
+
+                <div class="cp-price"
+                     th:text="${#numbers.formatInteger(coupon.couponPoint, 1, 'COMMA')} + ' P'">
+                  0 P
+                </div>
+              </div>
+            </div>
+          </th:block>
+
+          <!-- 선생님 화면 -->
+          <th:block sec:authorize="hasRole('TEACHER')">
+          <input type="text"
+                 class="cp-name coupon-name-input"
+                 th:value="${coupon.name}"
+                 readonly
+                 onclick="enableCouponEdit(this)">
+
+          <div class="coupon-divider"></div>
+
+          <div class="coupon-price-area teacher-price-area">
+            <span class="coupon-price-label">필요 포인트</span>
+
+            <div class="coupon-price-row">
+              <span class="point-circle">P</span>
+
+          <input type="number"
+                 class="cp-price coupon-point-input"
+                 th:value="${coupon.couponPoint}"
+                 readonly
+                 onclick="enableCouponEdit(this)">
+            </div>
+          </div>
+
+          <button type="button"
+                  class="save-cp-btn"
+                  onclick="updateCouponFromButton(this)">저장
+          </button>
+          </th:block>
+
+        </div>
+
+      </article>
+        </div>
+      <div class="empty-msg"
+           th:if="${#lists.isEmpty(couponList)}">
+        <div class="empty-coupon-icon">🎟</div>
+        <p>현재 쿠폰이 없습니다.</p>
+        <span>등록된 쿠폰이 생기면 이곳에 표시됩니다.</span>
       </div>
-      <div class="empty-msg" th:if="${#lists.isEmpty(couponList)}">현재 쿠폰이 없습니다.</div>
-    </div>
+
+      </section>
+
+    </main>
   </div>
 
   <div th:replace="~{sideBar :: sidebar('coupons')}"></div>

@@ -1,4 +1,4 @@
-package com.school.schoolstock.domain.news.dto;
+package com.school.schoolstock.domain.news.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

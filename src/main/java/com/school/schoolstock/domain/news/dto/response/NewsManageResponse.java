@@ -1,13 +1,13 @@
-package com.school.schoolstock.domain.news.vo;
+package com.school.schoolstock.domain.news.dto.response;
 
 import lombok.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @Setter
 @Getter
-public class News {
+@Builder
+public class NewsManageResponse {
     private int newsNo;
     private String newsContent;
 }
