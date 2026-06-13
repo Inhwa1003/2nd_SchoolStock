@@ -45,13 +45,14 @@
             <th sec:authorize="hasRole('TEACHER')">발행가</th>
             <th sec:authorize="hasRole('TEACHER')">발행 수량</th>
             <th sec:authorize="hasRole('TEACHER')">설명</th>
+            <th sec:authorize="hasRole('TEACHER')">관리</th>
           </tr>
           </thead>
 
           <tbody>
           <!-- 주식 목록이 비어 있을 때 -->
           <tr th:if="${#lists.isEmpty(stockList)}">
-            <td colspan="8">등록된 주식이 없습니다.</td>
+            <td colspan="9">등록된 주식이 없습니다.</td>
           </tr>
 
           <!-- 주식 목록 출력 -->
@@ -59,7 +60,10 @@
               th:data-stock-no="${stock.stockNo}"
               th:data-stock-name="${stock.name}">
 
-            <td th:text="${stock.name}">주식명</td>
+            <td>
+              <span  sec:authorize="hasRole('STUDENT')" th:text="${stock.name}">주식명</span>
+              <input sec:authorize="hasRole('TEACHER')" class="st-edit st-name" type="text" th:value="${stock.name}">
+            </td>
 
             <td class="current-price"
                 th:text="${stock.nowPoint + 'P'}">현재가격</td>
@@ -84,9 +88,25 @@
             </td>
 
             <!-- 선생님 전용 발행 정보 -->
-            <td sec:authorize="hasRole('TEACHER')" th:text="${stock.publicationPoint + 'P'}">발행가</td>
-            <td sec:authorize="hasRole('TEACHER')" th:text="${stock.publicationBalance}">발행수량</td>
-            <td sec:authorize="hasRole('TEACHER')" th:text="${stock.stockContent}">설명</td>
+            <td sec:authorize="hasRole('TEACHER')">
+              <input class="st-edit st-point" type="number" min="1"
+                     th:value="${stock.publicationPoint}"
+                     th:attr="disabled=${stock.tradeStarted} ? 'disabled' : null">
+            </td>
+            <td sec:authorize="hasRole('TEACHER')">
+              <input class="st-edit st-balance" type="number" min="0"
+                     th:value="${stock.publicationBalance}"
+                     th:attr="disabled=${stock.tradeStarted} ? 'disabled' : null">
+            </td>
+            <td sec:authorize="hasRole('TEACHER')">
+              <input class="st-edit st-content" type="text" th:value="${stock.stockContent}">
+            </td>
+            <td sec:authorize="hasRole('TEACHER')">
+              <button type="button" class="st-save">저장</button>
+              <div th:if="${stock.tradeStarted}" style="color:#888; font-size:11px; margin-top:4px;">
+                거래 시작됨<br>발행정보 잠금
+              </div>
+            </td>
           </tr>
           </tbody>
         </table>
