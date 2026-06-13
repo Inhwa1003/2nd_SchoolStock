@@ -12,6 +12,7 @@
     <meta name="_csrf" th:content="${_csrf.token}">
     <meta name="_csrf_header" th:content="${_csrf.headerName}">
 </head>
+
 <body>
 <div class="app">
     <div class="content">
@@ -19,50 +20,88 @@
             <div class="hd-name" th:text="${assetTitle} ?: '내 자산'">내 자산</div>
             <div sec:authorize="hasRole('TEACHER')" class="point-grant"
                  th:data-student-number="${targetStudentNumber}">
-                포인트 지급 :
+                <span class = "grant-label">포인트 지급 :</span>
                 <input type="number" id="grant-points" min="100" step="100" value="100" placeholder="포인트">
                 <input type="text" id="grant-content" placeholder="사유" maxlength="50">
                 <button type="button" id="grant-btn">지급</button>
             </div>
         </header>
+
         <div class="main">
             <div class="summary-container">
                 <div class="card">
-                    <span class="label">총 자산</span>
-                    <div class="value" id="total-assets"
-                         th:text="${#numbers.formatInteger(myAssets.totalValue, 1, 'COMMA')} + ' P'">0 P</div>
+                    <div class="summary-icon purple">💼</div>
+                    <div class="summary-text">
+                        <span class="label">총 자산</span>
+                        <div class="value" id="total-assets"
+                         th:text="${#numbers.formatInteger(myAssets.totalValue, 1, 'COMMA')} + ' P'">0 P
+                        </div>
+                    </div>
                 </div>
+
                 <div class="card">
+                    <div class="summary-icon yellow">🪙</div>
+                    <div class="summary-text">
                     <span class="label">보유 포인트</span>
                     <div class="value" id="total-points"
-                         th:text="${#numbers.formatInteger(myAssets.getMyPoint(), 1, 'COMMA')} + ' P'">0 P</div>
+                         th:text="${#numbers.formatInteger(myAssets.getMyPoint(), 1, 'COMMA')} + ' P'">0 P
+                    </div>
+                    </div>
                 </div>
+
                 <div class="card">
+                    <div class="summary-icon blue">📈</div>
+                    <div class="summary-text">
                     <span class="label">총 손익</span>
                     <div class="value" id="total-profit"
                          th:classappend="${myAssets.totalProfit ge 0} ? 'plus' : 'minus'"
-                         th:text="${(myAssets.totalProfit gt 0 ? '+' : '') + #numbers.formatInteger(myAssets.totalProfit, 1, 'COMMA')} + ' P'">0 P</div>
+                         th:text="${(myAssets.totalProfit gt 0 ? '+' : '') + #numbers.formatInteger(myAssets.totalProfit, 1, 'COMMA')} + ' P'">0 P
+                    </div>
                 </div>
-                <div class="card" id="coupon-card" style="cursor:pointer;"
-                    th:data-href="${couponHref} ?: @{/schoolstock/s/me/students/coupons}">
+                </div>
+
+                <div class="card"
+                     id="coupon-card"
+                     style="cursor:pointer;"
+                     th:attr="data-href=${couponHref != null ? couponHref : '/schoolstock/s/me/students/coupons'}">
+                    <div class = "summary-icon green">🎟</div>
+                    <div class = "summary-text">
                     <span class="label">보유 쿠폰</span>
-                    <div class="value" id="coupon-count" th:text="${myAssets.couponAmount} + '개'">0개</div>
+                    <div class="value"
+                         id="coupon-count"
+                         th:text="${myAssets.couponAmount} + '개'">
+                        0개
+                    </div>
                 </div>
+            </div>
             </div>
 
             <div class="panel">
                 <div class="table-header">
-                    <h3>보유 주식 상세</h3>
-                    <button type="button" class="refresh-all-btn" th:data-url="${assetsRefreshUrl}" id="refresh-btn">🔄</button>
+                    <div>
+                        <h3>보유 주식 상세</h3>
+                    </div>
+
+                    <button type="button"
+                            class="refresh-all-btn"
+                            th:data-url="${assetsRefreshUrl}"
+                            id="refresh-btn">
+                            🔄</button>
                 </div>
 
+                <div class = "stock-table-wrap">
                 <table id="stock-table">
                     <thead>
                         <tr>
-                            <th>주식명</th><th>보유수량</th><th>현재가격</th>
-                            <th>평균단가</th><th>총 구매 비용</th><th>수익금</th>
+                            <th>주식명</th>
+                            <th>보유수량</th>
+                            <th>현재가격</th>
+                            <th>평균단가</th>
+                            <th>총 구매 비용</th>
+                            <th>수익금</th>
                         </tr>
                     </thead>
+
                     <tbody id="stock-list">
                         <tr th:each="s, stat : ${myAssets.myStocks}"
                             th:id="'row-' + ${stat.index}" class="stock-row-item">
@@ -75,11 +114,20 @@
                             <td th:classappend="${s.stockProfit ge 0} ? 'plus' : 'minus'"
                                 th:text="${(s.stockProfit gt 0 ? '+' : '') + #numbers.formatInteger(s.stockProfit, 1, 'COMMA')} + 'P'">0P</td>
                         </tr>
-                        <tr th:if="${#lists.isEmpty(myAssets.myStocks)}">   <!-- ★ 비었을 때만 -->
-                            <td colspan="6">보유한 주식이 없습니다.</td>
+
+                        <tr th:if="${#lists.isEmpty(myAssets.myStocks)}"
+                            class="empty-stock-row">                            <td colspan="6">
+                                <div class="empty-stock-state">
+                                <div class="empty-stock-icon">📦</div>
+                                <p>보유한 주식이 없습니다.</p>
+                                <span>주식 목록에서 원하는 주식을 확인해보세요.</span>
+                            </div>
+                            </td>
                         </tr>
+
                     </tbody>
                 </table>
+                </div>
             </div>
         </div>
     </div>
