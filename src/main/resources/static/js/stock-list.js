@@ -1,6 +1,6 @@
 const PRICE_POLL_MS = 5000;
 
-// 현재 경로로 역할 판별 → 선생님이면 /t, 학생이면 /s 엔드포인트
+// 현재 경로로 역할 판별 -> 선생님이면 /t, 학생이면 /s 엔드포인트
 const IS_TEACHER = location.pathname.startsWith("/schoolstock/t/");
 const PRICE_URL  = IS_TEACHER ? "/schoolstock/t/stocks/prices"
     : "/schoolstock/s/stocks/prices";
