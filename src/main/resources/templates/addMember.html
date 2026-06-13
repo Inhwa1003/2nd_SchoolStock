@@ -5,66 +5,126 @@
     <title>회원 가입 페이지</title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/AddMember.css}" />
 </head>
+
 <body>
-<div class="addmember-container">
-    <h1>회원가입</h1>
-    <form method="post" th:action="@{/schoolstock/add-member}">
 
-        <div class="input-row">
-            <label>아이디 :</label>
-            <div class="input-field-group">
-                <input type="text" name="loginId" placeholder="아이디를 입력하세요">
-                <span id="id-check-msg"></span>
-            </div>
-            <button type="button" id="checkIdBtn">중복확인</button>
-    </div>
+<div class="signup-page">
 
-        <div class="input-row">
-            <label>이메일 :</label>
-            <div class="input-field-group">
-                <input type="email" name="email" placeholder="example@email.com">
-            </div>
-    </div>
+    <div class="addmember-container signup-card">
 
-        <div class="input-row">
-            <label>비밀번호 :</label>
-            <div class="input-field-group">
-                <input type="password" name="password" id="password" placeholder="비밀번호 (8자리 이상)">
-                <span class="message info"></span>
-            </div>
-    </div>
-
-        <div class="input-row">
-            <label>비밀번호 확인 :</label>
-            <div class="input-field-group">
-                <input type="password" id="passwordCheck" placeholder="비밀번호 재입력">
-                <span id="pwd-check-msg" class="message"></span>
-            </div>
-    </div>
-
-        <div class="input-row">
-            <label>이름 :</label>
-            <div class="input-field-group">
-                <input type="text" name="name" placeholder="이름">
-            </div>
-    </div>
-
-        <div class="info-row">
-            <span>학년 :</span>
-            <select name="grade">
-                <option value="" disabled selected>학년</option>   <!-- select는 placeholder 대신 이 방식 -->
-                <option>5</option>
-                <option>6</option>
-            </select>
-            <span>반 :</span> <input type="text" class="small" name="className" placeholder="반">
-        <span>번호 :</span> <input type="number" class="small" name="studentNumber" min="1" max="99" placeholder="번호">
+        <div class="signup-header">
+            <div class="signup-icon">👤</div>
+            <h1>회원가입</h1>
+            <p>SchoolStock 서비스를 이용하기 위해 정보를 입력해주세요.</p>
         </div>
-        <button class="submit-button">회원가입</button>
-    </form>
-    <div class="login-link-container">
-        이미 아이디가 있나요?
-        <a th:href="@{/schoolstock/login-view}" class="back-to-login">로그인하러 가기</a>
+
+        <form method="post" th:action="@{/schoolstock/add-member}">
+
+            <div class="input-row">
+                <label>아이디</label>
+
+                <div class="input-field-group">
+                    <input type="text"
+                           name="loginId"
+                           placeholder="아이디를 입력하세요">
+
+                    <span id="id-check-msg"></span>
+                </div>
+
+                <button type="button" id="checkIdBtn">
+                    중복확인
+                </button>
+            </div>
+
+            <div class="input-row">
+                <label>이메일</label>
+
+                <div class="input-field-group">
+                    <input type="email"
+                           name="email"
+                           placeholder="example@email.com">
+                </div>
+            </div>
+
+            <div class="input-row">
+                <label>비밀번호</label>
+
+                <div class="input-field-group">
+                    <input type="password"
+                           name="password"
+                           id="password"
+                           placeholder="비밀번호 (8자리 이상)">
+
+                    <span class="message info"></span>
+                </div>
+            </div>
+
+            <div class="input-row">
+                <label>비밀번호 확인</label>
+
+                <div class="input-field-group">
+                    <input type="password"
+                           id="passwordCheck"
+                           placeholder="비밀번호 재입력">
+
+                    <span id="pwd-check-msg" class="message"></span>
+                </div>
+            </div>
+
+            <div class="input-row">
+                <label>이름</label>
+
+                <div class="input-field-group">
+                    <input type="text"
+                           name="name"
+                           placeholder="이름">
+                </div>
+            </div>
+
+            <div class="info-row">
+                <div class="info-field">
+                    <label>학년</label>
+                    <select name="grade">
+                        <option value="" disabled selected>학년</option>
+                        <option>5</option>
+                        <option>6</option>
+                    </select>
+                </div>
+
+                <div class="info-field">
+                    <label>반</label>
+                    <input type="text"
+                           class="small"
+                           name="className"
+                           placeholder="반">
+                </div>
+
+                <div class="info-field">
+                    <label>번호</label>
+                    <input type="number"
+                           class="small"
+                           name="studentNumber"
+                           min="1"
+                           max="99"
+                           placeholder="번호">
+                </div>
+            </div>
+
+            <button type="submit" class="submit-button">
+                회원가입
+            </button>
+
+        </form>
+
+        <div class="login-link-container">
+            이미 아이디가 있나요?
+            <a th:href="@{/schoolstock/login-view}" class="back-to-login">
+                로그인하러 가기
+            </a>
+        </div>
+
     </div>
+
 </div>
 
 <script th:src="@{/js/add-member.js}"></script>
