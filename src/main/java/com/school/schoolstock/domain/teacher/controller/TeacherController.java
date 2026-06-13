@@ -1,5 +1,6 @@
 package com.school.schoolstock.domain.teacher.controller;
 
+import com.school.schoolstock.domain.news.service.NewsService;
 import com.school.schoolstock.domain.stock.service.StockService;
 import com.school.schoolstock.domain.student.dto.response.StudentInfoResponse;
 import com.school.schoolstock.domain.student.service.StudentService;
@@ -27,6 +28,7 @@ TeacherController {
     private final StudentService studentService;
     private final CouponService couponService;
     private final StockService stockService;
+    private final NewsService newsService;
 
     // 선생님이 맡은 반 학생 목록 조회 화면
     @GetMapping("/me/teachers/my-students")
@@ -93,6 +95,13 @@ TeacherController {
     public String getStockList(Model model){
         model.addAttribute("stockList", stockService.getManageStockList());
         return "stockList";
+    }
+
+    //선생님 뉴스화면
+    @GetMapping("/news")
+    public String getNewsManage(Model model){
+        model.addAttribute("newsList", newsService.getNewsManageList());
+        return "news";
     }
 
 }

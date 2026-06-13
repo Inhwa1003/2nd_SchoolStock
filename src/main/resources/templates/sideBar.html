@@ -47,6 +47,8 @@
                th:href="@{/schoolstock/t/me/teachers/my-students}">학생 목록</a>
             <a class="menu-button" th:classappend="${active == 'stocks'}  ? 'active'"
                th:href="@{/schoolstock/t/stocks}">주식 목록</a>
+            <a class="menu-button" th:classappend="${active == 'news'}  ? 'active'"
+               th:href="@{/schoolstock/t/news}">뉴스 목록</a>
             <a class="menu-button" th:classappend="${active == 'coupons'}  ? 'active'"
                th:href="@{/schoolstock/t/coupons}">쿠폰 상점</a>
         </th:block>
